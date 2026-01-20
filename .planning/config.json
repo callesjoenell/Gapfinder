@@ -1,0 +1,9 @@
+{
+  "mode": "yolo",
+  "depth": "standard",
+  "execution": "parallel",
+  "planning": {
+    "commit_docs": true
+  },
+  "created": "2025-01-20"
+}
