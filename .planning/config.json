@@ -5,5 +5,12 @@
   "planning": {
     "commit_docs": true
   },
-  "created": "2025-01-20"
+  "workflow": {
+    "research": true,
+    "plan_check": true,
+    "verifier": true
+  },
+  "model_profile": "balanced",
+  "created": "2025-01-20",
+  "updated": "2025-01-22"
 }
