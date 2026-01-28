@@ -18,21 +18,30 @@ Six phases derived from the natural dependency chain: Foundation enables Chat, C
 
 **Dependencies:** None (first phase)
 
+**Plans:** 6 plans
+
+Plans:
+- [ ] 01-01-PLAN.md - Project setup, Convex initialization, and database schema
+- [ ] 01-02-PLAN.md - Magic link authentication with Resend
+- [ ] 01-03-PLAN.md - Sessions/Messages API and Layout UI scaffold
+- [ ] 01-04-PLAN.md - System prompt engineering with scientific frameworks
+- [ ] 01-05-PLAN.md - Context management and hierarchical summarization
+- [ ] 01-06-PLAN.md - Chat integration and end-to-end wiring
+
 **Requirements:**
-- AUTH-01: Participant receives magic link via email tied to their cohort
+- AUTH-01: Participant receives magic link via email tied to their cohort (NOTE: v1 standalone users, no cohorts)
 - AUTH-02: Magic link authenticates and lands them in the chat interface
 - AUTH-03: Session persists - return via magic link, continue where left off
 - DATA-01: Save every message with timestamp
 - DATA-02: Track current phase per participant
 - DATA-03: Track idea card state (content, color/score)
-- DATA-04: Link participants to cohorts
+- DATA-04: Link participants to cohorts (DEFERRED to v2)
 - DATA-05: Store named sessions per participant
 
 **Success Criteria:**
 1. Participant receives magic link email and clicks through to the app
 2. Participant closes browser, returns via magic link, and sees their previous state
-3. Participant's cohort membership is visible in the system
-4. Message data persists across page refreshes and browser sessions
+3. Message data persists across page refreshes and browser sessions
 
 **Research Flags:**
 - Magic link security (15-min expiry, single-use tokens)
@@ -171,7 +180,7 @@ Six phases derived from the natural dependency chain: Foundation enables Chat, C
 
 | Phase | Status | Requirements | Completion |
 |-------|--------|--------------|------------|
-| 1 - Foundation | Not Started | 8 | 0% |
+| 1 - Foundation | Planned | 8 | 0% |
 | 2 - Chat Core | Not Started | 4 | 0% |
 | 3 - Sessions | Not Started | 3 | 0% |
 | 4 - Phase System | Not Started | 4 | 0% |
@@ -207,4 +216,4 @@ Note: Phases 5 and 6 both depend on Phase 4 but are independent of each other. T
 ---
 
 *Roadmap created: 2025-01-22*
-*Last updated: 2025-01-22*
+*Last updated: 2025-01-28*
