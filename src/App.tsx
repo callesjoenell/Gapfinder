@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useConvexAuth } from "convex/react";
+import { useConvexAuth, useQuery } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { Layout } from "./components/layout/Layout";
-import { NewSessionModal } from "./components/NewSessionModal";
+import { api } from "../convex/_generated/api";
+import type { Id } from "../convex/_generated/dataModel";
 import { SignIn } from "./components/auth/SignIn";
 import { AuthCallback } from "./components/auth/AuthCallback";
-import type { Id } from "../convex/_generated/dataModel";
+import { Layout } from "./components/layout/Layout";
+import { Chat } from "./components/Chat";
+import { NewSessionModal } from "./components/NewSessionModal";
 
 function App() {
   return (
@@ -45,64 +47,72 @@ function AuthenticatedApp() {
 }
 
 function MainApp() {
+  const { signOut } = useAuthActions();
   const [currentSessionId, setCurrentSessionId] = useState<Id<"sessions"> | null>(null);
-  const [isNewSessionModalOpen, setIsNewSessionModalOpen] = useState(false);
+  const [showNewSessionModal, setShowNewSessionModal] = useState(false);
+
+  // Get current session details
+  const session = useQuery(
+    api.sessions.getSession,
+    currentSessionId ? { sessionId: currentSessionId } : "skip"
+  );
+
+  // Get all sessions to auto-select first one
+  const sessions = useQuery(api.sessions.listSessions);
+
+  // Auto-select first session if none selected
+  useEffect(() => {
+    if (!currentSessionId && sessions && sessions.length > 0) {
+      setCurrentSessionId(sessions[0]._id);
+    }
+  }, [currentSessionId, sessions]);
 
   return (
-    <Layout
-      currentSessionId={currentSessionId}
-      onSelectSession={setCurrentSessionId}
-      onNewSession={() => setIsNewSessionModalOpen(true)}
-    >
-      {/* Main content area - placeholder for now */}
-      <div className="flex items-center justify-center h-full">
-        <div className="text-center">
-          {currentSessionId ? (
-            <p className="text-gray-600">
-              Chat interface will appear here
-            </p>
-          ) : (
-            <>
-              <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                Welcome to Gap Finder
-              </h1>
-              <p className="text-gray-600 mb-6">
-                Select a session from the sidebar or create a new one to begin.
-              </p>
+    <>
+      <Layout
+        currentSessionId={currentSessionId}
+        onSelectSession={setCurrentSessionId}
+        onNewSession={() => setShowNewSessionModal(true)}
+      >
+        {session ? (
+          <Chat
+            sessionId={session._id}
+            currentPhase={session.currentPhase}
+            sessionPath={session.path}
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full text-gray-400">
+            <div className="text-center">
+              <p className="text-lg">No session selected</p>
               <button
-                onClick={() => setIsNewSessionModalOpen(true)}
-                className="bg-primary-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors"
+                onClick={() => setShowNewSessionModal(true)}
+                className="mt-4 text-primary-600 hover:text-primary-700"
               >
-                Create Your First Session
+                Create your first session
               </button>
-            </>
-          )}
-        </div>
-      </div>
+            </div>
+          </div>
+        )}
+      </Layout>
 
       <NewSessionModal
-        isOpen={isNewSessionModalOpen}
-        onClose={() => setIsNewSessionModalOpen(false)}
-        onCreated={(sessionId) => setCurrentSessionId(sessionId)}
+        isOpen={showNewSessionModal}
+        onClose={() => setShowNewSessionModal(false)}
+        onCreated={(sessionId) => {
+          setCurrentSessionId(sessionId as Id<"sessions">);
+        }}
       />
 
-      <SignOutButton />
-    </Layout>
-  );
-}
-
-function SignOutButton() {
-  const { signOut } = useAuthActions();
-
-  return (
-    <div className="fixed bottom-4 right-4">
-      <button
-        onClick={() => signOut()}
-        className="text-gray-500 hover:text-gray-700 text-sm px-3 py-1.5 bg-white rounded-lg shadow-sm border border-gray-200"
-      >
-        Sign out
-      </button>
-    </div>
+      {/* Sign out button */}
+      <div className="fixed bottom-4 right-4">
+        <button
+          onClick={() => signOut()}
+          className="text-gray-500 hover:text-gray-700 text-sm px-3 py-1.5 bg-white rounded-lg shadow-sm border border-gray-200"
+        >
+          Sign out
+        </button>
+      </div>
+    </>
   );
 }
 
