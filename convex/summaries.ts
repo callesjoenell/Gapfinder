@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
-import { auth } from "./auth";
+import { getAuthUserId } from "./auth";
 
 // Summary data structure matches what we extract
 const summaryDataValidator = v.object({
@@ -14,7 +14,7 @@ const summaryDataValidator = v.object({
 export const getSessionSummaries = query({
   args: { sessionId: v.id("sessions") },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) return [];
 
     // Verify session ownership
@@ -37,7 +37,7 @@ export const getSummariesUpToPhase = query({
     beforePhase: v.number(),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) return [];
 
     const session = await ctx.db.get(args.sessionId);
@@ -58,7 +58,7 @@ export const getSummariesUpToPhase = query({
 export const getLatestSummary = query({
   args: { sessionId: v.id("sessions") },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) return null;
 
     const session = await ctx.db.get(args.sessionId);
@@ -88,7 +88,7 @@ export const saveSummary = mutation({
     data: summaryDataValidator,
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
 
     const session = await ctx.db.get(args.sessionId);
@@ -127,7 +127,7 @@ export const saveSummary = mutation({
 export const deleteSummary = mutation({
   args: { summaryId: v.id("summaries") },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
 
     const summary = await ctx.db.get(args.summaryId);

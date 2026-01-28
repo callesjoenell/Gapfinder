@@ -1,5 +1,8 @@
-// Auth config for OAuth providers
-// Email and credentials providers are configured in auth.ts
 export default {
-  providers: [],
+  providers: [
+    {
+      domain: "https://able-labrador-99.clerk.accounts.dev",
+      applicationID: "convex",
+    },
+  ],
 };

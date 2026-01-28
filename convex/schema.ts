@@ -1,13 +1,9 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { authTables } from "@convex-dev/auth/server";
 
 export default defineSchema({
-  // Auth tables from @convex-dev/auth (includes users table)
-  ...authTables,
-
   sessions: defineTable({
-    userId: v.id("users"),
+    userId: v.string(), // Clerk user ID (string, not Id<"users">)
     name: v.string(),
     currentPhase: v.number(), // 0-9
     path: v.union(v.literal("exploration"), v.literal("evaluation")),

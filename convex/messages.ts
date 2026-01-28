@@ -1,12 +1,12 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
-import { auth } from "./auth";
+import { getAuthUserId } from "./auth";
 
 // Get all messages for a session (DATA-01: with timestamps)
 export const getSessionMessages = query({
   args: { sessionId: v.id("sessions") },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) return [];
 
     // Verify session ownership
@@ -30,7 +30,7 @@ export const getPhaseMessages = query({
     phase: v.number(),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) return [];
 
     const session = await ctx.db.get(args.sessionId);
@@ -57,7 +57,7 @@ export const saveMessage = mutation({
     content: v.string(),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
 
     // Verify session ownership
@@ -85,7 +85,7 @@ export const saveMessage = mutation({
 export const getMessageCount = query({
   args: { sessionId: v.id("sessions") },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) return 0;
 
     const session = await ctx.db.get(args.sessionId);

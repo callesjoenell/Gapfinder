@@ -7,20 +7,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Green from https://say-it-with-a-song.vercel.app/ start button
-        // Using Tailwind's green palette as the primary color
+        // Teal green from https://say-it-with-a-song.vercel.app/ start button
         primary: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',  // Main green
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534',
-          900: '#14532d',
-          950: '#052e16',
+          50: '#e6faf7',
+          100: '#ccf5ef',
+          200: '#99ebdf',
+          300: '#66e0cf',
+          400: '#33d6bf',
+          500: '#00D5BE',  // Main teal - exact color from Say It With A Song
+          600: '#00aa98',
+          700: '#008072',
+          800: '#00554c',
+          900: '#002b26',
+          950: '#001513',
         },
       },
     },

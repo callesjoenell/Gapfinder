@@ -9,9 +9,11 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as claude from "../claude.js";
 import type * as http from "../http.js";
 import type * as messages from "../messages.js";
 import type * as sessions from "../sessions.js";
+import type * as summaries from "../summaries.js";
 
 import type {
   ApiFromModules,
@@ -21,9 +23,11 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  claude: typeof claude;
   http: typeof http;
   messages: typeof messages;
   sessions: typeof sessions;
+  summaries: typeof summaries;
 }>;
 
 /**

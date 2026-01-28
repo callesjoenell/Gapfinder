@@ -1,12 +1,12 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
-import { auth } from "./auth";
+import { getAuthUserId } from "./auth";
 
 // List all sessions for current user (non-deleted, sorted by lastActiveAt)
 export const listSessions = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) return [];
 
     return await ctx.db
@@ -23,7 +23,7 @@ export const listSessions = query({
 export const getSession = query({
   args: { sessionId: v.id("sessions") },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) return null;
 
     const session = await ctx.db.get(args.sessionId);
@@ -41,7 +41,7 @@ export const createSession = mutation({
     path: v.union(v.literal("exploration"), v.literal("evaluation")),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
 
     const now = Date.now();
@@ -71,7 +71,7 @@ export const updateSession = mutation({
     ideaCardScore: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
 
     const session = await ctx.db.get(args.sessionId);
@@ -96,7 +96,7 @@ export const updateSession = mutation({
 export const deleteSession = mutation({
   args: { sessionId: v.id("sessions") },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
 
     const session = await ctx.db.get(args.sessionId);
@@ -112,7 +112,7 @@ export const deleteSession = mutation({
 export const touchSession = mutation({
   args: { sessionId: v.id("sessions") },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
 
     await ctx.db.patch(args.sessionId, { lastActiveAt: Date.now() });
