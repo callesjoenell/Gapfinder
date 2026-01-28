@@ -3,22 +3,8 @@ import { v } from "convex/values";
 import { authTables } from "@convex-dev/auth/server";
 
 export default defineSchema({
-  // Auth tables from @convex-dev/auth
+  // Auth tables from @convex-dev/auth (includes users table)
   ...authTables,
-
-  // Override users table with our fields
-  users: defineTable({
-    // Fields from authTables
-    name: v.optional(v.string()),
-    image: v.optional(v.string()),
-    email: v.optional(v.string()),
-    emailVerificationTime: v.optional(v.number()),
-    phone: v.optional(v.string()),
-    phoneVerificationTime: v.optional(v.number()),
-    isAnonymous: v.optional(v.boolean()),
-    // Our custom fields (optional since auth library creates users)
-    createdAt: v.optional(v.number()),
-  }).index("email", ["email"]),
 
   sessions: defineTable({
     userId: v.id("users"),
