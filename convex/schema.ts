@@ -16,8 +16,8 @@ export default defineSchema({
     phone: v.optional(v.string()),
     phoneVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
-    // Our custom fields
-    createdAt: v.number(),
+    // Our custom fields (optional since auth library creates users)
+    createdAt: v.optional(v.number()),
   }).index("email", ["email"]),
 
   sessions: defineTable({
