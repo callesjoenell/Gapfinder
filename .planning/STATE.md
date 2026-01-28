@@ -8,7 +8,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 1 Foundation - Project initialized, ready for auth implementation.
+**Current Focus:** Phase 1 Foundation - System prompt engineering complete, context management next.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling)
 
@@ -17,18 +17,18 @@
 ## Current Position
 
 **Phase:** 1 - Foundation
-**Plan:** 01 of 06 complete
+**Plan:** 04 of 06 complete
 **Status:** In progress
 
 **Progress:**
 ```
-[##                  ] 4% (1/28 requirements started)
+[########            ] 14% (2/14 plans complete)
 ```
 
 **Phase Breakdown:**
 | Phase | Requirements | Status |
 |-------|--------------|--------|
-| 1 - Foundation | 8 | In Progress (Plan 01 complete) |
+| 1 - Foundation | 8 | In Progress (Plans 01, 04 complete) |
 | 2 - Chat Core | 4 | Not Started |
 | 3 - Sessions | 3 | Not Started |
 | 4 - Phase System | 4 | Not Started |
@@ -39,7 +39,7 @@
 
 ## Performance Metrics
 
-**Plans Completed:** 1
+**Plans Completed:** 2
 **Plans Total:** 6 (Phase 1)
 **Success Rate:** 100%
 **Blockers Resolved:** 1 (Convex authentication)
@@ -58,6 +58,9 @@
 | Tailwind v3 over v4 | v4 has different config approach; v3 is more stable/documented | 2026-01-28 |
 | Messages as individual rows | Per Convex best practices for real-time updates (not arrays) | 2026-01-28 |
 | Soft delete pattern for sessions | isDeleted field rather than actual deletion for data recovery | 2026-01-28 |
+| 10 phases split into exploration (0-3) and evaluation (4-9) | Aligns with business model: exploration free, evaluation paid | 2026-01-28 |
+| FORBIDDEN section explicitly prevents idea generation | Claude must surface user's ideas, not generate them | 2026-01-28 |
+| Tone: useful not encouraging | No flattery, no cheerleading - be a research partner | 2026-01-28 |
 
 ### Technical Findings
 
@@ -69,6 +72,8 @@
 - Animations: use transform/opacity only (GPU-accelerated)
 - Phase detection: use Claude semantic understanding, not keyword matching
 - Convex deployment: glad-bloodhound-996 (project: gap-finder)
+- System prompt: role definition at top is most powerful technique
+- Summaries: structured JSON (not narrative) preserves critical data better
 
 ### Known Pitfalls (from research)
 
@@ -78,6 +83,7 @@
 4. **Convex Query/Mutation Confusion** - Queries for reads, mutations for writes
 5. **Layout-Triggering Animations** - Use transform/opacity only
 6. **Render-Per-Token Jank** - Throttle streaming updates
+7. **AI-Generated Ideas** - Users abandon ideas that don't feel like theirs
 
 ### Blockers
 
@@ -89,7 +95,7 @@ None currently.
 - [x] Execute Plan 01-01 (Project Setup)
 - [ ] Execute Plan 01-02 (Magic Link Auth)
 - [ ] Execute Plan 01-03 (Basic Chat UI)
-- [ ] Execute Plan 01-04 (Skill Integration)
+- [x] Execute Plan 01-04 (Skill Integration)
 - [ ] Execute Plan 01-05 (Context Management)
 - [ ] Execute Plan 01-06 (Streaming)
 
@@ -98,16 +104,13 @@ None currently.
 ## Session Continuity
 
 **Last Session:** 2026-01-28
-**Last Action:** Completed Plan 01-01 (Project Setup)
-**Next Action:** Execute Plan 01-02 (Magic Link Auth)
+**Last Action:** Completed Plan 01-04 (System Prompt Engineering)
+**Next Action:** Execute Plan 01-02 (Magic Link Auth) or 01-05 (Context Management)
 
 **Files Modified This Session:**
-- package.json (created)
-- convex/schema.ts (created)
-- src/main.tsx (updated with ConvexProvider)
-- src/App.tsx (updated with Tailwind)
-- tailwind.config.js (created)
-- .planning/phases/01-foundation/01-01-SUMMARY.md (created)
+- src/lib/phaseConfig.ts (created)
+- src/lib/systemPrompts.ts (created)
+- .planning/phases/01-foundation/01-04-SUMMARY.md (created)
 
 ---
 
