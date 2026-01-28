@@ -8,7 +8,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 1 Foundation - Sessions/Messages API and Layout UI complete, context management next.
+**Current Focus:** Phase 1 Foundation - Magic link auth complete, ready for context management and streaming.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling)
 
@@ -17,18 +17,18 @@
 ## Current Position
 
 **Phase:** 1 - Foundation
-**Plan:** 03 of 06 complete (also 01, 04)
+**Plan:** 04 of 06 complete (01, 02, 03, 04)
 **Status:** In progress
 
 **Progress:**
 ```
-[##########          ] 21% (3/14 plans complete)
+[############        ] 29% (4/14 plans complete)
 ```
 
 **Phase Breakdown:**
 | Phase | Requirements | Status |
 |-------|--------------|--------|
-| 1 - Foundation | 8 | In Progress (Plans 01, 03, 04 complete) |
+| 1 - Foundation | 8 | In Progress (Plans 01, 02, 03, 04 complete) |
 | 2 - Chat Core | 4 | Not Started |
 | 3 - Sessions | 3 | Not Started |
 | 4 - Phase System | 4 | Not Started |
@@ -39,10 +39,10 @@
 
 ## Performance Metrics
 
-**Plans Completed:** 3
+**Plans Completed:** 4
 **Plans Total:** 6 (Phase 1)
 **Success Rate:** 100%
-**Blockers Resolved:** 2 (Convex authentication, auth config format)
+**Blockers Resolved:** 5 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build)
 
 ---
 
@@ -63,6 +63,9 @@
 | Tone: useful not encouraging | No flattery, no cheerleading - be a research partner | 2026-01-28 |
 | auth.getUserId() pattern for ownership | All session/message APIs verify userId before operations | 2026-01-28 |
 | Email provider in auth.ts not auth.config.ts | Convex cloud only accepts OAuth providers in auth.config.ts | 2026-01-28 |
+| Fetch API over Resend SDK | Resend SDK uses Node.js APIs not available in Convex runtime | 2026-01-28 |
+| 15-minute magic link expiry | Industry standard for security per research | 2026-01-28 |
+| Node types in tsconfig.app.json | Required for convex env vars accessed transitively | 2026-01-28 |
 
 ### Technical Findings
 
@@ -78,6 +81,7 @@
 - Summaries: structured JSON (not narrative) preserves critical data better
 - Convex auth.config.ts: only OAuth providers accepted, Email/credentials go in auth.ts
 - TypeScript verbatimModuleSyntax: requires `import type { }` for type-only imports
+- Resend SDK uses Node.js stream/crypto - use fetch API directly instead
 
 ### Known Pitfalls (from research)
 
@@ -91,13 +95,16 @@
 
 ### Blockers
 
-None currently.
+**AUTH_RESEND_KEY** - User needs to set real Resend API key:
+```bash
+npx convex env set AUTH_RESEND_KEY "re_actual_key_here"
+```
 
 ### TODOs
 
 - [x] Plan Phase 1 (Foundation) via `/gsd:plan-phase 1`
 - [x] Execute Plan 01-01 (Project Setup)
-- [ ] Execute Plan 01-02 (Magic Link Auth)
+- [x] Execute Plan 01-02 (Magic Link Auth)
 - [x] Execute Plan 01-03 (Sessions/Messages API + Layout UI)
 - [x] Execute Plan 01-04 (Skill Integration)
 - [ ] Execute Plan 01-05 (Context Management)
@@ -108,20 +115,16 @@ None currently.
 ## Session Continuity
 
 **Last Session:** 2026-01-28
-**Last Action:** Completed Plan 01-03 (Sessions/Messages API + Layout UI)
-**Next Action:** Execute Plan 01-02 (Magic Link Auth) or 01-05 (Context Management)
+**Last Action:** Completed Plan 01-02 (Magic Link Auth)
+**Next Action:** Execute Plan 01-05 (Context Management) or 01-06 (Streaming)
 
 **Files Modified This Session:**
-- convex/sessions.ts (created)
-- convex/messages.ts (created)
-- convex/auth.ts (updated with Email provider)
-- convex/auth.config.ts (updated)
-- src/components/layout/Layout.tsx (created)
-- src/components/layout/Sidebar.tsx (created)
-- src/components/layout/Header.tsx (created)
-- src/components/NewSessionModal.tsx (created)
-- src/App.tsx (updated with Layout and auth)
-- .planning/phases/01-foundation/01-03-SUMMARY.md (created)
+- package.json (added @auth/core, resend, build script)
+- src/components/auth/SignIn.tsx (created)
+- src/components/auth/AuthCallback.tsx (created)
+- tsconfig.app.json (added node types)
+- convex/tsconfig.json (added composite, node types)
+- .planning/phases/01-foundation/01-02-SUMMARY.md (created)
 
 ---
 
