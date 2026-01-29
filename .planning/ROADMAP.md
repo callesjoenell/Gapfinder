@@ -87,8 +87,8 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md - Paginated messages query and streaming Claude action
-- [ ] 02-02-PLAN.md - Throttled streaming hook and retry utilities
+- [x] 02-01-PLAN.md - Paginated messages query and streaming Claude action
+- [x] 02-02-PLAN.md - Throttled streaming hook and retry utilities
 - [ ] 02-03-PLAN.md - Message UI: thinking section, markdown, full-width layout
 - [ ] 02-04-PLAN.md - End-to-end wiring and verification
 
@@ -225,7 +225,7 @@ Plans:
 | Phase | Status | Requirements | Completion |
 |-------|--------|--------------|------------|
 | 1 - Foundation | Complete | 8 | 100% |
-| 2 - Chat Core | Planned | 4 | 0% |
+| 2 - Chat Core | In Progress | 4 | 50% |
 | 3 - Sessions | Not Started | 3 | 0% |
 | 4 - Phase System | Not Started | 4 | 0% |
 | 5 - Idea Card | Not Started | 6 | 0% |
