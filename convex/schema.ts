@@ -23,6 +23,7 @@ export default defineSchema({
     phase: v.number(),
     role: v.union(v.literal("user"), v.literal("assistant")),
     content: v.string(),
+    thinking: v.optional(v.string()), // Extended thinking content from Claude
     timestamp: v.number(), // DATA-01: timestamp
   })
     .index("by_session", ["sessionId", "timestamp"])
