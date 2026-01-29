@@ -84,6 +84,7 @@ export const saveMessage = mutation({
     phase: v.number(),
     role: v.union(v.literal("user"), v.literal("assistant")),
     content: v.string(),
+    thinking: v.optional(v.string()), // Extended thinking content from Claude
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -100,6 +101,7 @@ export const saveMessage = mutation({
       phase: args.phase,
       role: args.role,
       content: args.content,
+      thinking: args.thinking,
       timestamp: Date.now(),
     });
 

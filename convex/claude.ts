@@ -38,6 +38,50 @@ export const chat = action({
   },
 });
 
+// Streaming chat action with extended thinking support
+// Returns thinking and text separately for frontend to handle
+export const streamChat = action({
+  args: {
+    sessionId: v.id("sessions"),
+    systemPrompt: v.string(),
+    messages: v.array(
+      v.object({
+        role: v.union(v.literal("user"), v.literal("assistant")),
+        content: v.string(),
+      })
+    ),
+  },
+  handler: async (_ctx, args): Promise<{ thinking: string; text: string }> => {
+    let thinkingContent = "";
+    let textContent = "";
+
+    const stream = await anthropic.messages.stream({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 16000,
+      system: args.systemPrompt,
+      thinking: {
+        type: "enabled",
+        budget_tokens: 10000,
+      },
+      messages: args.messages,
+    });
+
+    // Process stream events
+    for await (const event of stream) {
+      if (event.type === "content_block_delta") {
+        const delta = event.delta as { type: string; thinking?: string; text?: string };
+        if (delta.type === "thinking_delta" && delta.thinking) {
+          thinkingContent += delta.thinking;
+        } else if (delta.type === "text_delta" && delta.text) {
+          textContent += delta.text;
+        }
+      }
+    }
+
+    return { thinking: thinkingContent, text: textContent };
+  },
+});
+
 // Summarize a phase conversation
 export const summarizePhase = action({
   args: {
