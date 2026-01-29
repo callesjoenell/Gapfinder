@@ -6,6 +6,30 @@
 
 ---
 
+## North Star: The Emotional Journey
+
+**Every phase in this roadmap serves ONE outcome: how users FEEL when they complete the process.**
+
+Users should exit feeling **confident**, **capable**, **clear**, and with genuine **ownership** of their idea. Features are the delivery mechanism for this emotional transformation.
+
+### Phase-to-Journey Mapping
+
+| Roadmap Phase | Enables Emotional Journey Stage | User Feels |
+|---------------|--------------------------------|------------|
+| 1 - Foundation | Persistence = trust, can return anytime | "My progress is safe" |
+| 2 - Chat Core | Quality conversation = being heard | "I'm understood" |
+| 3 - Sessions | Multiple explorations = freedom | "I can explore without losing anything" |
+| 4 - Phase System | Visual progress = momentum | "I'm making progress" |
+| 5 - Idea Card | Crystallization = clarity | "I can SEE my idea forming" |
+| 6 - Instructor | Support available = not alone | "Help is there if I need it" |
+
+### Verification Question
+
+Before marking any phase complete, ask:
+> "Does this help users feel capable and clear, with genuine ownership of their idea?"
+
+---
+
 ## Overview
 
 Six phases derived from the natural dependency chain: Foundation enables Chat, Chat enables Sessions, Sessions enable Phase tracking, Phase tracking enables Idea Card evolution, and all participant data enables Instructor visibility. Each phase delivers a verifiable capability before the next can begin.
@@ -15,6 +39,8 @@ Six phases derived from the natural dependency chain: Foundation enables Chat, C
 ## Phase 1: Foundation
 
 **Goal:** Participants can authenticate and their data persists across sessions.
+
+**Emotional Purpose:** Users feel "My progress is safe" - trust that they can leave and return without losing anything. This safety enables vulnerability in the exploration process.
 
 **Dependencies:** None (first phase)
 
@@ -54,6 +80,8 @@ Plans:
 
 **Goal:** Participants can have conversations that feel identical to Claude.ai with the skill loaded.
 
+**Emotional Purpose:** Users feel "I'm understood" - conversation quality enables the discovery moments. Claude's responses help them see patterns in their own experience they hadn't noticed. This is where "I have more to offer than I realized" begins.
+
 **Dependencies:** Phase 1 (auth and data persistence)
 
 **Plans:** 4 plans
@@ -88,6 +116,8 @@ Plans:
 
 **Goal:** Participants can explore multiple ideas in parallel through named sessions.
 
+**Emotional Purpose:** Users feel "I can explore without losing anything" - freedom to pursue multiple directions without commitment anxiety. Reduces fear of "picking wrong" which blocks exploration.
+
 **Dependencies:** Phase 2 (working chat)
 
 **Requirements:**
@@ -110,6 +140,8 @@ Plans:
 ## Phase 4: Phase System
 
 **Goal:** Participants can see their progress and unlock phases sequentially as they complete the methodology.
+
+**Emotional Purpose:** Users feel "I'm making progress" - visual momentum builds confidence. Seeing phases complete creates sense of accomplishment and forward motion. Gates prevent rushing (which undermines depth).
 
 **Dependencies:** Phase 3 (sessions with skill-driven behavior)
 
@@ -135,6 +167,8 @@ Plans:
 ## Phase 5: Idea Card
 
 **Goal:** Participants see their idea crystallize visually as scattered blobs merge into a scored card.
+
+**Emotional Purpose:** Users feel "I can SEE my idea forming" - the abstract becomes tangible. Blobs merging visualizes THEIR journey from confusion to clarity. The card is proof of their work, their discovery - reinforces ownership.
 
 **Dependencies:** Phase 4 (phase tracking drives card evolution)
 
@@ -163,6 +197,8 @@ Plans:
 ## Phase 6: Instructor View
 
 **Goal:** Instructor can see all participants and read their conversations to prep for sessions.
+
+**Emotional Purpose:** Users feel "Help is there if I need it" - knowing an instructor can see their progress provides safety net. Not alone in the journey. Instructor can offer personalized guidance based on actual conversation context.
 
 **Dependencies:** Phases 1-4 (participant data, conversations, phase tracking must exist)
 

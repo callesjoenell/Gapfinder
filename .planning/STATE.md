@@ -6,9 +6,11 @@
 
 ## Project Reference
 
+**North Star:** Users exit feeling **confident**, **capable**, **clear**, and with genuine **ownership** of their idea. Every technical decision serves this emotional outcome. (See PROJECT.md for full North Star definition)
+
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 1 Foundation complete. Ready for Phase 2 Chat Core.
+**Current Focus:** Skill adaptation research complete. Ready to revise Phase 2 plans with North Star alignment.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling)
 
@@ -121,26 +123,39 @@ Get key from: https://console.anthropic.com -> API Keys
 - [x] Execute Plan 01-04 (Skill Integration)
 - [x] Execute Plan 01-05 (Context Management)
 - [x] Execute Plan 01-06 (Chat Integration)
-- [ ] Plan Phase 2 (Chat Core) via `/gsd:plan-phase 2`
+- [x] Plan Phase 2 (Chat Core) via `/gsd:plan-phase 2` — plans created, 4 plans in 2 waves
+- [x] **Skill Adaptation Research** — complete, see `.planning/research/SKILL-ADAPTATION-RESEARCH.md`
+- [x] **North Star Alignment** — PROJECT.md, ROADMAP.md, REQUIREMENTS.md, all Phase 2 plans updated
+- [x] **Create North Star Checklist** — `.planning/NORTH-STAR-CHECKLIST.md` for future plans
+- [ ] Execute Phase 2 (Chat Core) — plans ready, aligned with North Star
 
 ---
 
 ## Session Continuity
 
 **Last Session:** 2026-01-29
-**Last Action:** Completed Phase 1 Foundation (all 6 plans)
-**Next Action:** Plan Phase 2 (Chat Core)
+**Last Action:** Completed skill adaptation research and North Star alignment across all project documents
+**Next Action:** Execute Phase 2 (Chat Core) - plans are ready and aligned with emotional journey
 
-**Files Modified This Session:**
-- src/hooks/useScrollIntent.ts (created - scroll intent tracking)
-- src/hooks/useStreamingChat.ts (created - chat state management)
-- src/components/MessageList.tsx (created - message rendering)
-- src/components/MessageInput.tsx (created - input component)
-- src/components/Chat.tsx (created - main chat container)
-- src/App.tsx (updated - integrated chat and sessions)
-- convex/claude.ts (fixed - Anthropic model name)
-- .planning/phases/01-foundation/01-06-SUMMARY.md (created)
-- .planning/phases/01-foundation/01-VERIFICATION.md (created)
+**Completed This Session:**
+1. Skill adaptation research (SKILL-ADAPTATION-RESEARCH.md)
+2. North Star principle added to PROJECT.md
+3. User Outcome Goals added to REQUIREMENTS.md
+4. Emotional Purpose added to ROADMAP.md (all 6 phases)
+5. Emotional Purpose sections added to all 4 Phase 2 plans
+6. Created NORTH-STAR-CHECKLIST.md for future plans
+
+**Phase 2 Plans (Ready to Execute):**
+- 02-01-PLAN.md - Pagination, streaming backend + emotional purpose
+- 02-02-PLAN.md - Throttling, retry utilities + emotional purpose
+- 02-03-PLAN.md - Thinking section, markdown, messages UI + emotional purpose
+- 02-04-PLAN.md - End-to-end wiring + emotional purpose
+
+**Key Research Findings:**
+- Phase-specific summaries needed (not generic keyFindings)
+- Handoff state for phases 2, 5, 6, 8
+- Ownership rules must be in EVERY system prompt
+- v1 without MCP is viable (user provides research)
 
 ---
 
