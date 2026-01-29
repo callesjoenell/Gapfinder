@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { paginationOptsValidator } from "convex/server";
 import { query, mutation } from "./_generated/server";
 import { getAuthUserId } from "./auth";
 
@@ -20,6 +21,34 @@ export const getSessionMessages = query({
       .withIndex("by_session", (q) => q.eq("sessionId", args.sessionId))
       .order("asc")
       .collect();
+  },
+});
+
+// Paginated messages query for lazy-loading history
+// Returns desc order (most recent first) - client reverses to show oldest at top
+export const paginatedMessages = query({
+  args: {
+    sessionId: v.id("sessions"),
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return { page: [], continueCursor: null, isDone: true };
+    }
+
+    const session = await ctx.db.get(args.sessionId);
+    if (!session || session.userId !== userId) {
+      return { page: [], continueCursor: null, isDone: true };
+    }
+
+    // Order desc = most recent first for pagination
+    // Client reverses to show oldest at top
+    return await ctx.db
+      .query("messages")
+      .withIndex("by_session", (q) => q.eq("sessionId", args.sessionId))
+      .order("desc")
+      .paginate(args.paginationOpts);
   },
 });
 
