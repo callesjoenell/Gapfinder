@@ -1,4 +1,4 @@
-import { getPhaseConfig, PhaseConfig } from "./phaseConfig";
+import { getPhaseConfig } from "./phaseConfig";
 
 export interface Summary {
   phase: number;
