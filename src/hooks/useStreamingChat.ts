@@ -1,23 +1,30 @@
 import { useState, useCallback } from "react";
-import { useMutation, useQuery, useAction } from "convex/react";
+import { useMutation, useQuery, useAction, usePaginatedQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
 import { buildSystemPrompt } from "../lib/systemPrompts";
+import { streamWithRetry, translateError } from "../lib/streamingRetry";
+import { useThrottledStreamingText } from "./useThrottledStreamingText";
 
 interface Message {
   _id: Id<"messages">;
   role: "user" | "assistant";
   content: string;
+  thinking?: string;
   phase: number;
   timestamp: number;
 }
 
 interface UseStreamingChatResult {
-  messages: Message[] | undefined;
+  messages: Message[];
   streamingContent: string;
+  streamingThinking: string;
   isStreaming: boolean;
   error: string | null;
   sendMessage: (content: string) => Promise<void>;
+  loadMore: (numItems: number) => void;
+  isLoadingMore: boolean;
+  canLoadMore: boolean;
 }
 
 export function useStreamingChat(
@@ -25,15 +32,32 @@ export function useStreamingChat(
   currentPhase: number,
   sessionPath: "exploration" | "evaluation"
 ): UseStreamingChatResult {
-  const [streamingContent, setStreamingContent] = useState("");
+  // Raw streaming state (high frequency updates)
+  const [rawStreamingContent, setRawStreamingContent] = useState("");
+  const [rawStreamingThinking, setRawStreamingThinking] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Queries
-  const messages = useQuery(
-    api.messages.getSessionMessages,
-    sessionId ? { sessionId } : "skip"
+  // Throttled display state (50ms batching)
+  const streamingContent = useThrottledStreamingText(rawStreamingContent);
+  const streamingThinking = useThrottledStreamingText(rawStreamingThinking);
+
+  // Paginated messages query - loads most recent first, then older on scroll
+  const {
+    results: paginatedResults,
+    status: paginationStatus,
+    loadMore: loadMoreFn,
+  } = usePaginatedQuery(
+    api.messages.paginatedMessages,
+    sessionId ? { sessionId } : "skip",
+    { initialNumItems: 20 }
   );
+
+  // Reverse the paginated results to show oldest at top (query returns desc order)
+  const messages = paginatedResults ? [...paginatedResults].reverse() : [];
+  const isLoadingMore = paginationStatus === "LoadingMore";
+  const canLoadMore = paginationStatus === "CanLoadMore";
+
   const summaries = useQuery(
     api.summaries.getSessionSummaries,
     sessionId ? { sessionId } : "skip"
@@ -41,7 +65,7 @@ export function useStreamingChat(
 
   // Mutations and actions
   const saveMessage = useMutation(api.messages.saveMessage);
-  const chat = useAction(api.claude.chat);
+  const streamChat = useAction(api.claude.streamChat);
 
   const sendMessage = useCallback(
     async (content: string) => {
@@ -49,6 +73,8 @@ export function useStreamingChat(
 
       setError(null);
       setIsStreaming(true);
+      setRawStreamingContent("");
+      setRawStreamingThinking("");
 
       try {
         // Save user message immediately
@@ -59,7 +85,7 @@ export function useStreamingChat(
           content,
         });
 
-        // Build system prompt with current phase and summaries from prior phases
+        // Build system prompt with current phase and summaries
         const currentSummaries = (summaries || []).map((s) => ({
           phase: s.phase,
           completedAt: s.completedAt,
@@ -72,47 +98,64 @@ export function useStreamingChat(
           sessionPath,
         });
 
-        // Format messages for Claude (current messages + new user message)
-        const currentMessages = messages || [];
+        // Format messages for Claude (use current messages state)
         const formattedMessages = [
-          ...currentMessages.map((m) => ({
+          ...messages.map((m) => ({
             role: m.role as "user" | "assistant",
             content: m.content,
           })),
           { role: "user" as const, content },
         ];
 
-        // Call Claude (non-streaming for now - streaming via SSE would be Phase 2 Chat Core)
-        const response = await chat({
-          sessionId,
-          systemPrompt,
-          messages: formattedMessages,
-        });
+        // Call streaming action with retry (batch mode - backend accumulates full response)
+        const response = await streamWithRetry(() =>
+          streamChat({
+            sessionId,
+            systemPrompt,
+            messages: formattedMessages,
+          })
+        );
 
-        // Save assistant response
+        // Save assistant response with thinking
         await saveMessage({
           sessionId,
           phase: currentPhase,
           role: "assistant",
-          content: response,
+          content: response.text,
+          thinking: response.thinking || undefined,
         });
 
-        setStreamingContent("");
+        // Clear streaming state
+        setRawStreamingContent("");
+        setRawStreamingThinking("");
       } catch (e) {
-        console.error("Chat error:", e);
-        setError(e instanceof Error ? e.message : "Failed to send message");
+        // Translate error to user-friendly message
+        setError(translateError(e));
       } finally {
         setIsStreaming(false);
       }
     },
-    [sessionId, currentPhase, sessionPath, messages, summaries, isStreaming, saveMessage, chat]
+    [
+      sessionId,
+      currentPhase,
+      sessionPath,
+      messages,
+      summaries,
+      isStreaming,
+      saveMessage,
+      streamChat,
+    ]
   );
 
   return {
     messages,
     streamingContent,
+    streamingThinking,
     isStreaming,
     error,
     sendMessage,
+    loadMore: loadMoreFn,
+    isLoadingMore,
+    canLoadMore,
   };
 }

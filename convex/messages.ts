@@ -34,12 +34,12 @@ export const paginatedMessages = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      return { page: [], continueCursor: null, isDone: true };
+      throw new Error("Not authenticated");
     }
 
     const session = await ctx.db.get(args.sessionId);
     if (!session || session.userId !== userId) {
-      return { page: [], continueCursor: null, isDone: true };
+      throw new Error("Session not found");
     }
 
     // Order desc = most recent first for pagination
