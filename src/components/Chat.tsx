@@ -12,23 +12,36 @@ interface ChatProps {
 
 export function Chat({ sessionId, currentPhase, sessionPath }: ChatProps) {
   const { containerRef, scrollToBottom, isUserScrolledUp } = useScrollIntent();
-  const { messages, streamingContent, isStreaming, error, sendMessage } =
-    useStreamingChat(sessionId, currentPhase, sessionPath);
+  const {
+    messages,
+    streamingContent,
+    streamingThinking,
+    isStreaming,
+    error,
+    sendMessage,
+    loadMore,
+    isLoadingMore,
+    canLoadMore,
+  } = useStreamingChat(sessionId, currentPhase, sessionPath);
 
   return (
     <div className="flex flex-col h-full bg-gray-50 relative">
       {error && (
-        <div className="bg-red-50 text-red-700 px-4 py-2 text-sm">
-          Error: {error}
+        <div className="bg-red-50 text-red-700 px-4 py-2 text-sm border-b border-red-100">
+          {error}
         </div>
       )}
 
       <MessageList
         messages={messages || []}
         streamingContent={streamingContent}
+        streamingThinking={streamingThinking}
         isStreaming={isStreaming}
         containerRef={containerRef}
         onScrollChange={scrollToBottom}
+        onLoadMore={loadMore}
+        isLoadingMore={isLoadingMore}
+        canLoadMore={canLoadMore}
       />
 
       {/* Scroll to bottom indicator */}
@@ -40,7 +53,8 @@ export function Chat({ sessionId, currentPhase, sessionPath }: ChatProps) {
               behavior: "smooth",
             });
           }}
-          className="absolute bottom-24 right-8 bg-white shadow-lg rounded-full p-2 text-gray-600 hover:bg-gray-50"
+          className="absolute bottom-24 right-8 bg-white shadow-lg rounded-full p-2 text-gray-600 hover:bg-gray-50 transition-colors"
+          aria-label="Scroll to bottom"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
