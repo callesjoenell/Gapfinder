@@ -22,7 +22,7 @@ export const chat = action({
   },
   handler: async (_ctx, args): Promise<string> => {
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-5-20250514",
+      model: "claude-sonnet-4-20250514",
       max_tokens: 4096,
       system: args.systemPrompt,
       messages: args.messages,
@@ -54,7 +54,7 @@ export const summarizePhase = action({
   handler: async (ctx, args) => {
     // Call Claude to extract summary
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-5-20250514",
+      model: "claude-sonnet-4-20250514",
       max_tokens: 2000,
       messages: [
         {
@@ -129,7 +129,7 @@ export const assessCompletion = action({
   },
   handler: async (_ctx, args) => {
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-5-20250514",
+      model: "claude-sonnet-4-20250514",
       max_tokens: 1000,
       messages: [
         {
