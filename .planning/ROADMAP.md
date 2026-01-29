@@ -21,12 +21,12 @@ Six phases derived from the natural dependency chain: Foundation enables Chat, C
 **Plans:** 6 plans
 
 Plans:
-- [ ] 01-01-PLAN.md - Project setup, Convex initialization, and database schema
-- [ ] 01-02-PLAN.md - Magic link authentication with Resend
-- [ ] 01-03-PLAN.md - Sessions/Messages API and Layout UI scaffold
-- [ ] 01-04-PLAN.md - System prompt engineering with scientific frameworks
-- [ ] 01-05-PLAN.md - Context management and hierarchical summarization
-- [ ] 01-06-PLAN.md - Chat integration and end-to-end wiring
+- [x] 01-01-PLAN.md - Project setup, Convex initialization, and database schema
+- [x] 01-02-PLAN.md - Magic link authentication with Resend (migrated to Clerk)
+- [x] 01-03-PLAN.md - Sessions/Messages API and Layout UI scaffold
+- [x] 01-04-PLAN.md - System prompt engineering with scientific frameworks
+- [x] 01-05-PLAN.md - Context management and hierarchical summarization
+- [x] 01-06-PLAN.md - Chat integration and end-to-end wiring
 
 **Requirements:**
 - AUTH-01: Participant receives magic link via email tied to their cohort (NOTE: v1 standalone users, no cohorts)
@@ -180,7 +180,7 @@ Plans:
 
 | Phase | Status | Requirements | Completion |
 |-------|--------|--------------|------------|
-| 1 - Foundation | Planned | 8 | 0% |
+| 1 - Foundation | Complete | 8 | 100% |
 | 2 - Chat Core | Not Started | 4 | 0% |
 | 3 - Sessions | Not Started | 3 | 0% |
 | 4 - Phase System | Not Started | 4 | 0% |
@@ -216,4 +216,4 @@ Note: Phases 5 and 6 both depend on Phase 4 but are independent of each other. T
 ---
 
 *Roadmap created: 2025-01-22*
-*Last updated: 2025-01-28*
+*Last updated: 2026-01-29*
