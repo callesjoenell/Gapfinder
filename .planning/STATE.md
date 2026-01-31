@@ -19,13 +19,13 @@
 ## Current Position
 
 **Phase:** 3 - Sessions (IN PROGRESS)
-**Plan:** 02 of 05 complete
+**Plan:** 03 of 05 complete
 **Status:** In Progress
-**Last Activity:** 2026-01-31 - Completed 03-02-PLAN.md (Session State Persistence Hooks)
+**Last Activity:** 2026-01-31 - Completed 03-03-PLAN.md (Sidebar Session Groups)
 
 **Progress:**
 ```
-[█████████████████████░] 75% (12/16 plans complete)
+[█████████████████████░] 81% (13/16 plans complete)
 ```
 
 **Phase Breakdown:**
@@ -33,7 +33,7 @@
 |-------|-------|--------|
 | 1 - Foundation | 6 | Complete |
 | 2 - Chat Core | 4 | Complete |
-| 3 - Sessions | 5 | 2/5 Complete |
+| 3 - Sessions | 5 | 3/5 Complete |
 | 4 - Phase System | 2 | Not Started |
 | 5 - Idea Card | 2 | Not Started |
 | 6 - Instructor View | 0 | Not Started |
@@ -80,6 +80,11 @@
 | 100ms throttle on scroll saves | Prevents excessive localStorage writes during scrolling | 2026-01-31 |
 | useLayoutEffect for scroll restoration | Restores before paint to prevent visual jump | 2026-01-31 |
 | isLoaded flag for scroll restoration | Prevents race condition where scroll restores before messages load | 2026-01-31 |
+| Phase indicator as dot + name | Cleaner visual than progress bar; shows phase at a glance | 2026-01-31 |
+| New session button at top of group | Follows natural reading order per CONTEXT.md | 2026-01-31 |
+| ArchivedSection renders null when empty | Keeps sidebar clean; appears only after first archive | 2026-01-31 |
+| Context menu state lifted to Sidebar | Prepares for 03-04; parent manages position state | 2026-01-31 |
+| Group-specific localStorage keys | Each collapsible section persists independently | 2026-01-31 |
 
 ### Technical Findings
 
@@ -146,13 +151,13 @@ Get key from: https://console.anthropic.com -> API Keys
 ## Session Continuity
 
 **Last Session:** 2026-01-31
-**Last Action:** Completed 03-02-PLAN.md (Session State Persistence Hooks)
-**Next Action:** Continue Phase 3 - execute remaining plans (03-05)
+**Last Action:** Completed 03-03-PLAN.md (Sidebar Session Groups)
+**Next Action:** Continue Phase 3 - execute remaining plans (03-04, 03-05)
 
 **Phase 3 Progress:**
 - [x] 03-01-PLAN.md - Sessions Backend Infrastructure (archive, linking, limits)
 - [x] 03-02-PLAN.md - Session State Persistence Hooks (scroll, draft)
-- [ ] 03-03-PLAN.md - Pending
+- [x] 03-03-PLAN.md - Sidebar Session Groups (exploration/evaluation/archived)
 - [ ] 03-04-PLAN.md - Pending
 - [ ] 03-05-PLAN.md - Pending
 
@@ -176,4 +181,4 @@ Get key from: https://console.anthropic.com -> API Keys
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-01-31 (Phase 3 Plan 02 complete)*
+*Last updated: 2026-01-31 (Phase 3 Plan 03 complete)*
