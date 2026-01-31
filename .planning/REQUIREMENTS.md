@@ -167,16 +167,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 - Foundation | Pending |
-| AUTH-02 | Phase 1 - Foundation | Pending |
-| AUTH-03 | Phase 1 - Foundation | Pending |
+| AUTH-01 | Phase 1 - Foundation | Complete |
+| AUTH-02 | Phase 1 - Foundation | Complete |
+| AUTH-03 | Phase 1 - Foundation | Complete |
 | AUTH-04 | Phase 3 - Sessions | Pending |
 | AUTH-05 | Phase 3 - Sessions | Pending |
-| CHAT-01 | Phase 2 - Chat Core | Pending |
-| CHAT-02 | Phase 2 - Chat Core | Pending |
+| CHAT-01 | Phase 2 - Chat Core | Complete |
+| CHAT-02 | Phase 2 - Chat Core | Complete |
 | CHAT-03 | Phase 3 - Sessions | Pending |
-| CHAT-04 | Phase 2 - Chat Core | Pending |
-| CHAT-05 | Phase 2 - Chat Core | Pending |
+| CHAT-04 | Phase 2 - Chat Core | Complete |
+| CHAT-05 | Phase 2 - Chat Core | Complete |
 | PROG-01 | Phase 4 - Phase System | Pending |
 | PROG-02 | Phase 4 - Phase System | Pending |
 | PROG-03 | Phase 4 - Phase System | Pending |
@@ -190,11 +190,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INST-01 | Phase 6 - Instructor View | Pending |
 | INST-02 | Phase 6 - Instructor View | Pending |
 | INST-03 | Phase 6 - Instructor View | Pending |
-| DATA-01 | Phase 1 - Foundation | Pending |
-| DATA-02 | Phase 1 - Foundation | Pending |
-| DATA-03 | Phase 1 - Foundation | Pending |
-| DATA-04 | Phase 1 - Foundation | Pending |
-| DATA-05 | Phase 1 - Foundation | Pending |
+| DATA-01 | Phase 1 - Foundation | Complete |
+| DATA-02 | Phase 1 - Foundation | Complete |
+| DATA-03 | Phase 1 - Foundation | Complete |
+| DATA-04 | Phase 1 - Foundation | Deferred |
+| DATA-05 | Phase 1 - Foundation | Complete |
 
 **Coverage:**
 - v1 requirements: 28 total

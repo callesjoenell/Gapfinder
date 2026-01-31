@@ -10,7 +10,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Skill adaptation research complete. Ready to revise Phase 2 plans with North Star alignment.
+**Current Focus:** Phase 2 complete. User feedback captured for prompt tuning. Ready for Phase 3 (Sessions).
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling)
 
@@ -128,7 +128,7 @@ Get key from: https://console.anthropic.com -> API Keys
 - [x] **Skill Adaptation Research** — complete, see `.planning/research/SKILL-ADAPTATION-RESEARCH.md`
 - [x] **North Star Alignment** — PROJECT.md, ROADMAP.md, REQUIREMENTS.md, all Phase 2 plans updated
 - [x] **Create North Star Checklist** — `.planning/NORTH-STAR-CHECKLIST.md` for future plans
-- [ ] Execute Phase 2 (Chat Core) — plans ready, aligned with North Star
+- [x] Execute Phase 2 (Chat Core) — 4 plans complete, verified, batch mode accepted for v1
 
 ---
 
