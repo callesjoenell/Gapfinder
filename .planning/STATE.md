@@ -18,14 +18,14 @@
 
 ## Current Position
 
-**Phase:** 2 - Chat Core (COMPLETE)
-**Plan:** 04 of 04 complete
-**Status:** Phase Complete
-**Last Activity:** 2026-01-29 - Completed 02-04-PLAN.md (End-to-End Wiring)
+**Phase:** 3 - Sessions (IN PROGRESS)
+**Plan:** 01 of 05 complete
+**Status:** In Progress
+**Last Activity:** 2026-01-31 - Completed 03-01-PLAN.md (Sessions Backend Infrastructure)
 
 **Progress:**
 ```
-[####################] 62% (10/16 plans complete)
+[████████████████████░░] 69% (11/16 plans complete)
 ```
 
 **Phase Breakdown:**
@@ -33,7 +33,7 @@
 |-------|-------|--------|
 | 1 - Foundation | 6 | Complete |
 | 2 - Chat Core | 4 | Complete |
-| 3 - Sessions | 2 | Not Started |
+| 3 - Sessions | 5 | 1/5 Complete |
 | 4 - Phase System | 2 | Not Started |
 | 5 - Idea Card | 2 | Not Started |
 | 6 - Instructor View | 0 | Not Started |
@@ -73,6 +73,9 @@
 | 50 message backup trigger for summarization | Catches verbose conversations that might not hit token limit | 2026-01-28 |
 | Keep last 15 messages when trimming mid-phase | Preserves recent context continuity | 2026-01-28 |
 | JSON extraction via regex for Claude responses | Handles markdown-wrapped JSON responses defensively | 2026-01-28 |
+| isArchived as optional boolean | Backward compatibility with existing sessions without data migration | 2026-01-31 |
+| In-memory filtering for optional fields | Convex can't efficiently index optional fields; filter post-query for user-scoped data | 2026-01-31 |
+| Contextual limit error messages | Exploration vs evaluation have different user journeys; tailor messages accordingly | 2026-01-31 |
 
 ### Technical Findings
 
@@ -91,6 +94,8 @@
 - Resend SDK uses Node.js stream/crypto - use fetch API directly instead
 - Convex actions use "use node" directive for Node.js runtime (needed for @anthropic-ai/sdk)
 - Actions call mutations via ctx.runMutation for database writes
+- Optional boolean fields handle additive schema changes without backfills
+- In-memory filtering acceptable for user-scoped queries (typically <100 records per user)
 
 ### Known Pitfalls (from research)
 
@@ -134,9 +139,16 @@ Get key from: https://console.anthropic.com -> API Keys
 
 ## Session Continuity
 
-**Last Session:** 2026-01-29
-**Last Action:** Completed 02-04-PLAN.md (End-to-End Wiring) - Phase 2 Complete
-**Next Action:** Plan Phase 3 (Sessions) via `/gsd:plan-phase 3`
+**Last Session:** 2026-01-31
+**Last Action:** Completed 03-01-PLAN.md (Sessions Backend Infrastructure)
+**Next Action:** Continue Phase 3 - execute remaining plans (02-05)
+
+**Phase 3 Progress:**
+- [x] 03-01-PLAN.md - Sessions Backend Infrastructure (archive, linking, limits)
+- [ ] 03-02-PLAN.md - Pending
+- [ ] 03-03-PLAN.md - Pending
+- [ ] 03-04-PLAN.md - Pending
+- [ ] 03-05-PLAN.md - Pending
 
 **Phase 2 Complete:**
 - [x] 02-01-PLAN.md - Pagination, streaming backend
@@ -158,4 +170,4 @@ Get key from: https://console.anthropic.com -> API Keys
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-01-29 (Phase 2 complete)*
+*Last updated: 2026-01-31 (Phase 3 Plan 01 complete)*
