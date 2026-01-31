@@ -39,10 +39,33 @@ export const createSession = mutation({
   args: {
     name: v.string(),
     path: v.union(v.literal("exploration"), v.literal("evaluation")),
+    description: v.optional(v.string()),
+    linkedExplorationId: v.optional(v.id("sessions")),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
+
+    // Check 5-session limit per path
+    const allSessions = await ctx.db
+      .query("sessions")
+      .withIndex("by_user_active", (q) =>
+        q.eq("userId", userId)
+          .eq("isDeleted", false)
+      )
+      .collect();
+
+    const activeSessionsForPath = allSessions.filter(session =>
+      session.path === args.path && !session.isArchived
+    );
+
+    if (activeSessionsForPath.length >= 5) {
+      if (args.path === "exploration") {
+        throw new Error("You've explored 5 different areas! Consider committing to one and starting an evaluation to dive deeper.");
+      } else {
+        throw new Error("You have 5 evaluations in progress. Archive or complete some before starting new ones.");
+      }
+    }
 
     const now = Date.now();
 
@@ -54,6 +77,8 @@ export const createSession = mutation({
       isPaid: args.path === "evaluation" ? false : true, // Exploration is "paid" (free), Evaluation needs payment
       isDeleted: false,
       isArchived: false,
+      description: args.description,
+      linkedExplorationId: args.linkedExplorationId,
       createdAt: now,
       lastActiveAt: now,
     });
@@ -183,5 +208,37 @@ export const countSessionsByPath = query({
     return allSessions.filter(session =>
       session.path === args.path && !session.isArchived
     ).length;
+  },
+});
+
+// Archive a session
+export const archiveSession = mutation({
+  args: { sessionId: v.id("sessions") },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+
+    const session = await ctx.db.get(args.sessionId);
+    if (!session || session.userId !== userId) {
+      throw new Error("Session not found");
+    }
+
+    await ctx.db.patch(args.sessionId, { isArchived: true });
+  },
+});
+
+// Unarchive a session
+export const unarchiveSession = mutation({
+  args: { sessionId: v.id("sessions") },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+
+    const session = await ctx.db.get(args.sessionId);
+    if (!session || session.userId !== userId) {
+      throw new Error("Session not found");
+    }
+
+    await ctx.db.patch(args.sessionId, { isArchived: false });
   },
 });
