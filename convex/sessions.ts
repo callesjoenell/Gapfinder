@@ -53,6 +53,7 @@ export const createSession = mutation({
       path: args.path,
       isPaid: args.path === "evaluation" ? false : true, // Exploration is "paid" (free), Evaluation needs payment
       isDeleted: false,
+      isArchived: false,
       createdAt: now,
       lastActiveAt: now,
     });
