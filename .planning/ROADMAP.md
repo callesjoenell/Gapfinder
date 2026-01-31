@@ -120,6 +120,15 @@ Plans:
 
 **Dependencies:** Phase 2 (working chat)
 
+**Plans:** 5 plans
+
+Plans:
+- [ ] 03-01-PLAN.md - Backend infrastructure: schema extensions, path-based queries, archive mutations, limit enforcement
+- [ ] 03-02-PLAN.md - Session state persistence: scroll position and draft message hooks
+- [ ] 03-03-PLAN.md - Sidebar restructure: SessionGroup, SessionItem, ArchivedSection components
+- [ ] 03-04-PLAN.md - Session actions: context menu, inline edit, delete confirmation modal
+- [ ] 03-05-PLAN.md - Full integration: onboarding view, updated creation modal, wiring all components
+
 **Requirements:**
 - AUTH-04: Multiple idea sessions accessible from sidebar (parallel exploration)
 - AUTH-05: Sessions have user-defined names
@@ -226,7 +235,7 @@ Plans:
 |-------|--------|--------------|------------|
 | 1 - Foundation | Complete | 8 | 100% |
 | 2 - Chat Core | Complete | 4 | 100% |
-| 3 - Sessions | Not Started | 3 | 0% |
+| 3 - Sessions | Planned | 3 | 0% |
 | 4 - Phase System | Not Started | 4 | 0% |
 | 5 - Idea Card | Not Started | 6 | 0% |
 | 6 - Instructor View | Not Started | 3 | 0% |
@@ -260,4 +269,4 @@ Note: Phases 5 and 6 both depend on Phase 4 but are independent of each other. T
 ---
 
 *Roadmap created: 2025-01-22*
-*Last updated: 2026-01-29*
+*Last updated: 2026-01-31*
