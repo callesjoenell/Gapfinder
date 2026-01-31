@@ -34,12 +34,14 @@ export const paginatedMessages = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      throw new Error("Not authenticated");
+      // Return empty pagination result when not authenticated
+      return { page: [], isDone: true, continueCursor: "" };
     }
 
     const session = await ctx.db.get(args.sessionId);
     if (!session || session.userId !== userId) {
-      throw new Error("Session not found");
+      // Return empty pagination result for invalid session
+      return { page: [], isDone: true, continueCursor: "" };
     }
 
     // Order desc = most recent first for pagination
