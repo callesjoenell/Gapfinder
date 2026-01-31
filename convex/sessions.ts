@@ -119,3 +119,69 @@ export const touchSession = mutation({
     await ctx.db.patch(args.sessionId, { lastActiveAt: Date.now() });
   },
 });
+
+// List sessions by path type (non-deleted, non-archived)
+export const listSessionsByPath = query({
+  args: { path: v.union(v.literal("exploration"), v.literal("evaluation")) },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return [];
+
+    const allSessions = await ctx.db
+      .query("sessions")
+      .withIndex("by_user_active", (q) =>
+        q.eq("userId", userId)
+          .eq("isDeleted", false)
+      )
+      .order("desc")
+      .collect();
+
+    // Filter by path and exclude archived sessions (treating undefined as false)
+    return allSessions.filter(session =>
+      session.path === args.path && !session.isArchived
+    );
+  },
+});
+
+// List archived sessions (regardless of path)
+export const listArchivedSessions = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return [];
+
+    const allSessions = await ctx.db
+      .query("sessions")
+      .withIndex("by_user_archived", (q) =>
+        q.eq("userId", userId)
+          .eq("isDeleted", false)
+      )
+      .order("desc")
+      .collect();
+
+    // Only return sessions where isArchived is explicitly true
+    return allSessions.filter(session => session.isArchived === true);
+  },
+});
+
+// Count active sessions per path (for limit checking)
+export const countSessionsByPath = query({
+  args: { path: v.union(v.literal("exploration"), v.literal("evaluation")) },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return 0;
+
+    const allSessions = await ctx.db
+      .query("sessions")
+      .withIndex("by_user_active", (q) =>
+        q.eq("userId", userId)
+          .eq("isDeleted", false)
+      )
+      .collect();
+
+    // Count only non-archived sessions for the specific path (treating undefined as false)
+    return allSessions.filter(session =>
+      session.path === args.path && !session.isArchived
+    ).length;
+  },
+});
