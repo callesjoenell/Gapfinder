@@ -1,82 +1,90 @@
+import { useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
+import { SessionGroup } from "../SessionGroup";
+import { ArchivedSection } from "../ArchivedSection";
 
 interface SidebarProps {
   currentSessionId: Id<"sessions"> | null;
   onSelectSession: (sessionId: Id<"sessions">) => void;
-  onNewSession: () => void;
+  onNewSession: (path: "exploration" | "evaluation") => void;
 }
 
-// Phase names for display
-const phaseNames: Record<number, string> = {
-  0: "Know Yourself",
-  1: "Find Gaps",
-  2: "Research",
-  3: "Your Idea",
-  4: "Customers",
-  5: "Problem",
-  6: "Solution",
-  7: "Score",
-  8: "Refine",
-  9: "Launch",
-};
+export function Sidebar({
+  currentSessionId,
+  onSelectSession,
+  onNewSession,
+}: SidebarProps) {
+  // Context menu state (lifted up for later plan)
+  const [contextMenu, setContextMenu] = useState<{
+    sessionId: Id<"sessions">;
+    x: number;
+    y: number;
+  } | null>(null);
 
-export function Sidebar({ currentSessionId, onSelectSession, onNewSession }: SidebarProps) {
-  const sessions = useQuery(api.sessions.listSessions);
+  // Query sessions by path
+  const explorationSessions = useQuery(api.sessions.listSessionsByPath, {
+    path: "exploration",
+  });
+  const evaluationSessions = useQuery(api.sessions.listSessionsByPath, {
+    path: "evaluation",
+  });
+  const archivedSessions = useQuery(api.sessions.listArchivedSessions);
+
+  const handleContextMenu = (sessionId: Id<"sessions">, e: React.MouseEvent) => {
+    e.preventDefault();
+    setContextMenu({
+      sessionId,
+      x: e.clientX,
+      y: e.clientY,
+    });
+  };
+
+  const closeContextMenu = () => setContextMenu(null);
+
+  // Loading state
+  const isLoading =
+    explorationSessions === undefined ||
+    evaluationSessions === undefined ||
+    archivedSessions === undefined;
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen">
-      {/* New session button */}
-      <div className="p-4 border-b border-gray-200">
-        <button
-          onClick={onNewSession}
-          className="w-full bg-primary-500 text-white py-2 px-4 rounded-lg hover:bg-primary-600 transition-colors flex items-center justify-center gap-2"
-        >
-          <span className="text-lg">+</span>
-          New Session
-        </button>
-      </div>
-
-      {/* Session list */}
+      {/* Session groups */}
       <div className="flex-1 overflow-y-auto p-2">
-        {sessions === undefined ? (
+        {isLoading ? (
           <div className="p-4 text-center text-gray-400">Loading...</div>
-        ) : sessions.length === 0 ? (
-          <div className="p-4 text-center text-gray-400 text-sm">
-            No sessions yet. Create your first one!
-          </div>
         ) : (
-          <ul className="space-y-1">
-            {sessions.map((session) => (
-              <li key={session._id}>
-                <button
-                  onClick={() => onSelectSession(session._id)}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    currentSessionId === session._id
-                      ? "bg-primary-50 text-primary-700"
-                      : "hover:bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  <div className="font-medium truncate">{session.name}</div>
-                  <div className="flex items-center gap-2 mt-1">
-                    {/* Mini progress bar */}
-                    <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-primary-500 transition-all"
-                        style={{
-                          width: `${((session.currentPhase + 1) / 10) * 100}%`,
-                        }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-500">
-                      {phaseNames[session.currentPhase] || `Phase ${session.currentPhase}`}
-                    </span>
-                  </div>
-                </button>
-              </li>
-            ))}
-          </ul>
+          <>
+            {/* Area Exploration group */}
+            <SessionGroup
+              type="exploration"
+              sessions={explorationSessions || []}
+              currentSessionId={currentSessionId}
+              onSelectSession={onSelectSession}
+              onNewSession={() => onNewSession("exploration")}
+              onContextMenu={handleContextMenu}
+            />
+
+            {/* Idea Evaluation group */}
+            <SessionGroup
+              type="evaluation"
+              sessions={evaluationSessions || []}
+              currentSessionId={currentSessionId}
+              onSelectSession={onSelectSession}
+              onNewSession={() => onNewSession("evaluation")}
+              onContextMenu={handleContextMenu}
+            />
+
+            {/* Archived section (only appears after first archive) */}
+            <ArchivedSection
+              sessions={archivedSessions || []}
+              currentSessionId={currentSessionId}
+              onSelectSession={onSelectSession}
+              onContextMenu={handleContextMenu}
+            />
+          </>
         )}
       </div>
 
@@ -86,6 +94,15 @@ export function Sidebar({ currentSessionId, onSelectSession, onNewSession }: Sid
           Settings
         </button>
       </div>
+
+      {/* Context menu placeholder - will be implemented in 03-04 */}
+      {contextMenu && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={closeContextMenu}
+          onContextMenu={(e) => { e.preventDefault(); closeContextMenu(); }}
+        />
+      )}
     </aside>
   );
 }
