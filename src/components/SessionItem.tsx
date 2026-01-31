@@ -1,4 +1,7 @@
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import type { Doc } from "../../convex/_generated/dataModel";
+import { InlineEditableText } from "./InlineEditableText";
 
 // Phase names for display
 const phaseNames: Record<number, string> = {
@@ -19,6 +22,8 @@ interface SessionItemProps {
   isActive: boolean;
   onSelect: () => void;
   onContextMenu: (e: React.MouseEvent) => void;
+  isEditing?: boolean;
+  onEditEnd?: () => void;
 }
 
 export function SessionItem({
@@ -26,8 +31,15 @@ export function SessionItem({
   isActive,
   onSelect,
   onContextMenu,
+  isEditing = false,
+  onEditEnd = () => {},
 }: SessionItemProps) {
+  const updateSession = useMutation(api.sessions.updateSession);
   const phaseName = phaseNames[session.currentPhase] || `Phase ${session.currentPhase}`;
+
+  const handleSave = async (newName: string) => {
+    await updateSession({ sessionId: session._id, name: newName });
+  };
 
   return (
     <button
@@ -40,7 +52,17 @@ export function SessionItem({
       }`}
     >
       <div className="flex items-center justify-between">
-        <span className="font-medium truncate flex-1 pr-2">{session.name}</span>
+        {isEditing ? (
+          <InlineEditableText
+            value={session.name}
+            isEditing={true}
+            onEditEnd={onEditEnd}
+            onSave={handleSave}
+            inputClassName="font-medium truncate flex-1 pr-2"
+          />
+        ) : (
+          <span className="font-medium truncate flex-1 pr-2">{session.name}</span>
+        )}
       </div>
       <div className="flex items-center gap-2 mt-1">
         {/* Phase indicator dot */}

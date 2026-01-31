@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
+import type { Id, Doc } from "../../../convex/_generated/dataModel";
 import { SessionGroup } from "../SessionGroup";
 import { ArchivedSection } from "../ArchivedSection";
+import { SessionContextMenu } from "../SessionContextMenu";
+import { DeleteConfirmModal } from "../DeleteConfirmModal";
 
 interface SidebarProps {
   currentSessionId: Id<"sessions"> | null;
@@ -16,12 +18,18 @@ export function Sidebar({
   onSelectSession,
   onNewSession,
 }: SidebarProps) {
-  // Context menu state (lifted up for later plan)
+  // Context menu state
   const [contextMenu, setContextMenu] = useState<{
     sessionId: Id<"sessions">;
     x: number;
     y: number;
   } | null>(null);
+
+  // Inline editing state
+  const [editingSessionId, setEditingSessionId] = useState<Id<"sessions"> | null>(null);
+
+  // Delete confirmation modal state
+  const [deleteSession, setDeleteSession] = useState<Doc<"sessions"> | null>(null);
 
   // Query sessions by path
   const explorationSessions = useQuery(api.sessions.listSessionsByPath, {
@@ -31,6 +39,14 @@ export function Sidebar({
     path: "evaluation",
   });
   const archivedSessions = useQuery(api.sessions.listArchivedSessions);
+
+  // Look up session from all session lists for context menu
+  const allSessions = [
+    ...(explorationSessions || []),
+    ...(evaluationSessions || []),
+    ...(archivedSessions || []),
+  ];
+  const contextSession = contextMenu ? allSessions.find(s => s._id === contextMenu.sessionId) : null;
 
   const handleContextMenu = (sessionId: Id<"sessions">, e: React.MouseEvent) => {
     e.preventDefault();
@@ -42,6 +58,30 @@ export function Sidebar({
   };
 
   const closeContextMenu = () => setContextMenu(null);
+
+  const handleRename = () => {
+    if (contextMenu) {
+      setEditingSessionId(contextMenu.sessionId);
+    }
+    closeContextMenu();
+  };
+
+  const handleDelete = () => {
+    if (contextSession) {
+      setDeleteSession(contextSession);
+    }
+    closeContextMenu();
+  };
+
+  const handleDeleted = () => {
+    // If deleted session was active, switch to first available session
+    if (deleteSession && deleteSession._id === currentSessionId) {
+      const firstSession = explorationSessions?.[0] || evaluationSessions?.[0];
+      if (firstSession) {
+        onSelectSession(firstSession._id);
+      }
+    }
+  };
 
   // Loading state
   const isLoading =
@@ -65,6 +105,8 @@ export function Sidebar({
               onSelectSession={onSelectSession}
               onNewSession={() => onNewSession("exploration")}
               onContextMenu={handleContextMenu}
+              editingSessionId={editingSessionId}
+              onEditEnd={() => setEditingSessionId(null)}
             />
 
             {/* Idea Evaluation group */}
@@ -75,6 +117,8 @@ export function Sidebar({
               onSelectSession={onSelectSession}
               onNewSession={() => onNewSession("evaluation")}
               onContextMenu={handleContextMenu}
+              editingSessionId={editingSessionId}
+              onEditEnd={() => setEditingSessionId(null)}
             />
 
             {/* Archived section (only appears after first archive) */}
@@ -83,6 +127,8 @@ export function Sidebar({
               currentSessionId={currentSessionId}
               onSelectSession={onSelectSession}
               onContextMenu={handleContextMenu}
+              editingSessionId={editingSessionId}
+              onEditEnd={() => setEditingSessionId(null)}
             />
           </>
         )}
@@ -95,14 +141,24 @@ export function Sidebar({
         </button>
       </div>
 
-      {/* Context menu placeholder - will be implemented in 03-04 */}
-      {contextMenu && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={closeContextMenu}
-          onContextMenu={(e) => { e.preventDefault(); closeContextMenu(); }}
-        />
-      )}
+      {/* Context menu */}
+      <SessionContextMenu
+        isOpen={contextMenu !== null}
+        position={contextMenu || { x: 0, y: 0 }}
+        session={contextSession || null}
+        onClose={closeContextMenu}
+        onRename={handleRename}
+        onDeleted={handleDelete}
+      />
+
+      {/* Delete confirmation modal */}
+      <DeleteConfirmModal
+        isOpen={deleteSession !== null}
+        sessionId={deleteSession?._id || null}
+        sessionName={deleteSession?.name || ""}
+        onClose={() => setDeleteSession(null)}
+        onDeleted={handleDeleted}
+      />
     </aside>
   );
 }

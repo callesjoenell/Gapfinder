@@ -7,6 +7,8 @@ interface ArchivedSectionProps {
   currentSessionId: Id<"sessions"> | null;
   onSelectSession: (sessionId: Id<"sessions">) => void;
   onContextMenu: (sessionId: Id<"sessions">, e: React.MouseEvent) => void;
+  editingSessionId: Id<"sessions"> | null;
+  onEditEnd: () => void;
 }
 
 export function ArchivedSection({
@@ -14,6 +16,8 @@ export function ArchivedSection({
   currentSessionId,
   onSelectSession,
   onContextMenu,
+  editingSessionId,
+  onEditEnd,
 }: ArchivedSectionProps) {
   const [isExpanded, setIsExpanded] = useLocalStorage(
     "gapfinder-archived-expanded",
@@ -64,6 +68,8 @@ export function ArchivedSection({
               isActive={session._id === currentSessionId}
               onSelect={() => onSelectSession(session._id)}
               onContextMenu={(e) => onContextMenu(session._id, e)}
+              isEditing={session._id === editingSessionId}
+              onEditEnd={onEditEnd}
             />
           ))}
         </div>

@@ -9,6 +9,8 @@ interface SessionGroupProps {
   onSelectSession: (sessionId: Id<"sessions">) => void;
   onNewSession: () => void;
   onContextMenu: (sessionId: Id<"sessions">, e: React.MouseEvent) => void;
+  editingSessionId: Id<"sessions"> | null;
+  onEditEnd: () => void;
 }
 
 export function SessionGroup({
@@ -18,6 +20,8 @@ export function SessionGroup({
   onSelectSession,
   onNewSession,
   onContextMenu,
+  editingSessionId,
+  onEditEnd,
 }: SessionGroupProps) {
   const [isExpanded, setIsExpanded] = useLocalStorage(
     `gapfinder-group-${type}-expanded`,
@@ -76,6 +80,8 @@ export function SessionGroup({
               isActive={session._id === currentSessionId}
               onSelect={() => onSelectSession(session._id)}
               onContextMenu={(e) => onContextMenu(session._id, e)}
+              isEditing={session._id === editingSessionId}
+              onEditEnd={onEditEnd}
             />
           ))}
 

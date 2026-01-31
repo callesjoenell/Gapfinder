@@ -7,6 +7,8 @@ import type { Id } from "../convex/_generated/dataModel";
 import { Layout } from "./components/layout/Layout";
 import { Chat } from "./components/Chat";
 import { NewSessionModal } from "./components/NewSessionModal";
+import { OnboardingView } from "./components/OnboardingView";
+import { useSessionState } from "./hooks/useSessionState";
 
 function App() {
   return (
@@ -50,27 +52,65 @@ function AuthenticatedApp() {
 
 function MainApp() {
   const [currentSessionId, setCurrentSessionId] = useState<Id<"sessions"> | null>(null);
-  const [showNewSessionModal, setShowNewSessionModal] = useState(false);
+  const [modalPath, setModalPath] = useState<"exploration" | "evaluation" | null>(null);
 
   const session = useQuery(
     api.sessions.getSession,
     currentSessionId ? { sessionId: currentSessionId } : "skip"
   );
 
-  const sessions = useQuery(api.sessions.listSessions);
+  // Query both session types for onboarding check
+  const explorationSessions = useQuery(api.sessions.listSessionsByPath, { path: "exploration" });
+  const evaluationSessions = useQuery(api.sessions.listSessionsByPath, { path: "evaluation" });
 
+  // Use session state hook for scroll and draft persistence
+  const sessionState = useSessionState(currentSessionId);
+
+  // Check if user has no sessions (show onboarding)
+  const hasNoSessions =
+    explorationSessions !== undefined &&
+    evaluationSessions !== undefined &&
+    explorationSessions.length === 0 &&
+    evaluationSessions.length === 0;
+
+  // Auto-select first session if none selected and sessions exist
   useEffect(() => {
-    if (!currentSessionId && sessions && sessions.length > 0) {
-      setCurrentSessionId(sessions[0]._id);
+    if (!currentSessionId && !hasNoSessions) {
+      // Prefer exploration sessions, fallback to evaluation
+      const firstSession = explorationSessions?.[0] || evaluationSessions?.[0];
+      if (firstSession) {
+        setCurrentSessionId(firstSession._id);
+      }
     }
-  }, [currentSessionId, sessions]);
+  }, [currentSessionId, hasNoSessions, explorationSessions, evaluationSessions]);
+
+  // Show onboarding when no sessions exist
+  if (hasNoSessions) {
+    return (
+      <>
+        <OnboardingView
+          onStartExploration={() => setModalPath("exploration")}
+          onStartEvaluation={() => setModalPath("evaluation")}
+        />
+        <NewSessionModal
+          isOpen={modalPath !== null}
+          path={modalPath || "exploration"}
+          onClose={() => setModalPath(null)}
+          onCreated={(sessionId) => {
+            setCurrentSessionId(sessionId);
+            setModalPath(null);
+          }}
+        />
+      </>
+    );
+  }
 
   return (
     <>
       <Layout
         currentSessionId={currentSessionId}
         onSelectSession={setCurrentSessionId}
-        onNewSession={() => setShowNewSessionModal(true)}
+        onNewSession={(path) => setModalPath(path)}
       >
         {session ? (
           <Chat
@@ -83,10 +123,10 @@ function MainApp() {
             <div className="text-center">
               <p className="text-lg">No session selected</p>
               <button
-                onClick={() => setShowNewSessionModal(true)}
+                onClick={() => setModalPath("exploration")}
                 className="mt-4 text-primary-600 hover:text-primary-700"
               >
-                Create your first session
+                Create a new session
               </button>
             </div>
           </div>
@@ -94,10 +134,12 @@ function MainApp() {
       </Layout>
 
       <NewSessionModal
-        isOpen={showNewSessionModal}
-        onClose={() => setShowNewSessionModal(false)}
+        isOpen={modalPath !== null}
+        path={modalPath || "exploration"}
+        onClose={() => setModalPath(null)}
         onCreated={(sessionId) => {
-          setCurrentSessionId(sessionId as Id<"sessions">);
+          setCurrentSessionId(sessionId);
+          setModalPath(null);
         }}
       />
 
