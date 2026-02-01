@@ -120,14 +120,15 @@ Plans:
 
 **Dependencies:** Phase 2 (working chat)
 
-**Plans:** 5 plans
+**Plans:** 6 plans
 
 Plans:
-- [ ] 03-01-PLAN.md - Backend infrastructure: schema extensions, path-based queries, archive mutations, limit enforcement
-- [ ] 03-02-PLAN.md - Session state persistence: scroll position and draft message hooks
-- [ ] 03-03-PLAN.md - Sidebar restructure: SessionGroup, SessionItem, ArchivedSection components
-- [ ] 03-04-PLAN.md - Session actions: context menu, inline edit, delete confirmation modal
-- [ ] 03-05-PLAN.md - Full integration: onboarding view, updated creation modal, wiring all components
+- [x] 03-01-PLAN.md - Backend infrastructure: schema extensions, path-based queries, archive mutations, limit enforcement
+- [x] 03-02-PLAN.md - Session state persistence: scroll position and draft message hooks
+- [x] 03-03-PLAN.md - Sidebar restructure: SessionGroup, SessionItem, ArchivedSection components
+- [x] 03-04-PLAN.md - Session actions: context menu, inline edit, delete confirmation modal
+- [x] 03-05-PLAN.md - Full integration: onboarding view, updated creation modal, wiring all components
+- [ ] 03-06-PLAN.md - Gap closure: Wire session state hooks to UI components (scroll/draft persistence)
 
 **Requirements:**
 - AUTH-04: Multiple idea sessions accessible from sidebar (parallel exploration)
