@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "sonner";
 import { useAuth, SignIn, SignOutButton } from "@clerk/clerk-react";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
@@ -12,11 +13,14 @@ import { useSessionState } from "./hooks/useSessionState";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/*" element={<AuthenticatedApp />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Toaster position="top-right" richColors />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/*" element={<AuthenticatedApp />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

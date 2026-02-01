@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import type { Id } from "../../convex/_generated/dataModel";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
+import { PhaseProgressBar } from "./PhaseProgressBar";
 import { useStreamingChat } from "../hooks/useStreamingChat";
 import { useScrollRestoration } from "../hooks/useScrollRestoration";
+import { usePhaseProgress } from "../hooks/usePhaseProgress";
 
 interface ChatProps {
   sessionId: Id<"sessions">;
@@ -27,6 +29,9 @@ export function Chat({
   clearDraftMessage,
 }: ChatProps) {
   const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
+
+  // Phase progress tracking (monotonic - never regresses)
+  const { currentProgress } = usePhaseProgress(currentPhase);
 
   const {
     messages,
@@ -67,8 +72,21 @@ export function Chat({
     return () => container.removeEventListener("scroll", handleScroll);
   }, [containerRef]);
 
+  // Handle phase click - for completed phases, will scroll to phase boundary
+  // For now, just console.log as placeholder (will wire in Plan 02)
+  const handlePhaseClick = (phase: number) => {
+    console.log(`Phase ${phase} clicked - scroll to phase boundary (placeholder)`);
+  };
+
   return (
     <div className="flex flex-col h-full bg-gray-50 relative">
+      <PhaseProgressBar
+        currentPhase={currentPhase}
+        currentProgress={currentProgress}
+        sessionPath={sessionPath}
+        onPhaseClick={handlePhaseClick}
+      />
+
       {error && (
         <div className="bg-red-50 text-red-700 px-4 py-2 text-sm border-b border-red-100">
           {error}
