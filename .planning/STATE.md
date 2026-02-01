@@ -34,7 +34,7 @@
 | 1 - Foundation | 6 | Complete |
 | 2 - Chat Core | 4 | Complete |
 | 3 - Sessions | 6 | Complete + Verified |
-| 4 - Phase System | 2 | Complete |
+| 4 - Phase System | 2 | Complete + Verified |
 | 5 - Idea Card | 2 | Not Started |
 | 6 - Instructor View | 0 | Not Started |
 

@@ -128,7 +128,7 @@ Plans:
 - [x] 03-03-PLAN.md - Sidebar restructure: SessionGroup, SessionItem, ArchivedSection components
 - [x] 03-04-PLAN.md - Session actions: context menu, inline edit, delete confirmation modal
 - [x] 03-05-PLAN.md - Full integration: onboarding view, updated creation modal, wiring all components
-- [ ] 03-06-PLAN.md - Gap closure: Wire session state hooks to UI components (scroll/draft persistence)
+- [x] 03-06-PLAN.md - Gap closure: Wire session state hooks to UI components (scroll/draft persistence)
 
 **Requirements:**
 - AUTH-04: Multiple idea sessions accessible from sidebar (parallel exploration)
@@ -158,8 +158,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md - Progress bar UI components (PhaseProgressBar, PhaseSegment) + Toast setup
-- [ ] 04-02-PLAN.md - Phase detection backend (structured outputs) + phase advancement + phase boundary markers
+- [x] 04-01-PLAN.md - Progress bar UI components (PhaseProgressBar, PhaseSegment) + Toast setup
+- [x] 04-02-PLAN.md - Phase detection backend (structured outputs) + phase advancement + phase boundary markers
 
 **Requirements:**
 - PROG-01: Progress bar shows all 10 phases (0-9, split by path)
@@ -243,7 +243,7 @@ Plans:
 | 1 - Foundation | Complete | 8 | 100% |
 | 2 - Chat Core | Complete | 4 | 100% |
 | 3 - Sessions | Complete | 3 | 100% |
-| 4 - Phase System | Not Started | 4 | 0% |
+| 4 - Phase System | Complete | 4 | 100% |
 | 5 - Idea Card | Not Started | 6 | 0% |
 | 6 - Instructor View | Not Started | 3 | 0% |
 
@@ -276,4 +276,4 @@ Note: Phases 5 and 6 both depend on Phase 4 but are independent of each other. T
 ---
 
 *Roadmap created: 2025-01-22*
-*Last updated: 2026-01-31*
+*Last updated: 2026-02-01*

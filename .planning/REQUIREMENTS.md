@@ -177,10 +177,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHAT-03 | Phase 3 - Sessions | Complete |
 | CHAT-04 | Phase 2 - Chat Core | Complete |
 | CHAT-05 | Phase 2 - Chat Core | Complete |
-| PROG-01 | Phase 4 - Phase System | Pending |
-| PROG-02 | Phase 4 - Phase System | Pending |
-| PROG-03 | Phase 4 - Phase System | Pending |
-| PROG-04 | Phase 4 - Phase System | Pending |
+| PROG-01 | Phase 4 - Phase System | Complete |
+| PROG-02 | Phase 4 - Phase System | Complete |
+| PROG-03 | Phase 4 - Phase System | Complete |
+| PROG-04 | Phase 4 - Phase System | Complete |
 | CARD-01 | Phase 5 - Idea Card | Pending |
 | CARD-02 | Phase 5 - Idea Card | Pending |
 | CARD-03 | Phase 5 - Idea Card | Pending |
