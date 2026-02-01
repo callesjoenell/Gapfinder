@@ -242,3 +242,60 @@ export const unarchiveSession = mutation({
     await ctx.db.patch(args.sessionId, { isArchived: false });
   },
 });
+
+// Advance to next phase (after user confirmation)
+export const advancePhase = mutation({
+  args: {
+    sessionId: v.id("sessions"),
+    toPhase: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+
+    const session = await ctx.db.get(args.sessionId);
+    if (!session || session.userId !== userId) {
+      throw new Error("Session not found");
+    }
+
+    // Validate phase progression (must be next phase)
+    if (args.toPhase !== session.currentPhase + 1) {
+      throw new Error(
+        `Cannot advance to phase ${args.toPhase} from phase ${session.currentPhase}`
+      );
+    }
+
+    // Validate phase boundaries per path
+    const maxPhase = session.path === "exploration" ? 3 : 9;
+    if (args.toPhase > maxPhase) {
+      throw new Error(`Phase ${args.toPhase} is beyond ${session.path} path`);
+    }
+
+    await ctx.db.patch(args.sessionId, {
+      currentPhase: args.toPhase,
+      lastActiveAt: Date.now(),
+    });
+
+    return { newPhase: args.toPhase };
+  },
+});
+
+// Clear all sessions for current user (dev/testing only)
+export const clearAllSessions = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+
+    const allSessions = await ctx.db
+      .query("sessions")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .collect();
+
+    for (const session of allSessions) {
+      await ctx.db.patch(session._id, { isDeleted: true });
+    }
+
+    return { deleted: allSessions.length };
+  },
+});
