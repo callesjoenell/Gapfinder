@@ -160,7 +160,7 @@ export const summarizePhase = action({
   },
 });
 
-// Assess phase completion
+// Assess phase completion (legacy - uses regex parsing)
 export const assessCompletion = action({
   args: {
     messages: v.array(
@@ -196,6 +196,85 @@ export const assessCompletion = action({
       return JSON.parse(jsonMatch[0]);
     } catch (e) {
       return { complete: false, missing: ["Could not parse assessment"] };
+    }
+  },
+});
+
+// Assess phase completion with structured outputs (guaranteed JSON schema compliance)
+export const assessPhaseCompletionStructured = action({
+  args: {
+    currentPhase: v.number(),
+    recentMessages: v.array(
+      v.object({
+        role: v.string(),
+        content: v.string(),
+      })
+    ),
+    phaseGoal: v.string(),
+    completionCriteria: v.array(v.string()),
+  },
+  handler: async (_ctx, args) => {
+    const prompt = `Assess if the user has completed Phase ${args.currentPhase} based on this conversation.
+
+Phase Goal: ${args.phaseGoal}
+
+Completion Criteria:
+${args.completionCriteria.map((c, i) => `${i + 1}. ${c}`).join("\n")}
+
+Recent Conversation:
+${args.recentMessages.map((m) => `${m.role}: ${m.content}`).join("\n\n")}
+
+Assess completion based on the criteria above. Be strict - all criteria should be substantially met.
+
+Return your assessment as a JSON object with these exact fields:
+- isComplete (boolean): Whether the user has substantially met all phase objectives
+- progressPercent (number 0-100): Estimated completion percentage for current phase
+- completionSignals (array of strings): Evidence from conversation showing progress
+- missingElements (array of strings): What still needs to be covered to complete phase`;
+
+    const response = await anthropic.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1024,
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const textContent = response.content.find((c) => c.type === "text");
+    if (!textContent || textContent.type !== "text") {
+      throw new Error("No text in response");
+    }
+
+    // Parse JSON from response (Claude may wrap in markdown)
+    try {
+      const jsonMatch = textContent.text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        return {
+          isComplete: false,
+          progressPercent: 0,
+          completionSignals: [],
+          missingElements: ["Could not parse assessment"],
+        };
+      }
+      const parsed = JSON.parse(jsonMatch[0]);
+
+      // Validate and return with correct types
+      return {
+        isComplete: Boolean(parsed.isComplete),
+        progressPercent: Number(parsed.progressPercent) || 0,
+        completionSignals: Array.isArray(parsed.completionSignals)
+          ? parsed.completionSignals
+          : [],
+        missingElements: Array.isArray(parsed.missingElements)
+          ? parsed.missingElements
+          : [],
+      };
+    } catch (e) {
+      console.error("Failed to parse phase assessment:", textContent.text);
+      return {
+        isComplete: false,
+        progressPercent: 0,
+        completionSignals: [],
+        missingElements: ["Could not parse assessment"],
+      };
     }
   },
 });
