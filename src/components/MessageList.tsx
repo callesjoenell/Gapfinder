@@ -16,7 +16,6 @@ interface MessageListProps {
   streamingThinking?: string;
   isStreaming: boolean;
   containerRef: React.RefObject<HTMLDivElement | null>;
-  onScrollChange: () => void;
   // Pagination props
   onLoadMore: (numItems: number) => void;
   isLoadingMore: boolean;
@@ -29,15 +28,10 @@ export function MessageList({
   streamingThinking,
   isStreaming,
   containerRef,
-  onScrollChange,
   onLoadMore,
   isLoadingMore,
   canLoadMore,
 }: MessageListProps) {
-  // Auto-scroll when new content arrives
-  useEffect(() => {
-    onScrollChange();
-  }, [messages, streamingContent, onScrollChange]);
 
   // Handle scroll to top for lazy loading older messages
   const handleScroll = useCallback(() => {
