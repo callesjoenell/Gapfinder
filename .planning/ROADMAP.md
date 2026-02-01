@@ -155,22 +155,28 @@ Plans:
 
 **Dependencies:** Phase 3 (sessions with skill-driven behavior)
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md - Progress bar UI components (PhaseProgressBar, PhaseSegment) + Toast setup
+- [ ] 04-02-PLAN.md - Phase detection backend (structured outputs) + phase advancement + phase boundary markers
+
 **Requirements:**
-- PROG-01: Progress bar shows all 12 phases
+- PROG-01: Progress bar shows all 10 phases (0-9, split by path)
 - PROG-02: Current phase highlighted with progress indicator within phase
 - PROG-03: Progressive unlocking - must complete phase N before N+1
 - PROG-04: Phases are clickable but locked until unlocked
 
 **Success Criteria:**
-1. Participant sees all 12 phases in progress bar with clear visual distinction between completed, current, and locked
-2. Participant clicks on a locked phase and sees it's not yet accessible
-3. Participant completes a phase and sees the next phase unlock
-4. Participant can click back to review a completed phase's conversation
+1. Participant sees all phases for their path in progress bar with clear visual distinction between completed, current, and locked
+2. Participant clicks on a locked phase and sees it's not yet accessible (toast notification)
+3. Participant completes a phase and sees the next phase unlock (confirmation dialog + toast)
+4. Participant can click back to review a completed phase's conversation (scroll to phase boundary)
 
 **Research Flags:**
-- Phase detection (Claude semantic detection, not keyword matching)
-- Phase completion criteria per methodology phase
-- UI state for current position within a phase (not just phase-level progress)
+- Phase detection (Claude semantic detection via structured outputs)
+- Phase completion criteria per methodology phase (in phaseConfig.ts)
+- UI state for current position within a phase (usePhaseProgress hook)
 
 ---
 
