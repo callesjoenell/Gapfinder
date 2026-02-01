@@ -4,15 +4,28 @@ interface MessageInputProps {
   onSend: (content: string) => void;
   disabled: boolean;
   placeholder?: string;
+  draftMessage?: string;
+  onDraftChange?: (draft: string) => void;
+  onSendSuccess?: () => void;
 }
 
 export function MessageInput({
   onSend,
   disabled,
   placeholder = "Type a message...",
+  draftMessage,
+  onDraftChange,
+  onSendSuccess,
 }: MessageInputProps) {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(draftMessage || "");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Sync with external draft message changes (e.g., when switching sessions)
+  useEffect(() => {
+    if (draftMessage !== undefined) {
+      setContent(draftMessage);
+    }
+  }, [draftMessage]);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -29,6 +42,7 @@ export function MessageInput({
 
     onSend(content.trim());
     setContent("");
+    onSendSuccess?.(); // Clear persisted draft
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -44,7 +58,10 @@ export function MessageInput({
         <textarea
           ref={textareaRef}
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => {
+            setContent(e.target.value);
+            onDraftChange?.(e.target.value);
+          }}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           placeholder={placeholder}

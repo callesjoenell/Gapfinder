@@ -119,6 +119,9 @@ export function Chat({
         placeholder={
           isStreaming ? "Waiting for response..." : "Type a message..."
         }
+        draftMessage={draftMessage}
+        onDraftChange={saveDraftMessage}
+        onSendSuccess={clearDraftMessage}
       />
     </div>
   );
