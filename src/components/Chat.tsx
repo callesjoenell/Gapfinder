@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import type { Id } from "../../convex/_generated/dataModel";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
@@ -6,6 +6,7 @@ import { PhaseProgressBar } from "./PhaseProgressBar";
 import { useStreamingChat } from "../hooks/useStreamingChat";
 import { useScrollRestoration } from "../hooks/useScrollRestoration";
 import { usePhaseProgress } from "../hooks/usePhaseProgress";
+import { usePhaseCompletion } from "../hooks/usePhaseCompletion";
 
 interface ChatProps {
   sessionId: Id<"sessions">;
@@ -29,9 +30,22 @@ export function Chat({
   clearDraftMessage,
 }: ChatProps) {
   const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
+  const scrollToPhaseRef = useRef<((phase: number) => void) | null>(null);
+  const lastMessageCountRef = useRef(0);
 
   // Phase progress tracking (monotonic - never regresses)
   const { currentProgress } = usePhaseProgress(currentPhase);
+
+  // Phase completion detection and advancement
+  const {
+    assessment,
+    isAssessing,
+    showConfirmation,
+    shouldAssess,
+    assessCompletion,
+    confirmAdvance,
+    dismissConfirmation,
+  } = usePhaseCompletion(sessionId, currentPhase, sessionPath);
 
   const {
     messages,
@@ -72,10 +86,35 @@ export function Chat({
     return () => container.removeEventListener("scroll", handleScroll);
   }, [containerRef]);
 
-  // Handle phase click - for completed phases, will scroll to phase boundary
-  // For now, just console.log as placeholder (will wire in Plan 02)
+  // Trigger phase assessment every 5 messages
+  useEffect(() => {
+    if (!messages || messages.length === 0 || isAssessing) return;
+
+    const messageCount = messages.length;
+    if (shouldAssess(messageCount) && messageCount > lastMessageCountRef.current) {
+      lastMessageCountRef.current = messageCount;
+      // Format messages for assessment
+      const recentMessages = messages.map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
+      assessCompletion(recentMessages);
+    }
+  }, [messages, shouldAssess, assessCompletion, isAssessing]);
+
+  // Handle scroll to phase callback from MessageList
+  const handleScrollToPhaseReady = useCallback(
+    (scrollFn: (phase: number) => void) => {
+      scrollToPhaseRef.current = scrollFn;
+    },
+    []
+  );
+
+  // Handle phase click - scroll to phase boundary for completed phases
   const handlePhaseClick = (phase: number) => {
-    console.log(`Phase ${phase} clicked - scroll to phase boundary (placeholder)`);
+    if (scrollToPhaseRef.current) {
+      scrollToPhaseRef.current(phase);
+    }
   };
 
   return (
@@ -102,6 +141,7 @@ export function Chat({
         onLoadMore={loadMore}
         isLoadingMore={isLoadingMore}
         canLoadMore={canLoadMore}
+        onScrollToPhaseReady={handleScrollToPhaseReady}
       />
 
       {/* Scroll to bottom indicator */}
@@ -141,6 +181,44 @@ export function Chat({
         onDraftChange={saveDraftMessage}
         onSendSuccess={clearDraftMessage}
       />
+
+      {/* Phase completion confirmation dialog */}
+      {showConfirmation && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold mb-2">Ready to advance?</h3>
+            <p className="text-gray-600 mb-4">
+              It looks like you've completed Phase {currentPhase}. Would you
+              like to move on to the next phase?
+            </p>
+            {assessment?.completionSignals &&
+              assessment.completionSignals.length > 0 && (
+                <div className="mb-4 text-sm text-gray-500">
+                  <p className="font-medium mb-1">What you've covered:</p>
+                  <ul className="list-disc list-inside">
+                    {assessment.completionSignals.slice(0, 3).map((signal, i) => (
+                      <li key={i}>{signal}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={dismissConfirmation}
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
+              >
+                Not yet
+              </button>
+              <button
+                onClick={confirmAdvance}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Yes, continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

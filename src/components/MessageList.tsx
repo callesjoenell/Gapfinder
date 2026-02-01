@@ -1,6 +1,7 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef, Fragment } from "react";
 import type { Id } from "../../convex/_generated/dataModel";
 import { MessageBubble } from "./MessageBubble";
+import { PhaseBoundary } from "./PhaseBoundary";
 
 interface Message {
   _id: Id<"messages">;
@@ -8,6 +9,7 @@ interface Message {
   content: string;
   thinking?: string;
   timestamp: number;
+  phase: number;
 }
 
 interface MessageListProps {
@@ -20,6 +22,8 @@ interface MessageListProps {
   onLoadMore: (numItems: number) => void;
   isLoadingMore: boolean;
   canLoadMore: boolean;
+  // Phase scroll navigation
+  onScrollToPhaseReady?: (scrollFn: (phase: number) => void) => void;
 }
 
 export function MessageList({
@@ -31,7 +35,28 @@ export function MessageList({
   onLoadMore,
   isLoadingMore,
   canLoadMore,
+  onScrollToPhaseReady,
 }: MessageListProps) {
+  // Track refs to phase boundary elements for scroll navigation
+  const phaseRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+
+  // Scroll to phase function
+  const scrollToPhase = useCallback((targetPhase: number) => {
+    const element = phaseRefs.current.get(targetPhase);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, []);
+
+  // Expose scroll function to parent
+  useEffect(() => {
+    if (onScrollToPhaseReady) {
+      onScrollToPhaseReady(scrollToPhase);
+    }
+  }, [scrollToPhase, onScrollToPhaseReady]);
 
   // Handle scroll to top for lazy loading older messages
   const handleScroll = useCallback(() => {
@@ -101,9 +126,26 @@ export function MessageList({
         </div>
       )}
 
-      {messages.map((message) => (
-        <MessageBubble key={message._id} message={message} />
-      ))}
+      {messages.map((message, index) => {
+        const prevMessage = index > 0 ? messages[index - 1] : null;
+        const showBoundary = prevMessage && prevMessage.phase !== message.phase;
+
+        return (
+          <Fragment key={message._id}>
+            {showBoundary && (
+              <PhaseBoundary
+                phase={message.phase}
+                ref={(el) => {
+                  if (el) {
+                    phaseRefs.current.set(message.phase, el);
+                  }
+                }}
+              />
+            )}
+            <MessageBubble message={message} />
+          </Fragment>
+        );
+      })}
 
       {/* Streaming message */}
       {isStreaming && (streamingContent || streamingThinking) && (

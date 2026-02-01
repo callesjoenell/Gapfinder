@@ -7,7 +7,7 @@ interface LayoutProps {
   children: ReactNode;
   currentSessionId: Id<"sessions"> | null;
   onSelectSession: (sessionId: Id<"sessions">) => void;
-  onNewSession: () => void;
+  onNewSession: (path: "exploration" | "evaluation") => void;
 }
 
 export function Layout({

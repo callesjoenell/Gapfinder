@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
 import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
-import type { Doc, Id } from '../../convex/_generated/dataModel';
+import type { Doc } from '../../convex/_generated/dataModel';
 
 interface SessionContextMenuProps {
   isOpen: boolean;
