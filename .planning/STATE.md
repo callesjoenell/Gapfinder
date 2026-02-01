@@ -10,7 +10,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 2 complete. User feedback captured for prompt tuning. Ready for Phase 3 (Sessions).
+**Current Focus:** Phase 4 in progress. Building phase progress visualization and detection system.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling)
 
@@ -18,14 +18,14 @@
 
 ## Current Position
 
-**Phase:** 3 - Sessions (COMPLETE + VERIFIED)
-**Plan:** 06 of 06 complete (includes gap closure)
-**Status:** Phase Complete - All gaps closed, ready for Phase 4
-**Last Activity:** 2026-02-01 - Completed 03-06-PLAN.md (Gap Closure - Session State Wiring)
+**Phase:** 4 - Phase System (IN PROGRESS)
+**Plan:** 01 of 02 complete
+**Status:** Plan 01 complete - Progress bar UI built
+**Last Activity:** 2026-02-01 - Completed 04-01-PLAN.md (Phase Progress Bar UI)
 
 **Progress:**
 ```
-[████████████████████████] 100% (16/16 plans complete)
+[█████████████████████████] 100% (17/18 plans complete)
 ```
 
 **Phase Breakdown:**
@@ -34,7 +34,7 @@
 | 1 - Foundation | 6 | Complete |
 | 2 - Chat Core | 4 | Complete |
 | 3 - Sessions | 6 | Complete + Verified |
-| 4 - Phase System | 2 | Not Started |
+| 4 - Phase System | 2 | 1/2 Complete |
 | 5 - Idea Card | 2 | Not Started |
 | 6 - Instructor View | 0 | Not Started |
 
@@ -92,6 +92,9 @@
 | Convert sessionId to string for useScrollRestoration | Hook expects string key for localStorage, use .toString() on Id type | 2026-02-01 |
 | Remove useScrollIntent in favor of useScrollRestoration | useScrollRestoration provides position persistence, local state tracks scroll for UI | 2026-02-01 |
 | Draft sync via useEffect watching draftMessage | External prop changes (session switch) update local state to prevent desync | 2026-02-01 |
+| Sonner over react-hot-toast | Lighter (2-3KB vs 5KB), shadcn/ui default, modern API | 2026-02-01 |
+| Monotonic progress tracking | Progress only increases to prevent confusing UX where bar moves backward | 2026-02-01 |
+| Session path filtering for phases | Exploration (0-3) and evaluation (4-9) are separate journeys | 2026-02-01 |
 
 ### Technical Findings
 
@@ -116,6 +119,8 @@
 - Scroll restoration requires coordination: throttle saves, wait for content load, use useLayoutEffect
 - Props threading pattern: state management in parent, hooks consumed in presentation components
 - Session state wiring complete: scroll position and draft message persist across switches and refreshes
+- sonner toast library: lightweight (2-3KB), auto-deduplication with id prop
+- Phase progress bar: visual momentum creates sense of accomplishment
 
 ### Known Pitfalls (from research)
 
@@ -160,8 +165,12 @@ Get key from: https://console.anthropic.com -> API Keys
 ## Session Continuity
 
 **Last Session:** 2026-02-01
-**Last Action:** Completed 03-06-PLAN.md (Gap Closure - Session State Wiring) - Phase 3 verified complete
-**Next Action:** Plan Phase 4 (Phase System) via `/gsd:plan-phase 4`
+**Last Action:** Completed 04-01-PLAN.md (Phase Progress Bar UI)
+**Next Action:** Execute 04-02-PLAN.md (Phase Detection & Advancement)
+
+**Phase 4 In Progress:**
+- [x] 04-01-PLAN.md - Phase Progress Bar UI (sonner, segments, integration)
+- [ ] 04-02-PLAN.md - Phase Detection & Advancement
 
 **Phase 3 Complete + Verified:**
 - [x] 03-01-PLAN.md - Sessions Backend Infrastructure (archive, linking, limits)
@@ -191,4 +200,4 @@ Get key from: https://console.anthropic.com -> API Keys
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-02-01 (Phase 3 verified complete - 16/16 plans done, 100% roadmap complete)*
+*Last updated: 2026-02-01 (Phase 4 Plan 01 complete - 17/18 plans done, progress bar UI built)*
