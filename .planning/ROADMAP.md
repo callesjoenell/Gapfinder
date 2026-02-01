@@ -236,7 +236,7 @@ Plans:
 |-------|--------|--------------|------------|
 | 1 - Foundation | Complete | 8 | 100% |
 | 2 - Chat Core | Complete | 4 | 100% |
-| 3 - Sessions | Planned | 3 | 0% |
+| 3 - Sessions | Complete | 3 | 100% |
 | 4 - Phase System | Not Started | 4 | 0% |
 | 5 - Idea Card | Not Started | 6 | 0% |
 | 6 - Instructor View | Not Started | 3 | 0% |

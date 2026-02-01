@@ -170,11 +170,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-01 | Phase 1 - Foundation | Complete |
 | AUTH-02 | Phase 1 - Foundation | Complete |
 | AUTH-03 | Phase 1 - Foundation | Complete |
-| AUTH-04 | Phase 3 - Sessions | Pending |
-| AUTH-05 | Phase 3 - Sessions | Pending |
+| AUTH-04 | Phase 3 - Sessions | Complete |
+| AUTH-05 | Phase 3 - Sessions | Complete |
 | CHAT-01 | Phase 2 - Chat Core | Complete |
 | CHAT-02 | Phase 2 - Chat Core | Complete |
-| CHAT-03 | Phase 3 - Sessions | Pending |
+| CHAT-03 | Phase 3 - Sessions | Complete |
 | CHAT-04 | Phase 2 - Chat Core | Complete |
 | CHAT-05 | Phase 2 - Chat Core | Complete |
 | PROG-01 | Phase 4 - Phase System | Pending |
