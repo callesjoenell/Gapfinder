@@ -117,6 +117,11 @@ function MainApp() {
             sessionId={session._id}
             currentPhase={session.currentPhase}
             sessionPath={session.path}
+            scrollPosition={sessionState.scrollPosition}
+            saveScrollPosition={sessionState.saveScrollPosition}
+            draftMessage={sessionState.draftMessage}
+            saveDraftMessage={sessionState.saveDraftMessage}
+            clearDraftMessage={sessionState.clearDraftMessage}
           />
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400">

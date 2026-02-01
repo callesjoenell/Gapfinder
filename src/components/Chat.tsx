@@ -1,17 +1,33 @@
+import { useState, useEffect, useRef } from "react";
 import type { Id } from "../../convex/_generated/dataModel";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { useStreamingChat } from "../hooks/useStreamingChat";
-import { useScrollIntent } from "../hooks/useScrollIntent";
+import { useScrollRestoration } from "../hooks/useScrollRestoration";
 
 interface ChatProps {
   sessionId: Id<"sessions">;
   currentPhase: number;
   sessionPath: "exploration" | "evaluation";
+  scrollPosition: number;
+  saveScrollPosition: (position: number) => void;
+  draftMessage: string;
+  saveDraftMessage: (draft: string) => void;
+  clearDraftMessage: () => void;
 }
 
-export function Chat({ sessionId, currentPhase, sessionPath }: ChatProps) {
-  const { containerRef, scrollToBottom, isUserScrolledUp } = useScrollIntent();
+export function Chat({
+  sessionId,
+  currentPhase,
+  sessionPath,
+  scrollPosition,
+  saveScrollPosition,
+  draftMessage,
+  saveDraftMessage,
+  clearDraftMessage,
+}: ChatProps) {
+  const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
+
   const {
     messages,
     streamingContent,
@@ -23,6 +39,33 @@ export function Chat({ sessionId, currentPhase, sessionPath }: ChatProps) {
     isLoadingMore,
     canLoadMore,
   } = useStreamingChat(sessionId, currentPhase, sessionPath);
+
+  // Use scroll restoration hook
+  const containerRef = useScrollRestoration({
+    sessionId: sessionId.toString(),
+    savedScrollPosition: scrollPosition,
+    saveScrollPosition,
+    isLoaded: messages !== undefined,
+  });
+
+  // Track if user has scrolled up
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight;
+      const clientHeight = container.clientHeight;
+
+      // User is scrolled up if they're more than 100px from the bottom
+      const isNearBottom = scrollTop >= scrollHeight - clientHeight - 100;
+      setIsUserScrolledUp(!isNearBottom);
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [containerRef]);
 
   return (
     <div className="flex flex-col h-full bg-gray-50 relative">
@@ -38,7 +81,6 @@ export function Chat({ sessionId, currentPhase, sessionPath }: ChatProps) {
         streamingThinking={streamingThinking}
         isStreaming={isStreaming}
         containerRef={containerRef}
-        onScrollChange={scrollToBottom}
         onLoadMore={loadMore}
         isLoadingMore={isLoadingMore}
         canLoadMore={canLoadMore}
