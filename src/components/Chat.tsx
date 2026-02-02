@@ -3,6 +3,7 @@ import type { Id } from "../../convex/_generated/dataModel";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { PhaseProgressBar } from "./PhaseProgressBar";
+import { IdeaCard } from "./idea-card";
 import { useStreamingChat } from "../hooks/useStreamingChat";
 import { useScrollRestoration } from "../hooks/useScrollRestoration";
 import { usePhaseProgress } from "../hooks/usePhaseProgress";
@@ -119,6 +120,7 @@ export function Chat({
 
   return (
     <div className="flex flex-col h-full bg-gray-50 relative">
+      <IdeaCard sessionId={sessionId} currentPhase={currentPhase} />
       <PhaseProgressBar
         currentPhase={currentPhase}
         currentProgress={currentProgress}

@@ -4,6 +4,7 @@
  */
 
 import { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import { useLocalStorage } from 'react-use';
 import type { Id } from '../../../convex/_generated/dataModel';
 import { useQuery, useAction } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
@@ -19,7 +20,8 @@ interface IdeaCardProps {
 }
 
 export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  // Persistent collapse state via localStorage
+  const [isCollapsed, setIsCollapsed] = useLocalStorage('ideaCard-collapsed', false);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -187,11 +189,24 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
         />
       )}
 
-      {/* Collapsed state - show phase indicator */}
+      {/* Collapsed state - show phase indicator with gradient hint */}
       {isCollapsed && (
-        <div className="flex items-center h-full px-4">
-          <span className="text-sm text-gray-600">
-            Phase {currentPhase}: Idea Card
+        <div
+          className="flex items-center h-full px-4 transition-all duration-300"
+          style={{
+            background: colorScheme === 'green'
+              ? 'linear-gradient(90deg, rgba(144,238,144,0.3) 0%, rgba(34,139,34,0.2) 100%)'
+              : 'linear-gradient(90deg, rgba(255,229,180,0.3) 0%, rgba(255,165,0,0.2) 100%)',
+          }}
+        >
+          <span className="text-sm text-gray-700 font-medium">
+            Phase {effectivePhase}
+          </span>
+          <span className="text-xs text-gray-500 ml-2">
+            {effectivePhase === 0 && 'Initial exploration'}
+            {effectivePhase >= 1 && effectivePhase <= 2 && 'Building idea'}
+            {effectivePhase >= 3 && effectivePhase <= 6 && 'Idea formed'}
+            {effectivePhase >= 7 && 'Evaluating'}
           </span>
         </div>
       )}
