@@ -139,12 +139,13 @@ export const chatWithResearch = action({
       });
     }
 
-    // Extract final text response
+    // Extract final text response (matching streamChat format)
     const textContent = response.content.find(c => c.type === "text");
     if (!textContent || textContent.type !== "text") {
       throw new Error("No text in final response");
     }
 
-    return textContent.text;
+    // Research actions don't use extended thinking, so return empty string
+    return { thinking: "", text: textContent.text };
   },
 });

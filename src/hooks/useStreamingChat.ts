@@ -5,6 +5,8 @@ import type { Id } from "../../convex/_generated/dataModel";
 import { buildSystemPrompt } from "../lib/systemPrompts";
 import { streamWithRetry, translateError } from "../lib/streamingRetry";
 import { useThrottledStreamingText } from "./useThrottledStreamingText";
+import { getResearchPromptAddition, parseChecklistType } from "../lib/prompts/researchPrompt";
+import type { ChecklistType } from "../components/research/checklistConfig";
 
 interface Message {
   _id: Id<"messages">;
@@ -25,6 +27,8 @@ interface UseStreamingChatResult {
   loadMore: (numItems: number) => void;
   isLoadingMore: boolean;
   canLoadMore: boolean;
+  detectedChecklistType: ChecklistType | null;
+  clearChecklistType: () => void;
 }
 
 export function useStreamingChat(
@@ -66,10 +70,33 @@ export function useStreamingChat(
   // Mutations and actions
   const saveMessage = useMutation(api.messages.saveMessage);
   const streamChat = useAction(api.claude.streamChat);
+  const chatWithResearch = useAction(api.researchActions.chatWithResearch);
+
+  // State for detected checklist trigger (exposed to Chat.tsx)
+  const [detectedChecklistType, setDetectedChecklistType] = useState<ChecklistType | null>(null);
+
+  // Query session for research findings (to pass context to prompt)
+  const researchFindings = useQuery(
+    api.sessions.getSessionResearchFindings,
+    sessionId ? { sessionId } : "skip"
+  );
+
+  // Query manual research findings
+  const manualResearchFindings = useQuery(
+    api.manualResearch.getManualResearchForContext,
+    sessionId ? { sessionId } : "skip"
+  );
 
   const sendMessage = useCallback(
     async (content: string) => {
       if (!sessionId || isStreaming) return;
+
+      // Check for checklist triggers first
+      const checklistType = parseChecklistType(content);
+      if (checklistType) {
+        setDetectedChecklistType(checklistType);
+        return; // Don't send message, just trigger UI
+      }
 
       setError(null);
       setIsStreaming(true);
@@ -92,11 +119,23 @@ export function useStreamingChat(
           data: s.data,
         }));
 
-        const systemPrompt = buildSystemPrompt({
+        let systemPrompt = buildSystemPrompt({
           currentPhase,
           summaries: currentSummaries.filter((s) => s.phase < currentPhase),
           sessionPath,
         });
+
+        // Add research prompt additions for phases 0-2 (exploration phases)
+        const isResearchPhase = currentPhase >= 0 && currentPhase <= 2;
+        if (isResearchPhase) {
+          const hasResearchFindings = (researchFindings?.length || 0) > 0;
+          const manualResearchContext = manualResearchFindings || null;
+
+          systemPrompt += getResearchPromptAddition(
+            hasResearchFindings,
+            manualResearchContext
+          );
+        }
 
         // Format messages for Claude (use current messages state)
         const formattedMessages = [
@@ -107,14 +146,22 @@ export function useStreamingChat(
           { role: "user" as const, content },
         ];
 
-        // Call streaming action with retry (batch mode - backend accumulates full response)
-        const response = await streamWithRetry(() =>
-          streamChat({
-            sessionId,
-            systemPrompt,
-            messages: formattedMessages,
-          })
-        );
+        // Use research-enabled action for phases 0-2, standard action otherwise
+        const response = isResearchPhase
+          ? await streamWithRetry(() =>
+              chatWithResearch({
+                sessionId,
+                systemPrompt,
+                messages: formattedMessages,
+              })
+            )
+          : await streamWithRetry(() =>
+              streamChat({
+                sessionId,
+                systemPrompt,
+                messages: formattedMessages,
+              })
+            );
 
         // Save assistant response with thinking
         await saveMessage({
@@ -141,9 +188,12 @@ export function useStreamingChat(
       sessionPath,
       messages,
       summaries,
+      researchFindings,
+      manualResearchFindings,
       isStreaming,
       saveMessage,
       streamChat,
+      chatWithResearch,
     ]
   );
 
@@ -157,5 +207,7 @@ export function useStreamingChat(
     loadMore: loadMoreFn,
     isLoadingMore,
     canLoadMore,
+    detectedChecklistType,
+    clearChecklistType: () => setDetectedChecklistType(null),
   };
 }

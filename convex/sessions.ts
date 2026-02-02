@@ -301,6 +301,22 @@ export const getSessionScore = query({
   },
 });
 
+// Get research findings for a session (for context prompt)
+export const getSessionResearchFindings = query({
+  args: { sessionId: v.id("sessions") },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return [];
+
+    const session = await ctx.db.get(args.sessionId);
+    if (!session || session.userId !== userId || session.isDeleted) {
+      return [];
+    }
+
+    return session.researchFindings || [];
+  },
+});
+
 // Clear all sessions for current user (dev/testing only)
 export const clearAllSessions = mutation({
   args: {},
