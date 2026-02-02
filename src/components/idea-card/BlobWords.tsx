@@ -27,15 +27,15 @@ interface BlobWordsProps {
 }
 
 /**
- * Get 20% grey text color tinted with blob color
+ * Get 7% grey text color tinted with blob color
  * Creates readable text that harmonizes with the blob
  *
  * @param blobColor - Hex color of the blob
  * @returns RGB string with tinted grey (70% grey + 30% blob color)
  */
 function getTintedGrey(blobColor: string): string {
-  // Base grey value (20% grey = 80% white)
-  const greyValue = 204; // rgb(204, 204, 204) or #CCCCCC
+  // Base grey value (7% grey = 93% white, lighter)
+  const greyValue = 237; // rgb(237, 237, 237) or #EDEDED
 
   // Parse blob color
   const hex = blobColor.replace('#', '');
@@ -124,7 +124,7 @@ function BlobWordCloud({ words, bounds, color, phase }: BlobWordCloudProps) {
   // Calculate opacity: fade out at phase 3
   const opacity = phase >= 3 ? 0 : 1;
 
-  // Use 20% grey tinted with blob color for readable text
+  // Use 7% grey tinted with blob color for readable text
   const textColor = getTintedGrey(color);
 
   return (
