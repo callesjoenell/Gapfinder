@@ -76,16 +76,67 @@ export function generateBlobPath(
 }
 
 /**
- * Color pairs for the 6 blobs - mostly yellow/orange with subtle green accents
- * 80% warm (yellow/orange), 20% light green tints for visual variety
+ * Multi-color gradient definitions for the 6 blobs
+ * Each blob has a unique gradient blending between green, yellow, and orange
+ * Gradients have 3-4 stops for rich color blending
  */
 export const BLOB_COLORS = [
-  { fill: '#FFD700', gradient: '#FFF3B0' }, // Gold (warm - keep)
-  { fill: '#E8F5C8', gradient: '#D4E89D' }, // Light green tint (pale sage)
-  { fill: '#FFB700', gradient: '#FFD966' }, // Amber (warm - keep)
-  { fill: '#F0F4C3', gradient: '#E6EE9C' }, // Pale lime tint
-  { fill: '#FF9500', gradient: '#FFBB66' }, // Deep orange (warm - keep)
-  { fill: '#DCEDC8', gradient: '#C5E1A5' }, // Soft sage tint
+  // Blob 0: Yellow → Orange
+  {
+    stops: [
+      { offset: '0%', color: '#FFD700' },    // gold yellow
+      { offset: '50%', color: '#FFA500' },   // orange
+      { offset: '100%', color: '#FF8C00' },  // dark orange
+    ],
+    direction: { x1: '0%', y1: '0%', x2: '100%', y2: '100%' }
+  },
+  // Blob 1: Light Green → Yellow
+  {
+    stops: [
+      { offset: '0%', color: '#90EE90' },    // light green
+      { offset: '60%', color: '#FFD700' },   // gold yellow
+      { offset: '100%', color: '#FFA500' },  // orange
+    ],
+    direction: { x1: '100%', y1: '0%', x2: '0%', y2: '100%' }
+  },
+  // Blob 2: Orange → Yellow → Green hint
+  {
+    stops: [
+      { offset: '0%', color: '#FFA500' },    // orange
+      { offset: '40%', color: '#FFD700' },   // gold yellow
+      { offset: '70%', color: '#FFEB3B' },   // bright yellow
+      { offset: '100%', color: '#C5E1A5' },  // sage green
+    ],
+    direction: { x1: '0%', y1: '100%', x2: '100%', y2: '0%' }
+  },
+  // Blob 3: Yellow → Light Green
+  {
+    stops: [
+      { offset: '0%', color: '#FFEB3B' },    // bright yellow
+      { offset: '50%', color: '#FFF59D' },   // pale yellow
+      { offset: '100%', color: '#98FB98' },  // pale green
+    ],
+    direction: { x1: '50%', y1: '0%', x2: '50%', y2: '100%' }
+  },
+  // Blob 4: Orange → Yellow
+  {
+    stops: [
+      { offset: '0%', color: '#FF8C00' },    // dark orange
+      { offset: '50%', color: '#FFB74D' },   // soft orange
+      { offset: '100%', color: '#FFD700' },  // gold yellow
+    ],
+    direction: { x1: '100%', y1: '100%', x2: '0%', y2: '0%' }
+  },
+  // Blob 5: Green → Yellow → Orange
+  {
+    stops: [
+      { offset: '0%', color: '#C5E1A5' },    // sage green
+      { offset: '30%', color: '#D4E89D' },   // lime green
+      { offset: '70%', color: '#FFD700' },   // gold yellow
+      { offset: '100%', color: '#FFA500' },  // orange
+    ],
+    direction: { x1: '0%', y1: '50%', x2: '100%', y2: '50%' }
+  },
 ];
 
 /**

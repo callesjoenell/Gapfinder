@@ -41,8 +41,13 @@ export function BlobBackground({ phase, width, height, isMerging = false, colorS
         ]
       }
     : {
-        gradients: BLOB_COLORS, // Use default orange spectrum
+        gradients: BLOB_COLORS, // Use multi-color gradients
       };
+
+  // Calculate base opacity based on phase - make phases 0-1 MORE VISIBLE
+  // Phase 0-1: 0.85 (much more visible)
+  // Phase 2+: 0.7 (slightly visible)
+  const baseOpacity = phase <= 1 ? 0.85 : 0.7;
 
   // Calculate stdDeviation for blur based on edge clarity
   // edgeClarity 0.1 (90% fuzzy) -> high blur (stdDeviation ~28)
@@ -65,39 +70,73 @@ export function BlobBackground({ phase, width, height, isMerging = false, colorS
       >
         <defs>
           {/* Gradient definitions for each blob */}
-          {colors.gradients.map((color, i) => (
-            <motion.linearGradient
-              key={`gradient-${i}`}
-              id={`gradient-${i}`}
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <motion.stop
-                offset="0%"
-                animate={{
-                  stopColor: color.gradient,
-                  stopOpacity: 0.6,
-                }}
-                transition={{
-                  duration: 2.5,
-                  ease: 'easeInOut',
-                }}
-              />
-              <motion.stop
-                offset="100%"
-                animate={{
-                  stopColor: color.fill,
-                  stopOpacity: 0.6,
-                }}
-                transition={{
-                  duration: 2.5,
-                  ease: 'easeInOut',
-                }}
-              />
-            </motion.linearGradient>
-          ))}
+          {colors.gradients.map((color, i) => {
+            // Check if it's the new multi-color gradient format or old format
+            const isMultiColor = 'stops' in color;
+
+            if (isMultiColor) {
+              return (
+                <motion.linearGradient
+                  key={`gradient-${i}`}
+                  id={`gradient-${i}`}
+                  x1={color.direction.x1}
+                  y1={color.direction.y1}
+                  x2={color.direction.x2}
+                  y2={color.direction.y2}
+                >
+                  {color.stops.map((stop, stopIndex) => (
+                    <motion.stop
+                      key={stopIndex}
+                      offset={stop.offset}
+                      animate={{
+                        stopColor: stop.color,
+                        stopOpacity: baseOpacity,
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        ease: 'easeInOut',
+                      }}
+                    />
+                  ))}
+                </motion.linearGradient>
+              );
+            } else {
+              // Fallback for green color scheme (old format)
+              return (
+                <motion.linearGradient
+                  key={`gradient-${i}`}
+                  id={`gradient-${i}`}
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <motion.stop
+                    offset="0%"
+                    animate={{
+                      stopColor: color.gradient,
+                      stopOpacity: baseOpacity,
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                  <motion.stop
+                    offset="100%"
+                    animate={{
+                      stopColor: color.fill,
+                      stopOpacity: baseOpacity,
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                </motion.linearGradient>
+              );
+            }
+          })}
 
           {/* Blur filter for gradient edges */}
           <filter id="blob-blur">
