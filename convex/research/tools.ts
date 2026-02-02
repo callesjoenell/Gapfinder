@@ -135,4 +135,19 @@ export const researchTools: ClaudeTool[] = [
       required: ["query"],
     },
   },
+  {
+    name: "get_keyword_volume",
+    description: "Get search volume, CPC, and competition data for keywords. PAID FEATURE - costs credits. Max 20 keywords per lookup. Always confirm with user before calling.",
+    input_schema: {
+      type: "object",
+      properties: {
+        keywords: {
+          type: "array",
+          items: { type: "string" },
+          description: "Keywords to look up (max 20)",
+        },
+      },
+      required: ["keywords"],
+    },
+  },
 ];
