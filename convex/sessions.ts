@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { query, mutation, internalMutation } from "./_generated/server";
 import { getAuthUserId } from "./auth";
 
 // List all sessions for current user (non-deleted, sorted by lastActiveAt)
@@ -318,5 +318,33 @@ export const clearAllSessions = mutation({
     }
 
     return { deleted: allSessions.length };
+  },
+});
+
+// Internal mutation: Append research findings to session (07-02)
+// Called by research actions to persist automated research results
+export const appendResearchFindings = internalMutation({
+  args: {
+    sessionId: v.id("sessions"),
+    findings: v.array(v.object({
+      source: v.string(),
+      query: v.string(),
+      results: v.array(v.object({
+        title: v.string(),
+        url: v.optional(v.string()),
+        snippet: v.string(),
+        score: v.optional(v.number()),
+      })),
+      timestamp: v.number(),
+    })),
+  },
+  handler: async (ctx, args) => {
+    const session = await ctx.db.get(args.sessionId);
+    if (!session) return;
+
+    const existingFindings = session.researchFindings || [];
+    await ctx.db.patch(args.sessionId, {
+      researchFindings: [...existingFindings, ...args.findings],
+    });
   },
 });
