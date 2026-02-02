@@ -26,6 +26,18 @@ export default defineSchema({
       text: v.string(),
       areaIndex: v.number()
     }))),
+    // Research findings from automated tools (07-02)
+    researchFindings: v.optional(v.array(v.object({
+      source: v.string(),        // "reddit", "hackernews", "tavily", etc.
+      query: v.string(),         // What was searched
+      results: v.array(v.object({
+        title: v.string(),
+        url: v.optional(v.string()),
+        snippet: v.string(),
+        score: v.optional(v.number()),
+      })),
+      timestamp: v.number(),
+    }))),
     createdAt: v.number(),
     lastActiveAt: v.number(),
   })
@@ -56,4 +68,19 @@ export default defineSchema({
       energySignals: v.array(v.string()),
     }),
   }).index("by_session", ["sessionId", "phase"]),
+
+  // Manual research findings from checklists (07-02)
+  manualResearchFindings: defineTable({
+    sessionId: v.id("sessions"),
+    type: v.string(),  // "facebook_groups", "linkedin", "twitter", "amazon_reviews"
+    data: v.object({
+      // Flexible object for different checklist types
+      groupName: v.optional(v.string()),
+      groupSize: v.optional(v.string()),
+      topPainPosts: v.optional(v.string()),
+      commonLanguage: v.optional(v.string()),
+      // ... other fields as needed for different research types
+    }),
+    submittedAt: v.number(),
+  }).index("by_session", ["sessionId"]),
 });
