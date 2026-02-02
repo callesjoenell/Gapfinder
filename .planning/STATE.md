@@ -21,11 +21,11 @@
 **Milestone:** v1 continued
 **Phase:** 7 - Research Tools (In Progress)
 **Status:** Executing wave 2
-**Last Activity:** 2026-02-02 - Completed 07-03-PLAN.md (Manual Research Checklist)
+**Last Activity:** 2026-02-02 - Completed 07-04-PLAN.md (Keyword Volume Lookup)
 
 **Progress:**
 ```
-[███████████████████████████░] 93% (25/~27 plans complete for v1)
+[████████████████████████████] 96% (26/~27 plans complete for v1)
 ```
 
 **Phase Breakdown:**
@@ -37,16 +37,16 @@
 | 4 - Phase System | 2 | Complete + Verified |
 | 5 - Idea Card | 3 | Complete + Verified |
 | 6 - Instructor View | — | Deferred to v2 |
-| 7 - Research Tools | 3 | In Progress (07-01, 07-02, 07-03 complete) |
+| 7 - Research Tools | 4 | In Progress (07-01, 07-02, 07-03, 07-04 complete) |
 
 ---
 
 ## Performance Metrics
 
-**Plans Completed:** 24
-**Plans Total:** 24 (Phases 1-5, 7)
+**Plans Completed:** 26
+**Plans Total:** 26 (Phases 1-5, 7)
 **Success Rate:** 100%
-**Blockers Resolved:** 8 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency)
+**Blockers Resolved:** 10 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency, auth import pattern, TypeScript strict mode types)
 
 ---
 
@@ -133,6 +133,11 @@
 | Sequential tool execution (not parallel) | Respects API rate limits for Reddit (60/min), others | 2026-02-02 |
 | Store top 5 results per finding | Limits data growth while preserving key evidence | 2026-02-02 |
 | Research findings as optional field | Backward compatible, no data migration required | 2026-02-02 |
+| Credit check before API execution | Prevents charging for failed lookups by verifying credits before API call | 2026-02-02 |
+| 20-keyword max limit enforced | Server-side enforcement prevents runaway costs from malicious/accidental overuse | 2026-02-02 |
+| Trial credits implementation | 50 free lookups via grantTrialCredits enables testing without payment setup | 2026-02-02 |
+| UI-side usage tracking | trackKeywordUsage called after success ensures only successful API calls deduct credits | 2026-02-02 |
+| Auth import pattern uses ./auth | Project convention: import from ./auth not @convex-dev/auth/server | 2026-02-02 |
 
 ### Technical Findings
 
@@ -213,6 +218,13 @@ npx convex env set PRODUCTHUNT_API_KEY "..."
 ```
 Get key from: https://api.producthunt.com/v2/docs (requires approval)
 
+**KEYWORDS_EVERYWHERE_API_KEY** - Required for keyword volume lookups (paid feature):
+```bash
+npx convex env set KEYWORDS_EVERYWHERE_API_KEY "..."
+```
+Get key from: https://keywordseverywhere.com -> Dashboard -> API Key
+Create account and purchase credits ($10 for 100K keywords)
+
 ### TODOs
 
 - [x] Plan Phase 1 (Foundation) via `/gsd:plan-phase 1`
@@ -233,14 +245,14 @@ Get key from: https://api.producthunt.com/v2/docs (requires approval)
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Last Action:** Completed 07-03-PLAN.md (Manual Research Checklist)
+**Last Action:** Completed 07-04-PLAN.md (Keyword Volume Lookup)
 **Next Action:** Continue Phase 7 execution with remaining plans
 
 **Phase 7 In Progress:**
 - [x] 07-01-PLAN.md - Research Tools Foundation (Claude tool definitions, API wrappers for Reddit/HN/Tavily/ProductHunt/SO)
-- [x] 07-02-PLAN.md - Research Action Backend (tool execution loop, result caching, conversation integration)
-- [x] 07-03-PLAN.md - Manual Research Checklist (forms for Facebook Groups, LinkedIn, Twitter, Amazon Reviews)
 - [x] 07-02-PLAN.md - Research Action Backend (chatWithResearch action with tool loop, schema extensions, findings persistence)
+- [x] 07-03-PLAN.md - Manual Research Checklist (forms for Facebook Groups, LinkedIn, Twitter, Amazon Reviews)
+- [x] 07-04-PLAN.md - Keyword Volume Lookup (Keywords Everywhere API, credit billing, confirmation UI, Convex action)
 
 **Phase 5 Complete + Verified:**
 - [x] 05-01-PLAN.md - Blob Rendering Foundation (6 organic blobs, drift, convergence)
@@ -280,4 +292,4 @@ Get key from: https://api.producthunt.com/v2/docs (requires approval)
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-02-02 (Phase 7 wave 2 - 07-03 complete, manual research checklist with react-hook-form)*
+*Last updated: 2026-02-02 (Phase 7 wave 2 - 07-04 complete, keyword volume lookup with credit billing)*
