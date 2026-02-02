@@ -21,16 +21,20 @@ This phase replaces the current vague "Research" phase with concrete tooling. It
 
 Full research stack from skill document:
 
-**Tier 1 (MCP Servers to integrate):**
+**Tier 1 (MCP Servers to integrate — FREE):**
 - Reddit (mcp-server-reddit) — pain signals, complaints, frustrations
 - Hacker News (@devabdultech/hn-mcp) — tech builder sentiment, what's being discussed
 - ProductHunt (product-hunt-mcp) — competition, what's launching
-- Google Trends (google-news-trends-mcp) — timing signals, search volume trends
-- Tavily (tavily-mcp) — general web search, news, content extraction
+- Google Trends (google-news-trends-mcp) — timing signals, trend direction (NO API KEY NEEDED)
+- Tavily (tavily-mcp) — general web search, news, content extraction (free tier: 1000 queries/month)
 - YouTube transcripts (mcp-server-youtube-transcript) — video pain signals
 - GitHub (github-mcp-server) — what developers are building
 
-**Tier 2 (Direct API calls):**
+**Tier 1.5 (Keyword Volume — CHEAP):**
+- Keywords Everywhere — $10 for 100K credits, search volume + CPC + competition
+- Alternative: SearchVolume.io (web tool for bulk lookups, no API but free)
+
+**Tier 2 (Direct API calls — FREE):**
 - Indie Hackers API — founder discussions, revenue numbers
 - DEV.to API — developer community pain
 - Stack Overflow — technical problems, unanswered questions
