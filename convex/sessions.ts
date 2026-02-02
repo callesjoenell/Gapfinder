@@ -280,6 +280,27 @@ export const advancePhase = mutation({
   },
 });
 
+// Get session score for color transition threshold
+export const getSessionScore = query({
+  args: { sessionId: v.id("sessions") },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return { score: null, passesThreshold: false };
+
+    const session = await ctx.db.get(args.sessionId);
+    if (!session || session.userId !== userId || session.isDeleted) {
+      return { score: null, passesThreshold: false };
+    }
+
+    const score = session.ideaCardScore ?? null;
+    // Threshold: 20 out of 30 max (6 areas × 5 points = 30)
+    // This gives some flexibility: avg 3.33/5 per area triggers green
+    const passesThreshold = score !== null && score >= 20;
+
+    return { score, passesThreshold };
+  },
+});
+
 // Clear all sessions for current user (dev/testing only)
 export const clearAllSessions = mutation({
   args: {},

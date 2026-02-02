@@ -27,6 +27,9 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
   // Query message count for triggering extraction on new messages
   const messageCount = useQuery(api.messages.getMessageCount, { sessionId });
 
+  // Query session score for color transition
+  const scoreData = useQuery(api.sessions.getSessionScore, { sessionId });
+
   // Action to trigger idea extraction
   const extractIdea = useAction(api.ideasActions.extractIdeaContent);
 
@@ -54,6 +57,9 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
   // Only merge if both phase >= 3 AND we have an actual idea sentence
   // This handles the case where extractIdeaContent runs but returns ideaReady=false
   const isMerging = currentPhase >= 3 && !!ideaData?.ideaSentence;
+
+  // Compute color scheme based on score threshold
+  const colorScheme: 'orange' | 'green' = scoreData?.passesThreshold ? 'green' : 'orange';
 
   // Measure container dimensions for BlobBackground
   useLayoutEffect(() => {
@@ -113,6 +119,7 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
           width={dimensions.width}
           height={dimensions.height}
           isMerging={isMerging}
+          colorScheme={colorScheme}
         />
       )}
 
@@ -138,6 +145,7 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
           ideaSentence={ideaData.ideaSentence}
           supportingSentences={ideaData.supportingSentences ?? []}
           isVisible={isMerging}
+          colorScheme={colorScheme}
         />
       )}
 

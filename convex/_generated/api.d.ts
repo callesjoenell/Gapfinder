@@ -11,6 +11,8 @@
 import type * as auth from "../auth.js";
 import type * as claude from "../claude.js";
 import type * as http from "../http.js";
+import type * as ideas from "../ideas.js";
+import type * as ideasActions from "../ideasActions.js";
 import type * as messages from "../messages.js";
 import type * as sessions from "../sessions.js";
 import type * as summaries from "../summaries.js";
@@ -25,6 +27,8 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   claude: typeof claude;
   http: typeof http;
+  ideas: typeof ideas;
+  ideasActions: typeof ideasActions;
   messages: typeof messages;
   sessions: typeof sessions;
   summaries: typeof summaries;

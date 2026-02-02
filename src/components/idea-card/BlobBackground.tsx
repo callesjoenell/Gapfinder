@@ -18,14 +18,31 @@ interface BlobBackgroundProps {
   width: number;
   height: number;
   isMerging?: boolean;
+  colorScheme?: 'orange' | 'green';
 }
 
-export function BlobBackground({ phase, width, height, isMerging = false }: BlobBackgroundProps) {
+export function BlobBackground({ phase, width, height, isMerging = false, colorScheme = 'orange' }: BlobBackgroundProps) {
   const shouldReduceMotion = useReducedMotion() ?? false;
   const { blobTransforms, edgeClarity } = useBlobAnimation(
     phase,
     shouldReduceMotion
   );
+
+  // Define color schemes
+  const colors = colorScheme === 'green'
+    ? {
+        gradients: [
+          { gradient: '#90EE90', fill: '#228B22' }, // Light green to forest green
+          { gradient: '#98FB98', fill: '#32CD32' }, // Pale green to lime green
+          { gradient: '#90EE90', fill: '#228B22' },
+          { gradient: '#98FB98', fill: '#32CD32' },
+          { gradient: '#90EE90', fill: '#228B22' },
+          { gradient: '#98FB98', fill: '#32CD32' },
+        ]
+      }
+    : {
+        gradients: BLOB_COLORS, // Use default orange spectrum
+      };
 
   // Calculate stdDeviation for blur based on edge clarity
   // edgeClarity 0.1 (1%) -> high blur (stdDeviation ~25)
@@ -46,8 +63,8 @@ export function BlobBackground({ phase, width, height, isMerging = false }: Blob
       >
         <defs>
           {/* Gradient definitions for each blob */}
-          {BLOB_COLORS.map((color, i) => (
-            <linearGradient
+          {colors.gradients.map((color, i) => (
+            <motion.linearGradient
               key={`gradient-${i}`}
               id={`gradient-${i}`}
               x1="0%"
@@ -55,15 +72,29 @@ export function BlobBackground({ phase, width, height, isMerging = false }: Blob
               x2="100%"
               y2="100%"
             >
-              <stop
+              <motion.stop
                 offset="0%"
-                style={{ stopColor: color.gradient, stopOpacity: 0.6 }}
+                animate={{
+                  stopColor: color.gradient,
+                  stopOpacity: 0.6,
+                }}
+                transition={{
+                  duration: 2.5,
+                  ease: 'easeInOut',
+                }}
               />
-              <stop
+              <motion.stop
                 offset="100%"
-                style={{ stopColor: color.fill, stopOpacity: 0.6 }}
+                animate={{
+                  stopColor: color.fill,
+                  stopOpacity: 0.6,
+                }}
+                transition={{
+                  duration: 2.5,
+                  ease: 'easeInOut',
+                }}
               />
-            </linearGradient>
+            </motion.linearGradient>
           ))}
 
           {/* Blur filter for gradient edges */}
