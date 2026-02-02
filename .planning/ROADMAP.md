@@ -188,6 +188,13 @@ Plans:
 
 **Dependencies:** Phase 4 (phase tracking drives card evolution)
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 05-01-PLAN.md - Blob rendering foundation: SVG blobs with gradient edges, drift animation, 6-blob layout
+- [ ] 05-02-PLAN.md - Word cloud + idea extraction: d3-cloud layout, Claude extraction, merge animation
+- [ ] 05-03-PLAN.md - Responsive layout + color transitions: Chat integration, score-based colors, testing mode
+
 **Requirements:**
 - CARD-01: Idea card takes up top 25% of screen
 - CARD-02: Phases 1-5: Scattered fuzzy yellow blobs, slowly drifting together
@@ -244,7 +251,7 @@ Plans:
 | 2 - Chat Core | Complete | 4 | 100% |
 | 3 - Sessions | Complete | 3 | 100% |
 | 4 - Phase System | Complete | 4 | 100% |
-| 5 - Idea Card | Not Started | 6 | 0% |
+| 5 - Idea Card | In Progress | 6 | 0% |
 | 6 - Instructor View | Not Started | 3 | 0% |
 
 **Total:** 28 requirements across 6 phases
@@ -276,4 +283,4 @@ Note: Phases 5 and 6 both depend on Phase 4 but are independent of each other. T
 ---
 
 *Roadmap created: 2025-01-22*
-*Last updated: 2026-02-01*
+*Last updated: 2026-02-02*
