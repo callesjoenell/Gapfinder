@@ -20,12 +20,12 @@
 
 **Milestone:** v1 continued
 **Phase:** 7 - Research Tools (In Progress)
-**Status:** Executing wave 1
-**Last Activity:** 2026-02-02 - Completed 07-01-PLAN.md (Research Tools Foundation)
+**Status:** Executing wave 2
+**Last Activity:** 2026-02-02 - Completed 07-02-PLAN.md (Research Action Backend)
 
 **Progress:**
 ```
-[█████████████████████████░░░] 85% (23/~27 plans complete for v1)
+[██████████████████████████░░] 89% (24/~27 plans complete for v1)
 ```
 
 **Phase Breakdown:**
@@ -37,14 +37,14 @@
 | 4 - Phase System | 2 | Complete + Verified |
 | 5 - Idea Card | 3 | Complete + Verified |
 | 6 - Instructor View | — | Deferred to v2 |
-| 7 - Research Tools | 1 | In Progress (07-01 complete) |
+| 7 - Research Tools | 2 | In Progress (07-01, 07-02 complete) |
 
 ---
 
 ## Performance Metrics
 
-**Plans Completed:** 23
-**Plans Total:** 23 (Phases 1-5, 7)
+**Plans Completed:** 24
+**Plans Total:** 24 (Phases 1-5, 7)
 **Success Rate:** 100%
 **Blockers Resolved:** 8 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency)
 
@@ -125,6 +125,10 @@
 | Edge fuzziness progression 90% to 50% | Phase 0 at 90% fuzzy (barely visible) to phase 3 at 50% fuzzy (more defined) | 2026-02-02 |
 | Word text: 7% grey with blob color tints | Subtle appearance balancing readability with aesthetic integration | 2026-02-02 |
 | Responsive heights: 25vh desktop, 40vh mobile | Desktop maximizes chat space, mobile maintains blob visibility on smaller screens | 2026-02-02 |
+| Max 5 tool execution iterations | Prevents infinite loops while allowing thorough research | 2026-02-02 |
+| Sequential tool execution (not parallel) | Respects API rate limits for Reddit (60/min), others | 2026-02-02 |
+| Store top 5 results per finding | Limits data growth while preserving key evidence | 2026-02-02 |
+| Research findings as optional field | Backward compatible, no data migration required | 2026-02-02 |
 
 ### Technical Findings
 
@@ -225,11 +229,12 @@ Get key from: https://api.producthunt.com/v2/docs (requires approval)
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Last Action:** Completed 07-01-PLAN.md (Research Tools Foundation)
+**Last Action:** Completed 07-02-PLAN.md (Research Action Backend)
 **Next Action:** Continue Phase 7 execution with remaining plans
 
 **Phase 7 In Progress:**
 - [x] 07-01-PLAN.md - Research Tools Foundation (Claude tool definitions, API wrappers for Reddit/HN/Tavily/ProductHunt/SO)
+- [x] 07-02-PLAN.md - Research Action Backend (chatWithResearch action with tool loop, schema extensions, findings persistence)
 
 **Phase 5 Complete + Verified:**
 - [x] 05-01-PLAN.md - Blob Rendering Foundation (6 organic blobs, drift, convergence)
@@ -269,4 +274,4 @@ Get key from: https://api.producthunt.com/v2/docs (requires approval)
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-02-02 (Phase 5 complete + verified - 22/22 plans done, IdeaCard fully integrated with color transitions and testing mode)*
+*Last updated: 2026-02-02 (Phase 7 wave 2 - 07-02 complete, research action backend with tool execution loop)*
