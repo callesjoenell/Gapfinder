@@ -85,10 +85,10 @@ export function BlobWords({ keywords, blobBounds, phase }: BlobWordsProps) {
         }
 
         // Map keywords to word cloud input format
-        // Size based on relevance: 10-30px
+        // Size based on relevance: 14-38px
         const words = areaKeywords.map((kw) => ({
           text: kw.word,
-          size: 10 + kw.relevance * 20,
+          size: 14 + kw.relevance * 24,
         }));
 
         return (
@@ -121,8 +121,8 @@ function BlobWordCloud({ words, bounds, color, phase }: BlobWordCloudProps) {
   // Calculate opacity: fade out at phase 3
   const opacity = phase >= 3 ? 0 : 1;
 
-  // Use white text with low opacity for soft appearance
-  const textColor = 'rgba(255, 255, 255, 0.75)';
+  // Use white text with full opacity
+  const textColor = 'white';
 
   return (
     <g>
