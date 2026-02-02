@@ -45,12 +45,14 @@ export function BlobBackground({ phase, width, height, isMerging = false, colorS
       };
 
   // Calculate stdDeviation for blur based on edge clarity
-  // edgeClarity 0.1 (1%) -> high blur (stdDeviation ~25)
-  // edgeClarity 0.8 (80%) -> low blur (stdDeviation ~5)
-  const blurStdDeviation = 30 - edgeClarity * 25;
+  // edgeClarity 0.1 (90% fuzzy) -> high blur (stdDeviation ~28)
+  // edgeClarity 0.5 (50% fuzzy) -> moderate blur (stdDeviation ~13)
+  const blurStdDeviation = 30 - edgeClarity * 34;
 
-  // Calculate merge blur: when merging, blur decreases for crisp edges
-  const mergeBlurStdDeviation = isMerging ? 5 : blurStdDeviation;
+  // Calculate merge blur: when merging, maintain 50% fuzziness (not crisp)
+  // User feedback: Final merged state should have edges 20% MORE gradient
+  // edgeClarity at phase 3+ is 0.5, which gives stdDeviation ~13
+  const mergeBlurStdDeviation = isMerging ? 13 : blurStdDeviation;
 
   return (
     <AnimatePresence mode="wait">

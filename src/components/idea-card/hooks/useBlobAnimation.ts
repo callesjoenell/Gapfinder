@@ -41,25 +41,28 @@ export function useBlobAnimation(
   _shouldReduceMotion: boolean
 ): UseBlobAnimationReturn {
   // Calculate edge clarity based on phase
+  // User feedback: 90% fuzzy → 70% fuzzy → 50% fuzzy
+  // 90% fuzzy = edgeClarity 0.1 (very blurred)
+  // 70% fuzzy = edgeClarity 0.3 (quite blurred)
+  // 50% fuzzy = edgeClarity 0.5 (moderate blur - final merged state)
   const edgeClarity = (() => {
     if (phase === 0) {
-      // Phase 0: start at 0.1 (1%), end at 0.5 (50%)
-      // This will be interpolated based on progress within phase 0
-      return 0.3; // Mid-phase default for now
-    } else if (phase >= 1 && phase <= 2) {
-      return 0.6; // Phases 1-2
+      return 0.1; // 90% fuzzy - super blurred
+    } else if (phase === 1) {
+      return 0.15; // Still very fuzzy
+    } else if (phase === 2) {
+      return 0.3; // 70% fuzzy
     } else if (phase >= 3) {
-      return 0.8; // Phase 3+
+      return 0.5; // 50% fuzzy - final merged state
     }
     return 0.1;
   })();
 
   // Calculate convergence factor - how much blobs move toward center
-  // Phase 0: 0% (blobs at starting positions)
-  // Phase 1: ~15% toward center
-  // Phase 2: ~30% toward center
+  // User feedback: Keep blobs MORE spread out and BIGGER in phases 0-2
+  // Phase 0-2: 0% (blobs stay at starting positions - spread out)
   // Phase 3+: merge animation takes over (handled in BlobBackground)
-  const convergenceFactor = clamp(phase * 0.15, 0, 0.3);
+  const convergenceFactor = phase >= 3 ? 0 : 0;
 
   // Generate transforms for each blob with centripetal convergence
   // The local drift animation is handled by Motion in BlobBackground
