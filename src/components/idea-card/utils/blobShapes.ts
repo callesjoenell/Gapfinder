@@ -76,15 +76,16 @@ export function generateBlobPath(
 }
 
 /**
- * Color pairs for the 6 blobs - gradient between yellow and orange
+ * Color pairs for the 6 blobs - mostly yellow/orange with subtle green accents
+ * 80% warm (yellow/orange), 20% light green tints for visual variety
  */
 export const BLOB_COLORS = [
-  { fill: '#FFD700', gradient: '#FFF3B0' }, // Gold
-  { fill: '#FFCC00', gradient: '#FFE680' }, // Deep yellow
-  { fill: '#FFB700', gradient: '#FFD966' }, // Amber
-  { fill: '#FFA500', gradient: '#FFCC80' }, // Orange
-  { fill: '#FF9500', gradient: '#FFBB66' }, // Deep orange
-  { fill: '#FFB84D', gradient: '#FFD9A3' }, // Light orange
+  { fill: '#FFD700', gradient: '#FFF3B0' }, // Gold (warm - keep)
+  { fill: '#E8F5C8', gradient: '#D4E89D' }, // Light green tint (pale sage)
+  { fill: '#FFB700', gradient: '#FFD966' }, // Amber (warm - keep)
+  { fill: '#F0F4C3', gradient: '#E6EE9C' }, // Pale lime tint
+  { fill: '#FF9500', gradient: '#FFBB66' }, // Deep orange (warm - keep)
+  { fill: '#DCEDC8', gradient: '#C5E1A5' }, // Soft sage tint
 ];
 
 /**

@@ -121,8 +121,8 @@ function BlobWordCloud({ words, bounds, color, phase }: BlobWordCloudProps) {
   // Calculate opacity: fade out at phase 3
   const opacity = phase >= 3 ? 0 : 1;
 
-  // Lighten blob color for text
-  const textColor = lightenColor(color, 0.4);
+  // Use white text for better readability
+  const textColor = 'white';
 
   return (
     <g>
