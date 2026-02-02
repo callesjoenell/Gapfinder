@@ -10,6 +10,8 @@ import { api } from '../../../convex/_generated/api';
 import { BlobBackground } from './BlobBackground';
 import { BlobWords } from './BlobWords';
 import { IdeaCardContent } from './IdeaCardContent';
+import { TestingControls } from './TestingControls';
+import { MOCK_PHASE_STATES } from '../../fixtures/phaseStates';
 
 interface IdeaCardProps {
   sessionId: Id<'sessions'>;
@@ -21,14 +23,30 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Query idea card data from Convex
-  const ideaData = useQuery(api.ideas.getIdeaCard, { sessionId });
+  // Test mode detection and state
+  const [isTestMode] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return new URLSearchParams(window.location.search).get('testMode') === 'true';
+  });
+  const [testPhase, setTestPhase] = useState(0);
 
-  // Query message count for triggering extraction on new messages
-  const messageCount = useQuery(api.messages.getMessageCount, { sessionId });
+  // Query idea card data from Convex (skip in test mode)
+  const ideaData = useQuery(
+    api.ideas.getIdeaCard,
+    isTestMode ? 'skip' : { sessionId }
+  );
 
-  // Query session score for color transition
-  const scoreData = useQuery(api.sessions.getSessionScore, { sessionId });
+  // Query message count for triggering extraction on new messages (skip in test mode)
+  const messageCount = useQuery(
+    api.messages.getMessageCount,
+    isTestMode ? 'skip' : { sessionId }
+  );
+
+  // Query session score for color transition (skip in test mode)
+  const scoreData = useQuery(
+    api.sessions.getSessionScore,
+    isTestMode ? 'skip' : { sessionId }
+  );
 
   // Action to trigger idea extraction
   const extractIdea = useAction(api.ideasActions.extractIdeaContent);
@@ -37,7 +55,10 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
   const prevMessageCountRef = useRef<number>(messageCount ?? 0);
 
   // Trigger extraction on phase changes AND message count changes (CARD-06)
+  // Skip in test mode
   useEffect(() => {
+    if (isTestMode) return;
+
     // Only trigger if we have a valid message count
     if (messageCount === undefined) return;
 
@@ -51,15 +72,24 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
     }
 
     prevMessageCountRef.current = messageCount;
-  }, [currentPhase, messageCount, sessionId, extractIdea]);
+  }, [isTestMode, currentPhase, messageCount, sessionId, extractIdea]);
+
+  // Use mock data in test mode, real data otherwise
+  const effectivePhase = isTestMode ? testPhase : currentPhase;
+  const mockData = isTestMode ? MOCK_PHASE_STATES[testPhase] : null;
+  const effectiveIdeaData = isTestMode
+    ? mockData
+    : ideaData;
 
   // Compute merge state with edge case handling:
   // Only merge if both phase >= 3 AND we have an actual idea sentence
   // This handles the case where extractIdeaContent runs but returns ideaReady=false
-  const isMerging = currentPhase >= 3 && !!ideaData?.ideaSentence;
+  const isMerging = effectivePhase >= 3 && !!effectiveIdeaData?.ideaSentence;
 
   // Compute color scheme based on score threshold
-  const colorScheme: 'orange' | 'green' = scoreData?.passesThreshold ? 'green' : 'orange';
+  const effectiveScore = isTestMode ? mockData?.score ?? null : scoreData?.score ?? null;
+  const passesThreshold = effectiveScore !== null && effectiveScore >= 20;
+  const colorScheme: 'orange' | 'green' = passesThreshold ? 'green' : 'orange';
 
   // Measure container dimensions for BlobBackground
   useLayoutEffect(() => {
@@ -115,7 +145,7 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
       {/* Blob background - only render when expanded */}
       {!isCollapsed && (
         <BlobBackground
-          phase={currentPhase}
+          phase={effectivePhase}
           width={dimensions.width}
           height={dimensions.height}
           isMerging={isMerging}
@@ -124,9 +154,9 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
       )}
 
       {/* BlobWords - render when phase 1-2 and not merging */}
-      {!isCollapsed && !isMerging && currentPhase >= 1 && ideaData?.ideaKeywords && (
+      {!isCollapsed && !isMerging && effectivePhase >= 1 && effectiveIdeaData?.ideaKeywords && (
         <BlobWords
-          keywords={ideaData.ideaKeywords}
+          keywords={effectiveIdeaData.ideaKeywords}
           blobBounds={[
             { x: 200, y: 150, width: 160, height: 160 },
             { x: 600, y: 150, width: 160, height: 160 },
@@ -135,17 +165,25 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
             { x: 200, y: 450, width: 160, height: 160 },
             { x: 600, y: 450, width: 160, height: 160 },
           ]}
-          phase={currentPhase}
+          phase={effectivePhase}
         />
       )}
 
       {/* IdeaCardContent - render when merged */}
-      {!isCollapsed && isMerging && ideaData?.ideaSentence && (
+      {!isCollapsed && isMerging && effectiveIdeaData?.ideaSentence && (
         <IdeaCardContent
-          ideaSentence={ideaData.ideaSentence}
-          supportingSentences={ideaData.supportingSentences ?? []}
+          ideaSentence={effectiveIdeaData.ideaSentence}
+          supportingSentences={effectiveIdeaData.supportingSentences ?? []}
           isVisible={isMerging}
           colorScheme={colorScheme}
+        />
+      )}
+
+      {/* Testing controls - only render in test mode */}
+      {isTestMode && (
+        <TestingControls
+          currentTestPhase={testPhase}
+          onPhaseChange={setTestPhase}
         />
       )}
 
