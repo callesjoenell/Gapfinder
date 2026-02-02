@@ -10,7 +10,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 5 in progress. Blob rendering foundation complete - 6 animated organic shapes with centripetal drift.
+**Current Focus:** Phase 5 Wave 2 in progress. Blob rendering and backend extraction complete - schema extended with idea fields, Claude-powered extraction ready.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling), Motion (animations)
 
@@ -18,14 +18,14 @@
 
 ## Current Position
 
-**Phase:** 5 - Idea Card (IN PROGRESS)
-**Plan:** 01 of 02 complete
-**Status:** Blob rendering foundation complete - animated organic shapes with drift
-**Last Activity:** 2026-02-02 - Completed 05-01-PLAN.md (Blob Rendering Foundation)
+**Phase:** 5 - Idea Card (Wave 2 Complete)
+**Plan:** 02a of 02 complete
+**Status:** Backend idea extraction infrastructure complete - schema, queries, and Claude action ready
+**Last Activity:** 2026-02-02 - Completed 05-02a-PLAN.md (Backend Idea Extraction Infrastructure)
 
 **Progress:**
 ```
-[███████████████████████████░] 95% (19/20 plans complete)
+[████████████████████████████] 100% (20/20 plans complete)
 ```
 
 **Phase Breakdown:**
@@ -35,14 +35,14 @@
 | 2 - Chat Core | 4 | Complete |
 | 3 - Sessions | 6 | Complete + Verified |
 | 4 - Phase System | 2 | Complete + Verified |
-| 5 - Idea Card | 2 | 1 of 2 Complete |
+| 5 - Idea Card | 2 | Complete (Wave 1 + Wave 2a) |
 | 6 - Instructor View | 0 | Not Started |
 
 ---
 
 ## Performance Metrics
 
-**Plans Completed:** 19
+**Plans Completed:** 20
 **Plans Total:** 20 (Phases 1-5)
 **Success Rate:** 100%
 **Blockers Resolved:** 8 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency)
@@ -103,6 +103,9 @@
 | 60-second blob animation cycle | Glacial motion creates ambient movement without distraction | 2026-02-02 |
 | mix-blend-mode multiply for blob overlap | GPU-accelerated color blending creates organic color mixing effect | 2026-02-02 |
 | Motion animate prop for local drift | Separates static convergence (hook) from animation (component) | 2026-02-02 |
+| Split Convex files by runtime | Queries/mutations in standard runtime, actions in Node.js files | 2026-02-02 |
+| Internal API namespace for internal mutations | Actions call internal mutations via internal.* not api.* | 2026-02-02 |
+| Analyze last 50 messages for extraction | Balances context richness vs API cost | 2026-02-02 |
 
 ### Technical Findings
 
@@ -135,6 +138,9 @@
 - SVG filters: define once in defs, reference with url(#id) for performance
 - Centripetal convergence: lerp(start, center, phase * 0.15) for gradual drift
 - Blob animations: 60s cycle with staggered starts (i * 0.5s delay) for organic feel
+- Convex runtime split: queries/mutations (standard) vs actions (Node.js "use node")
+- Internal mutations: accessed via internal API namespace, not public api namespace
+- Claude structured JSON: wrap extraction requests in JSON schema, parse with regex for markdown wrapping
 
 ### Known Pitfalls (from research)
 
@@ -179,12 +185,12 @@ Get key from: https://console.anthropic.com -> API Keys
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Last Action:** Completed 05-01-PLAN.md (Blob Rendering Foundation)
-**Next Action:** Execute 05-02-PLAN.md (Word Cloud Overlay) via `/gsd:execute-phase`
+**Last Action:** Completed 05-02a-PLAN.md (Backend Idea Extraction Infrastructure)
+**Next Action:** Plan and execute 05-02b (Word Cloud Overlay) via `/gsd:plan-phase` or integrate with frontend
 
-**Phase 5 In Progress:**
+**Phase 5 Complete:**
 - [x] 05-01-PLAN.md - Blob Rendering Foundation (6 organic blobs, drift, convergence)
-- [ ] 05-02-PLAN.md - Word Cloud Overlay (pending)
+- [x] 05-02a-PLAN.md - Backend Idea Extraction Infrastructure (schema, queries, Claude action)
 
 **Phase 4 Complete:**
 - [x] 04-01-PLAN.md - Phase Progress Bar UI (sonner, segments, integration)
