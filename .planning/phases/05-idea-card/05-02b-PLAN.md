@@ -2,7 +2,7 @@
 phase: 05-idea-card
 plan: 02b
 type: execute
-wave: 2
+wave: 3
 depends_on: ["05-01", "05-02a"]
 files_modified:
   - src/components/idea-card/hooks/useWordCloud.ts
@@ -39,6 +39,10 @@ must_haves:
       to: "useWordCloud"
       via: "d3-cloud layout hook"
       pattern: "useWordCloud\\("
+    - from: "src/components/idea-card/IdeaCard.tsx"
+      to: "convex/ideas.ts"
+      via: "extractIdeaContent triggered on message count changes"
+      pattern: "extractIdeaContent.*messageCount"
 ---
 
 <objective>
@@ -152,7 +156,7 @@ TypeScript compilation: `npx tsc --noEmit`
 </task>
 
 <task type="auto">
-  <name>Task 3: Wire merge animation into IdeaCard and BlobBackground</name>
+  <name>Task 3: Wire merge animation and message-based extraction trigger into IdeaCard</name>
   <files>
     src/components/idea-card/BlobBackground.tsx
     src/components/idea-card/IdeaCard.tsx
@@ -175,6 +179,11 @@ Update `IdeaCard.tsx`:
 - Add import: `import { BlobWords } from './BlobWords'`
 
 - Add query: `const ideaData = useQuery(api.ideas.getIdeaCard, { sessionId })`
+- **Add message count query for CARD-06 (idea updates during refinement):**
+  ```tsx
+  const messages = useQuery(api.messages.list, { sessionId });
+  const messageCount = messages?.length ?? 0;
+  ```
 - Pass keywords to BlobWords: `<BlobWords keywords={ideaData?.ideaKeywords ?? []} ... />`
 - Compute merge state with edge case handling:
   ```tsx
@@ -203,22 +212,39 @@ Update `IdeaCard.tsx`:
     />
   )}
   ```
-- Trigger extractIdeaContent action on phase changes:
+- **Trigger extractIdeaContent on BOTH phase changes AND message count changes (CARD-06):**
   ```tsx
   const extractIdea = useMutation(api.ideas.extractIdeaContent);
+
+  // Track previous message count to detect new messages
+  const prevMessageCountRef = useRef(messageCount);
+
   useEffect(() => {
-    if (currentPhase >= 1) {
+    // Trigger extraction when:
+    // 1. Phase changes to >= 1 (initial keyword extraction)
+    // 2. New messages arrive (idea refinement during conversation)
+    const hasNewMessages = messageCount > prevMessageCountRef.current;
+
+    if (currentPhase >= 1 && (hasNewMessages || prevMessageCountRef.current === 0)) {
       extractIdea({ sessionId });
     }
-  }, [currentPhase, sessionId, extractIdea]);
+
+    prevMessageCountRef.current = messageCount;
+  }, [currentPhase, messageCount, sessionId, extractIdea]);
   ```
+  This ensures the idea card updates when:
+  - User enters phase 1+ for the first time
+  - User sends a new message that refines the idea
+  - AI responds with new insights
   </action>
   <verify>
 TypeScript compilation: `npx tsc --noEmit`
 `npm run build` succeeds
 `grep -l "useQuery.*api.ideas" src/components/idea-card/IdeaCard.tsx` confirms Convex wiring
 `grep -l "isMerging" src/components/idea-card/BlobBackground.tsx` confirms merge prop
+`grep -l "messageCount" src/components/idea-card/IdeaCard.tsx` confirms message-based trigger
 Visual check: Merge animation triggers when ideaSentence is set
+Visual check: Send new message in phase 3+, card content should update within a few seconds
   </verify>
   <done>
 - BlobBackground merge animation moves blobs to center when isMerging=true
@@ -226,6 +252,7 @@ Visual check: Merge animation triggers when ideaSentence is set
 - Edge case handled: phase >= 3 but no ideaSentence prevents premature merge
 - Convex reactive query updates card when idea is extracted
 - BlobWords shown in phases 1-2, IdeaCardContent shown when merged
+- **Message-based extraction trigger ensures card updates during conversation refinement (CARD-06)**
   </done>
 </task>
 
@@ -237,7 +264,7 @@ Overall plan verification:
 2. Words appear in blobs during phases 1-2 (positioned by d3-cloud)
 3. Merge animation triggers when Claude extracts idea sentence (not just when phase >= 3)
 4. Idea card content displays with proper hierarchy (sentence > supporting)
-5. Content updates reactively when conversation refines idea
+5. Content updates reactively when conversation refines idea (new messages trigger re-extraction)
 </verification>
 
 <success_criteria>
@@ -250,6 +277,7 @@ Overall plan verification:
 7. Idea card content shows sentence prominently with supporting sentences below
 8. Content updates via Convex reactive query when idea is refined
 9. Dynamic text sizing ensures content always fits container
+10. **Message-based trigger: new messages during phases 1+ trigger re-extraction (CARD-06)**
 </success_criteria>
 
 <output>
