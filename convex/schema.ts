@@ -15,6 +15,17 @@ export default defineSchema({
     // Idea card state (DATA-03)
     ideaCardContent: v.optional(v.string()),
     ideaCardScore: v.optional(v.number()), // Total score from Phase 7
+    // Idea extraction fields (05-02a)
+    ideaKeywords: v.optional(v.array(v.object({
+      word: v.string(),
+      area: v.number(),
+      relevance: v.number()
+    }))),
+    ideaSentence: v.optional(v.string()), // Crystallized idea sentence
+    supportingSentences: v.optional(v.array(v.object({
+      text: v.string(),
+      areaIndex: v.number()
+    }))),
     createdAt: v.number(),
     lastActiveAt: v.number(),
   })
