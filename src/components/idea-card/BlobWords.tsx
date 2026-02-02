@@ -27,10 +27,10 @@ interface BlobWordsProps {
 }
 
 /**
- * Lighten a hex color for word display
- * Makes words slightly whiter than blob color
+ * Darken a hex color for word display
+ * Makes words 20% darker than blob color
  */
-function lightenColor(hexColor: string, amount: number = 0.3): string {
+function darkenColor(hexColor: string, amount: number = 0.2): string {
   // Remove # if present
   const hex = hexColor.replace('#', '');
 
@@ -39,10 +39,10 @@ function lightenColor(hexColor: string, amount: number = 0.3): string {
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
 
-  // Lighten by moving toward white
-  const newR = Math.round(r + (255 - r) * amount);
-  const newG = Math.round(g + (255 - g) * amount);
-  const newB = Math.round(b + (255 - b) * amount);
+  // Darken by reducing each channel
+  const newR = Math.max(0, Math.round(r * (1 - amount)));
+  const newG = Math.max(0, Math.round(g * (1 - amount)));
+  const newB = Math.max(0, Math.round(b * (1 - amount)));
 
   // Convert back to hex
   return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
@@ -121,8 +121,8 @@ function BlobWordCloud({ words, bounds, color, phase }: BlobWordCloudProps) {
   // Calculate opacity: fade out at phase 3
   const opacity = phase >= 3 ? 0 : 1;
 
-  // Use white text for better readability
-  const textColor = 'white';
+  // Use darkened blob color for text (20% darker than blob)
+  const textColor = darkenColor(color, 0.2);
 
   return (
     <g>
