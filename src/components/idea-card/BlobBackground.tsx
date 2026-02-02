@@ -118,7 +118,7 @@ export function BlobBackground({ phase, width, height, isMerging = false, colorS
             BLOB_SEEDS[i],
             blobTransforms[i].x,
             blobTransforms[i].y,
-            80
+            120
           );
 
           return (

@@ -117,7 +117,7 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
       ref={containerRef}
       className={`
         relative w-full bg-white/50 overflow-hidden transition-all duration-300
-        ${isCollapsed ? 'h-16' : 'h-[40vh] md:h-[25vh]'}
+        ${isCollapsed ? 'h-16' : 'h-[50vh]'}
       `}
     >
       {/* Collapse/expand toggle button */}
@@ -160,12 +160,12 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
         <BlobWords
           keywords={effectiveIdeaData.ideaKeywords}
           blobBounds={[
-            { x: 200, y: 150, width: 160, height: 160 },
-            { x: 600, y: 150, width: 160, height: 160 },
-            { x: 150, y: 300, width: 160, height: 160 },
-            { x: 650, y: 300, width: 160, height: 160 },
-            { x: 200, y: 450, width: 160, height: 160 },
-            { x: 600, y: 450, width: 160, height: 160 },
+            { x: 150, y: 100, width: 200, height: 200 },
+            { x: 650, y: 100, width: 200, height: 200 },
+            { x: 100, y: 300, width: 200, height: 200 },
+            { x: 700, y: 300, width: 200, height: 200 },
+            { x: 150, y: 500, width: 200, height: 200 },
+            { x: 650, y: 500, width: 200, height: 200 },
           ]}
           phase={effectivePhase}
         />

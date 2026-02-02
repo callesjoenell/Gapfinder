@@ -89,15 +89,16 @@ export const BLOB_COLORS = [
 export const CARD_CENTER = { x: 400, y: 300 };
 
 /**
- * Starting zones for the 6 blobs - outer ring arrangement
+ * Starting zones for the 6 blobs - outer edges arrangement
  * Each blob starts in its zone and drifts toward CARD_CENTER
+ * Positioned to cover the full card area (800x600 viewBox)
  * maxDrift defines the local movement range within the zone
  */
 export const BLOB_ZONES = [
-  { x: 200, y: 150, maxDrift: 15 }, // Top-left
-  { x: 600, y: 150, maxDrift: 15 }, // Top-right
-  { x: 150, y: 300, maxDrift: 15 }, // Middle-left
-  { x: 650, y: 300, maxDrift: 15 }, // Middle-right
-  { x: 200, y: 450, maxDrift: 15 }, // Bottom-left
-  { x: 600, y: 450, maxDrift: 15 }, // Bottom-right
+  { x: 150, y: 100, maxDrift: 15 }, // Top-left corner
+  { x: 650, y: 100, maxDrift: 15 }, // Top-right corner
+  { x: 100, y: 300, maxDrift: 15 }, // Middle-left edge
+  { x: 700, y: 300, maxDrift: 15 }, // Middle-right edge
+  { x: 150, y: 500, maxDrift: 15 }, // Bottom-left corner
+  { x: 650, y: 500, maxDrift: 15 }, // Bottom-right corner
 ];
