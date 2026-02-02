@@ -28,6 +28,7 @@ function seededRandom(seed: number): () => number {
  * @param centerY - Y coordinate of blob center
  * @param radius - Base radius of the blob
  * @param edges - Number of control points (default 8 for smooth curves)
+ * @param aspectRatio - Horizontal stretch factor (default 1.8 for wider blobs)
  * @returns SVG path string
  */
 export function generateBlobPath(
@@ -35,19 +36,22 @@ export function generateBlobPath(
   centerX: number,
   centerY: number,
   radius: number,
-  edges: number = 8
+  edges: number = 8,
+  aspectRatio: number = 1.8
 ): string {
   const random = seededRandom(seed);
   const points: { x: number; y: number }[] = [];
 
   // Generate irregular points using polar coordinates with noise
+  // Apply aspect ratio to make blobs wider horizontally
   for (let i = 0; i < edges; i++) {
     const angle = (i / edges) * Math.PI * 2;
     const radiusVariation = radius * (0.7 + random() * 0.6); // 70%-130% of base radius
     const angleNoise = (random() - 0.5) * 0.3; // Small angle variation
 
     const adjustedAngle = angle + angleNoise;
-    const x = centerX + Math.cos(adjustedAngle) * radiusVariation;
+    // Apply aspect ratio to x-coordinate for horizontal stretching
+    const x = centerX + Math.cos(adjustedAngle) * radiusVariation * aspectRatio;
     const y = centerY + Math.sin(adjustedAngle) * radiusVariation;
 
     points.push({ x, y });
@@ -92,13 +96,14 @@ export const CARD_CENTER = { x: 400, y: 300 };
  * Starting zones for the 6 blobs - outer edges arrangement
  * Each blob starts in its zone and drifts toward CARD_CENTER
  * Positioned to cover the full card area (800x600 viewBox)
+ * Spread wider horizontally to use more of the 800px width
  * maxDrift defines the local movement range within the zone
  */
 export const BLOB_ZONES = [
-  { x: 150, y: 100, maxDrift: 15 }, // Top-left corner
-  { x: 650, y: 100, maxDrift: 15 }, // Top-right corner
-  { x: 100, y: 300, maxDrift: 15 }, // Middle-left edge
-  { x: 700, y: 300, maxDrift: 15 }, // Middle-right edge
-  { x: 150, y: 500, maxDrift: 15 }, // Bottom-left corner
-  { x: 650, y: 500, maxDrift: 15 }, // Bottom-right corner
+  { x: 80, y: 100, maxDrift: 15 }, // Top-left corner (further left)
+  { x: 720, y: 100, maxDrift: 15 }, // Top-right corner (further right)
+  { x: 50, y: 300, maxDrift: 15 }, // Middle-left edge (further left)
+  { x: 750, y: 300, maxDrift: 15 }, // Middle-right edge (further right)
+  { x: 80, y: 500, maxDrift: 15 }, // Bottom-left corner (further left)
+  { x: 720, y: 500, maxDrift: 15 }, // Bottom-right corner (further right)
 ];

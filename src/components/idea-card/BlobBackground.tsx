@@ -118,7 +118,9 @@ export function BlobBackground({ phase, width, height, isMerging = false, colorS
             BLOB_SEEDS[i],
             blobTransforms[i].x,
             blobTransforms[i].y,
-            120
+            120,
+            8, // edges
+            1.8 // aspectRatio - horizontally stretched blobs
           );
 
           return (
@@ -134,9 +136,9 @@ export function BlobBackground({ phase, width, height, isMerging = false, colorS
               animate={
                 isMerging
                   ? {
-                      // Merge animation: expand blobs in place to fill 75% of card
-                      // Blobs stay in their general positions but grow larger
-                      scale: 1.8,
+                      // Merge animation: expand blobs in place to create wide horizontal band
+                      // Blobs stay in their general positions but grow much larger
+                      scale: 2.5,
                       x: 0,
                       y: 0,
                     }
