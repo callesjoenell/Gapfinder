@@ -30,9 +30,11 @@ Full research stack from skill document:
 - YouTube transcripts (mcp-server-youtube-transcript) — video pain signals
 - GitHub (github-mcp-server) — what developers are building
 
-**Tier 1.5 (Keyword Volume — CHEAP):**
+**Tier 1.5 (Keyword Volume — PAID ADD-ON):**
 - Keywords Everywhere — $10 for 100K credits, search volume + CPC + competition
-- Alternative: SearchVolume.io (web tool for bulk lookups, no API but free)
+- **Monetization:** Charge users 50% markup on API costs (pass-through + margin)
+- Presented as optional paid feature in chat flow during Phase 1-2
+- Alternative: SearchVolume.io (web tool for manual lookups, free but no API)
 
 **Tier 2 (Direct API calls — FREE):**
 - Indie Hackers API — founder discussions, revenue numbers
@@ -73,6 +75,14 @@ Structured checklists (not instructions) for sources without APIs:
 - Pre-filled prompts for what to look for
 - Submitted findings become part of conversation context
 - Findings persist to session for later reference
+
+### Monetization
+
+- **Free tier:** All MCP research (Reddit, HN, ProductHunt, Google Trends, Tavily, etc.)
+- **Paid add-on:** Keyword search volume lookups via Keywords Everywhere
+- **Pricing:** 50% markup on API costs (e.g., if API costs $0.0001/keyword, charge $0.00015)
+- **UX:** Claude offers keyword lookup as optional upgrade during Phase 1-2 research
+- **Tracking:** Need to track usage per user for billing
 
 ### Claude's Discretion
 

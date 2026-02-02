@@ -264,6 +264,8 @@ Plans:
 - RESEARCH-04: User can report back findings from manual research in structured format
 - RESEARCH-05: Research findings persist and inform later phases
 - RESEARCH-06: System prompt updated to orchestrate both auto and manual research
+- RESEARCH-07: Keyword volume as paid add-on (50% markup on Keywords Everywhere API costs)
+- RESEARCH-08: Usage tracking for paid features per user
 
 **Success Criteria:**
 1. User in Phase 1 (Find Gaps) sees Claude query Reddit/HN for pain signals
@@ -290,9 +292,9 @@ Plans:
 | 4 - Phase System | Complete | 4 | 100% |
 | 5 - Idea Card | Complete | 6 | 100% |
 | 6 - Instructor View | Deferred to v2 | 3 | — |
-| 7 - Research Tools | Not Started | 6 | 0% |
+| 7 - Research Tools | Not Started | 8 | 0% |
 
-**v1 Total:** 31 requirements across 6 phases
+**v1 Total:** 33 requirements across 6 phases
 **v1 Complete:** 25/31 (81%)
 **v2 Total:** 3 requirements (Phase 6)
 
