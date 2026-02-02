@@ -10,22 +10,22 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 5 Wave 2 in progress. Blob rendering and backend extraction complete - schema extended with idea fields, Claude-powered extraction ready.
+**Current Focus:** Phase 5 Wave 3 complete. Word cloud overlay with d3-cloud positioning, merge animation, and message-based extraction triggers implemented.
 
-**Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling), Motion (animations)
+**Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling), Motion (animations), d3-cloud (word layouts)
 
 ---
 
 ## Current Position
 
-**Phase:** 5 - Idea Card (Wave 2 Complete)
-**Plan:** 02a of 02 complete
-**Status:** Backend idea extraction infrastructure complete - schema, queries, and Claude action ready
-**Last Activity:** 2026-02-02 - Completed 05-02a-PLAN.md (Backend Idea Extraction Infrastructure)
+**Phase:** 5 - Idea Card (Wave 3 Complete)
+**Plan:** 02b of 02 complete
+**Status:** Word cloud overlay and merge animation complete - d3-cloud positioning, IdeaCardContent with dynamic sizing, message-based extraction triggers
+**Last Activity:** 2026-02-02 - Completed 05-02b-PLAN.md (Word Cloud Overlay and Merge Animation)
 
 **Progress:**
 ```
-[████████████████████████████] 100% (20/20 plans complete)
+[████████████████████████████] 100% (21/21 plans complete)
 ```
 
 **Phase Breakdown:**
@@ -35,15 +35,15 @@
 | 2 - Chat Core | 4 | Complete |
 | 3 - Sessions | 6 | Complete + Verified |
 | 4 - Phase System | 2 | Complete + Verified |
-| 5 - Idea Card | 2 | Complete (Wave 1 + Wave 2a) |
+| 5 - Idea Card | 3 | Complete (Wave 1 + Wave 2a + Wave 2b) |
 | 6 - Instructor View | 0 | Not Started |
 
 ---
 
 ## Performance Metrics
 
-**Plans Completed:** 20
-**Plans Total:** 20 (Phases 1-5)
+**Plans Completed:** 21
+**Plans Total:** 21 (Phases 1-5)
 **Success Rate:** 100%
 **Blockers Resolved:** 8 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency)
 
@@ -106,6 +106,10 @@
 | Split Convex files by runtime | Queries/mutations in standard runtime, actions in Node.js files | 2026-02-02 |
 | Internal API namespace for internal mutations | Actions call internal mutations via internal.* not api.* | 2026-02-02 |
 | Analyze last 50 messages for extraction | Balances context richness vs API cost | 2026-02-02 |
+| d3-cloud archimedean spiral for word positioning | Natural word cloud layout within blob bounds without excessive overlap | 2026-02-02 |
+| Binary search for dynamic text sizing (12-48px) | Faster than linear search, ensures readability on all screen sizes | 2026-02-02 |
+| Message count tracking for extraction triggers | Re-extract idea on new messages for real-time refinement during conversation | 2026-02-02 |
+| Edge case: merge only when ideaSentence exists | Prevents premature merge when phase >= 3 but conversation lacks depth | 2026-02-02 |
 
 ### Technical Findings
 
@@ -141,6 +145,10 @@
 - Convex runtime split: queries/mutations (standard) vs actions (Node.js "use node")
 - Internal mutations: accessed via internal API namespace, not public api namespace
 - Claude structured JSON: wrap extraction requests in JSON schema, parse with regex for markdown wrapping
+- d3-cloud layout: returns positioned words with x, y, rotate properties added to input objects
+- useFitText pattern: binary search with temporary DOM element for measurement before paint
+- Message-based reactive triggers: useEffect with ref tracking previous value to detect changes
+- useAction for Convex actions: useMutation only works for mutations, actions need useAction hook
 
 ### Known Pitfalls (from research)
 
@@ -185,12 +193,13 @@ Get key from: https://console.anthropic.com -> API Keys
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Last Action:** Completed 05-02a-PLAN.md (Backend Idea Extraction Infrastructure)
-**Next Action:** Plan and execute 05-02b (Word Cloud Overlay) via `/gsd:plan-phase` or integrate with frontend
+**Last Action:** Completed 05-02b-PLAN.md (Word Cloud Overlay and Merge Animation)
+**Next Action:** Continue with Phase 5 or 6, or verify Phase 5 work end-to-end
 
 **Phase 5 Complete:**
 - [x] 05-01-PLAN.md - Blob Rendering Foundation (6 organic blobs, drift, convergence)
 - [x] 05-02a-PLAN.md - Backend Idea Extraction Infrastructure (schema, queries, Claude action)
+- [x] 05-02b-PLAN.md - Word Cloud Overlay and Merge Animation (d3-cloud, IdeaCardContent, message-based triggers)
 
 **Phase 4 Complete:**
 - [x] 04-01-PLAN.md - Phase Progress Bar UI (sonner, segments, integration)
@@ -224,4 +233,4 @@ Get key from: https://console.anthropic.com -> API Keys
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-02-02 (Phase 5 in progress - 19/20 plans done, blob rendering foundation complete)*
+*Last updated: 2026-02-02 (Phase 5 complete - 21/21 plans done, word cloud overlay and merge animation complete)*
