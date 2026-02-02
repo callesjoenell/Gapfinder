@@ -69,18 +69,40 @@ export default defineSchema({
     }),
   }).index("by_session", ["sessionId", "phase"]),
 
-  // Manual research findings from checklists (07-02)
+  // Manual research findings from checklists (07-03)
   manualResearchFindings: defineTable({
     sessionId: v.id("sessions"),
     type: v.string(),  // "facebook_groups", "linkedin", "twitter", "amazon_reviews"
     data: v.object({
-      // Flexible object for different checklist types
+      // Facebook Groups fields
       groupName: v.optional(v.string()),
       groupSize: v.optional(v.string()),
       topPainPosts: v.optional(v.string()),
       commonLanguage: v.optional(v.string()),
-      // ... other fields as needed for different research types
+      // LinkedIn fields
+      targetRoles: v.optional(v.string()),
+      skillsInDemand: v.optional(v.string()),
+      painPointsFromPosts: v.optional(v.string()),
+      toolsMentioned: v.optional(v.string()),
+      // Twitter fields
+      hashtags: v.optional(v.string()),
+      influencers: v.optional(v.string()),
+      commonComplaints: v.optional(v.string()),
+      wishlistItems: v.optional(v.string()),
+      // Amazon Reviews fields
+      productCategory: v.optional(v.string()),
+      productsReviewed: v.optional(v.string()),
+      topComplaints: v.optional(v.string()),
+      missingFeatures: v.optional(v.string()),
     }),
     submittedAt: v.number(),
   }).index("by_session", ["sessionId"]),
+
+  // Keyword lookup credits (07-04)
+  keywordCredits: defineTable({
+    userId: v.string(),
+    creditsRemaining: v.number(),
+    creditsUsed: v.number(),
+    lastUpdated: v.number(),
+  }).index("by_user", ["userId"]),
 });
