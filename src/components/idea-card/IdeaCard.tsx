@@ -123,7 +123,7 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
       {/* Collapse/expand toggle button */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute top-2 right-2 z-10 p-2 rounded-md bg-white/80 hover:bg-white transition-colors"
+        className="absolute top-2 right-2 z-30 p-2 rounded-md bg-white/80 hover:bg-white transition-colors"
         aria-label={isCollapsed ? 'Expand card' : 'Collapse card'}
       >
         <svg
@@ -144,15 +144,17 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
         </svg>
       </button>
 
-      {/* Blob background - only render when expanded */}
+      {/* Blob background - only render when expanded, positioned as background layer */}
       {!isCollapsed && (
-        <BlobBackground
-          phase={effectivePhase}
-          width={dimensions.width}
-          height={dimensions.height}
-          isMerging={isMerging}
-          colorScheme={colorScheme}
-        />
+        <div className="absolute inset-0 z-0">
+          <BlobBackground
+            phase={effectivePhase}
+            width={dimensions.width}
+            height={dimensions.height}
+            isMerging={isMerging}
+            colorScheme={colorScheme}
+          />
+        </div>
       )}
 
       {/* BlobWords - render when phase 1-2 and not merging */}
@@ -171,7 +173,7 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
         />
       )}
 
-      {/* IdeaCardContent - render when merged */}
+      {/* IdeaCardContent - render when merged, positioned over blob background */}
       {!isCollapsed && isMerging && effectiveIdeaData?.ideaSentence && (
         <IdeaCardContent
           ideaSentence={effectiveIdeaData.ideaSentence}

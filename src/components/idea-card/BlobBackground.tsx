@@ -134,10 +134,11 @@ export function BlobBackground({ phase, width, height, isMerging = false, colorS
               animate={
                 isMerging
                   ? {
-                      // Merge animation: move to center, scale down
-                      x: CARD_CENTER.x - blobTransforms[i].x,
-                      y: CARD_CENTER.y - blobTransforms[i].y,
-                      scale: 0.7,
+                      // Merge animation: expand blobs in place to fill 75% of card
+                      // Blobs stay in their general positions but grow larger
+                      scale: 1.8,
+                      x: 0,
+                      y: 0,
                     }
                   : {
                       // Normal drift animation

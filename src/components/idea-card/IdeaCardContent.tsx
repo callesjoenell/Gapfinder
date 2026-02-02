@@ -69,6 +69,7 @@ export function IdeaCardContent({
               fontSize: `${optimalFontSize}px`,
               fontWeight: 'bold',
               lineHeight: 1.3,
+              textShadow: isGreen ? '0 2px 4px rgba(0,0,0,0.3)' : '0 2px 4px rgba(255,255,255,0.8)',
             }}
           >
             {ideaSentence}
