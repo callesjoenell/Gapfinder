@@ -27,25 +27,28 @@ interface BlobWordsProps {
 }
 
 /**
- * Darken a hex color for word display
- * Makes words 20% darker than blob color
+ * Get 20% grey text color tinted with blob color
+ * Creates readable text that harmonizes with the blob
+ *
+ * @param blobColor - Hex color of the blob
+ * @returns RGB string with tinted grey (70% grey + 30% blob color)
  */
-function darkenColor(hexColor: string, amount: number = 0.2): string {
-  // Remove # if present
-  const hex = hexColor.replace('#', '');
+function getTintedGrey(blobColor: string): string {
+  // Base grey value (20% grey = 80% white)
+  const greyValue = 204; // rgb(204, 204, 204) or #CCCCCC
 
-  // Parse RGB
+  // Parse blob color
+  const hex = blobColor.replace('#', '');
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
 
-  // Darken by reducing each channel
-  const newR = Math.max(0, Math.round(r * (1 - amount)));
-  const newG = Math.max(0, Math.round(g * (1 - amount)));
-  const newB = Math.max(0, Math.round(b * (1 - amount)));
+  // Mix 70% grey + 30% blob color for noticeable tint
+  const mixR = Math.round(greyValue * 0.7 + r * 0.3);
+  const mixG = Math.round(greyValue * 0.7 + g * 0.3);
+  const mixB = Math.round(greyValue * 0.7 + b * 0.3);
 
-  // Convert back to hex
-  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+  return `rgb(${mixR}, ${mixG}, ${mixB})`;
 }
 
 export function BlobWords({ keywords, blobBounds, phase }: BlobWordsProps) {
@@ -121,8 +124,8 @@ function BlobWordCloud({ words, bounds, color, phase }: BlobWordCloudProps) {
   // Calculate opacity: fade out at phase 3
   const opacity = phase >= 3 ? 0 : 1;
 
-  // Use white text with full opacity
-  const textColor = 'white';
+  // Use 20% grey tinted with blob color for readable text
+  const textColor = getTintedGrey(color);
 
   return (
     <g>
