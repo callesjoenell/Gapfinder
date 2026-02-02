@@ -19,13 +19,13 @@
 ## Current Position
 
 **Milestone:** v1 continued
-**Phase:** 7 - Research Tools (Not Started)
-**Status:** Context gathered, ready to plan
-**Last Activity:** 2026-02-02 - Added Phase 7 to roadmap, gathered context for research tools
+**Phase:** 7 - Research Tools (In Progress)
+**Status:** Executing wave 1
+**Last Activity:** 2026-02-02 - Completed 07-01-PLAN.md (Research Tools Foundation)
 
 **Progress:**
 ```
-[████████████████████████░░░░] 81% (22/~27 plans complete for v1)
+[█████████████████████████░░░] 85% (23/~27 plans complete for v1)
 ```
 
 **Phase Breakdown:**
@@ -37,14 +37,14 @@
 | 4 - Phase System | 2 | Complete + Verified |
 | 5 - Idea Card | 3 | Complete + Verified |
 | 6 - Instructor View | — | Deferred to v2 |
-| 7 - Research Tools | 0 | Context gathered, needs planning |
+| 7 - Research Tools | 1 | In Progress (07-01 complete) |
 
 ---
 
 ## Performance Metrics
 
-**Plans Completed:** 22
-**Plans Total:** 22 (Phases 1-5)
+**Plans Completed:** 23
+**Plans Total:** 23 (Phases 1-5, 7)
 **Success Rate:** 100%
 **Blockers Resolved:** 8 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency)
 
@@ -117,6 +117,11 @@
 | Collapse state in localStorage | 'ideaCard-collapsed' key persists across refreshes and session switches | 2026-02-02 |
 | Blobs expanded to 75% of card area | Prominence and visual impact over small shapes; 1.8x aspect ratio for text containment | 2026-02-02 |
 | Multi-color blob gradients | Green, yellow, orange spectrum blends for visual richness; 3 blobs with green tints | 2026-02-02 |
+| Claude tool use format with input_schema | Follows Anthropic spec: name, description, input_schema with JSON Schema validation | 2026-02-02 |
+| API keys server-side only in Convex actions | All wrappers use process.env with "use node" directive, never exposed to browser | 2026-02-02 |
+| Graceful degradation for optional APIs | ProductHunt returns empty arrays with warnings vs throwing errors, allows conversation continuation | 2026-02-02 |
+| Free-first research approach | HN and Stack Overflow work without keys, Reddit anonymous, only Tavily requires key | 2026-02-02 |
+| Stack Overflow gzip decompression | Stack Exchange API returns gzip by default, use node:zlib gunzipSync | 2026-02-02 |
 | Edge fuzziness progression 90% to 50% | Phase 0 at 90% fuzzy (barely visible) to phase 3 at 50% fuzzy (more defined) | 2026-02-02 |
 | Word text: 7% grey with blob color tints | Subtle appearance balancing readability with aesthetic integration | 2026-02-02 |
 | Responsive heights: 25vh desktop, 40vh mobile | Desktop maximizes chat space, mobile maintains blob visibility on smaller screens | 2026-02-02 |
@@ -188,6 +193,18 @@ npx convex env set ANTHROPIC_API_KEY "sk-ant-api03-..."
 ```
 Get key from: https://console.anthropic.com -> API Keys
 
+**TAVILY_API_KEY** - Required for web search research tool:
+```bash
+npx convex env set TAVILY_API_KEY "tvly-..."
+```
+Get key from: https://tavily.com/
+
+**PRODUCTHUNT_API_KEY** - Optional for ProductHunt competitive research:
+```bash
+npx convex env set PRODUCTHUNT_API_KEY "..."
+```
+Get key from: https://api.producthunt.com/v2/docs (requires approval)
+
 ### TODOs
 
 - [x] Plan Phase 1 (Foundation) via `/gsd:plan-phase 1`
@@ -208,8 +225,11 @@ Get key from: https://console.anthropic.com -> API Keys
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Last Action:** Added Phase 7 (Research Tools) to roadmap, gathered context
-**Next Action:** `/gsd:plan-phase 7` to create execution plans
+**Last Action:** Completed 07-01-PLAN.md (Research Tools Foundation)
+**Next Action:** Continue Phase 7 execution with remaining plans
+
+**Phase 7 In Progress:**
+- [x] 07-01-PLAN.md - Research Tools Foundation (Claude tool definitions, API wrappers for Reddit/HN/Tavily/ProductHunt/SO)
 
 **Phase 5 Complete + Verified:**
 - [x] 05-01-PLAN.md - Blob Rendering Foundation (6 organic blobs, drift, convergence)
