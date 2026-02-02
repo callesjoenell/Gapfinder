@@ -3,22 +3,24 @@
  * Blobs have gradient edges and drift subtly while converging toward center
  */
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { useBlobAnimation } from './hooks/useBlobAnimation';
 import {
   generateBlobPath,
   BLOB_SEEDS,
   BLOB_COLORS,
   BLOB_ZONES,
+  CARD_CENTER,
 } from './utils/blobShapes';
 
 interface BlobBackgroundProps {
   phase: number;
   width: number;
   height: number;
+  isMerging?: boolean;
 }
 
-export function BlobBackground({ phase, width, height }: BlobBackgroundProps) {
+export function BlobBackground({ phase, width, height, isMerging = false }: BlobBackgroundProps) {
   const shouldReduceMotion = useReducedMotion() ?? false;
   const { blobTransforms, edgeClarity } = useBlobAnimation(
     phase,
@@ -30,83 +32,105 @@ export function BlobBackground({ phase, width, height }: BlobBackgroundProps) {
   // edgeClarity 0.8 (80%) -> low blur (stdDeviation ~5)
   const blurStdDeviation = 30 - edgeClarity * 25;
 
+  // Calculate merge blur: when merging, blur decreases for crisp edges
+  const mergeBlurStdDeviation = isMerging ? 5 : blurStdDeviation;
+
   return (
-    <svg
-      width={width}
-      height={height}
-      viewBox="0 0 800 600"
-      preserveAspectRatio="xMidYMid meet"
-      className="absolute inset-0 w-full h-full"
-    >
-      <defs>
-        {/* Gradient definitions for each blob */}
-        {BLOB_COLORS.map((color, i) => (
-          <linearGradient
-            key={`gradient-${i}`}
-            id={`gradient-${i}`}
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="100%"
-          >
-            <stop
-              offset="0%"
-              style={{ stopColor: color.gradient, stopOpacity: 0.6 }}
+    <AnimatePresence mode="wait">
+      <svg
+        width={width}
+        height={height}
+        viewBox="0 0 800 600"
+        preserveAspectRatio="xMidYMid meet"
+        className="absolute inset-0 w-full h-full"
+      >
+        <defs>
+          {/* Gradient definitions for each blob */}
+          {BLOB_COLORS.map((color, i) => (
+            <linearGradient
+              key={`gradient-${i}`}
+              id={`gradient-${i}`}
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
+            >
+              <stop
+                offset="0%"
+                style={{ stopColor: color.gradient, stopOpacity: 0.6 }}
+              />
+              <stop
+                offset="100%"
+                style={{ stopColor: color.fill, stopOpacity: 0.6 }}
+              />
+            </linearGradient>
+          ))}
+
+          {/* Blur filter for gradient edges */}
+          <filter id="blob-blur">
+            <feGaussianBlur in="SourceGraphic" stdDeviation={mergeBlurStdDeviation} />
+            <feColorMatrix
+              type="matrix"
+              values={`
+                1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 ${edgeClarity} 0
+              `}
             />
-            <stop
-              offset="100%"
-              style={{ stopColor: color.fill, stopOpacity: 0.6 }}
+          </filter>
+        </defs>
+
+        {/* Render 6 blobs with animation */}
+        {BLOB_ZONES.map((_zone, i) => {
+          const blobPath = generateBlobPath(
+            BLOB_SEEDS[i],
+            blobTransforms[i].x,
+            blobTransforms[i].y,
+            80
+          );
+
+          return (
+            <motion.path
+              key={i}
+              d={blobPath}
+              fill={`url(#gradient-${i})`}
+              filter="url(#blob-blur)"
+              style={{
+                mixBlendMode: 'multiply',
+                willChange: 'transform',
+              }}
+              animate={
+                isMerging
+                  ? {
+                      // Merge animation: move to center, scale down
+                      x: CARD_CENTER.x - blobTransforms[i].x,
+                      y: CARD_CENTER.y - blobTransforms[i].y,
+                      scale: 0.7,
+                    }
+                  : {
+                      // Normal drift animation
+                      x: shouldReduceMotion ? 0 : [-5, 10, -8, 5, 0],
+                      y: shouldReduceMotion ? 0 : [0, -8, 12, -5, 0],
+                    }
+              }
+              transition={
+                isMerging
+                  ? {
+                      duration: 2.5,
+                      ease: 'easeInOut',
+                    }
+                  : {
+                      duration: 60,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                      delay: i * 0.5,
+                    }
+              }
             />
-          </linearGradient>
-        ))}
-
-        {/* Blur filter for gradient edges */}
-        <filter id="blob-blur">
-          <feGaussianBlur in="SourceGraphic" stdDeviation={blurStdDeviation} />
-          <feColorMatrix
-            type="matrix"
-            values={`
-              1 0 0 0 0
-              0 1 0 0 0
-              0 0 1 0 0
-              0 0 0 ${edgeClarity} 0
-            `}
-          />
-        </filter>
-      </defs>
-
-      {/* Render 6 blobs with animation */}
-      {BLOB_ZONES.map((_zone, i) => {
-        const blobPath = generateBlobPath(
-          BLOB_SEEDS[i],
-          blobTransforms[i].x,
-          blobTransforms[i].y,
-          80
-        );
-
-        return (
-          <motion.path
-            key={i}
-            d={blobPath}
-            fill={`url(#gradient-${i})`}
-            filter="url(#blob-blur)"
-            style={{
-              mixBlendMode: 'multiply',
-              willChange: 'transform',
-            }}
-            animate={{
-              x: shouldReduceMotion ? 0 : [-5, 10, -8, 5, 0],
-              y: shouldReduceMotion ? 0 : [0, -8, 12, -5, 0],
-            }}
-            transition={{
-              duration: 60,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: i * 0.5, // Stagger animation start for each blob
-            }}
-          />
-        );
-      })}
-    </svg>
+          );
+        })}
+      </svg>
+    </AnimatePresence>
   );
 }

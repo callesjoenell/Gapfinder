@@ -3,7 +3,8 @@
  * Uses binary search to find the largest font size that fits content in container
  */
 
-import { useLayoutEffect, useState, RefObject } from 'react';
+import { useLayoutEffect, useState } from 'react';
+import type { RefObject } from 'react';
 
 /**
  * Calculate optimal font size for text to fit within container

@@ -3,19 +3,57 @@
  * Renders BlobBackground with measured dimensions and collapse functionality
  */
 
-import { useState, useRef, useLayoutEffect } from 'react';
+import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import type { Id } from '../../../convex/_generated/dataModel';
+import { useQuery, useAction } from 'convex/react';
+import { api } from '../../../convex/_generated/api';
 import { BlobBackground } from './BlobBackground';
+import { BlobWords } from './BlobWords';
+import { IdeaCardContent } from './IdeaCardContent';
 
 interface IdeaCardProps {
   sessionId: Id<'sessions'>;
   currentPhase: number;
 }
 
-export function IdeaCard({ currentPhase }: IdeaCardProps) {
+export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Query idea card data from Convex
+  const ideaData = useQuery(api.ideas.getIdeaCard, { sessionId });
+
+  // Query message count for triggering extraction on new messages
+  const messageCount = useQuery(api.messages.getMessageCount, { sessionId });
+
+  // Action to trigger idea extraction
+  const extractIdea = useAction(api.ideasActions.extractIdeaContent);
+
+  // Track previous message count to detect new messages
+  const prevMessageCountRef = useRef<number>(messageCount ?? 0);
+
+  // Trigger extraction on phase changes AND message count changes (CARD-06)
+  useEffect(() => {
+    // Only trigger if we have a valid message count
+    if (messageCount === undefined) return;
+
+    // Trigger extraction when:
+    // 1. Phase changes to >= 1 (initial keyword extraction)
+    // 2. New messages arrive (idea refinement during conversation)
+    const hasNewMessages = messageCount > prevMessageCountRef.current;
+
+    if (currentPhase >= 1 && (hasNewMessages || prevMessageCountRef.current === 0)) {
+      extractIdea({ sessionId });
+    }
+
+    prevMessageCountRef.current = messageCount;
+  }, [currentPhase, messageCount, sessionId, extractIdea]);
+
+  // Compute merge state with edge case handling:
+  // Only merge if both phase >= 3 AND we have an actual idea sentence
+  // This handles the case where extractIdeaContent runs but returns ideaReady=false
+  const isMerging = currentPhase >= 3 && !!ideaData?.ideaSentence;
 
   // Measure container dimensions for BlobBackground
   useLayoutEffect(() => {
@@ -74,6 +112,32 @@ export function IdeaCard({ currentPhase }: IdeaCardProps) {
           phase={currentPhase}
           width={dimensions.width}
           height={dimensions.height}
+          isMerging={isMerging}
+        />
+      )}
+
+      {/* BlobWords - render when phase 1-2 and not merging */}
+      {!isCollapsed && !isMerging && currentPhase >= 1 && ideaData?.ideaKeywords && (
+        <BlobWords
+          keywords={ideaData.ideaKeywords}
+          blobBounds={[
+            { x: 200, y: 150, width: 160, height: 160 },
+            { x: 600, y: 150, width: 160, height: 160 },
+            { x: 150, y: 300, width: 160, height: 160 },
+            { x: 650, y: 300, width: 160, height: 160 },
+            { x: 200, y: 450, width: 160, height: 160 },
+            { x: 600, y: 450, width: 160, height: 160 },
+          ]}
+          phase={currentPhase}
+        />
+      )}
+
+      {/* IdeaCardContent - render when merged */}
+      {!isCollapsed && isMerging && ideaData?.ideaSentence && (
+        <IdeaCardContent
+          ideaSentence={ideaData.ideaSentence}
+          supportingSentences={ideaData.supportingSentences ?? []}
+          isVisible={isMerging}
         />
       )}
 

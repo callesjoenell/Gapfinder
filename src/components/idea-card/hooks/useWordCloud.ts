@@ -63,13 +63,17 @@ export function useWordCloud(
       .fontSize((d) => d.size)
       .on('end', (cloudWords) => {
         // Transform d3-cloud output to our layout format
-        const positionedWords = cloudWords.map((word) => ({
-          text: word.text || '',
-          x: (word.x || 0) + bounds.x,
-          y: (word.y || 0) + bounds.y,
-          size: word.size || 12,
-          rotate: word.rotate || 0,
-        }));
+        const positionedWords = cloudWords.map((word) => {
+          // d3-cloud adds x, y, rotate properties during layout
+          const layoutWord = word as WordInput & { x?: number; y?: number; rotate?: number };
+          return {
+            text: layoutWord.text || '',
+            x: (layoutWord.x || 0) + bounds.x,
+            y: (layoutWord.y || 0) + bounds.y,
+            size: layoutWord.size || 12,
+            rotate: layoutWord.rotate || 0,
+          };
+        });
         setLayout(positionedWords);
         setIsLoading(false);
       });

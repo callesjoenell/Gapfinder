@@ -24,8 +24,9 @@ export function IdeaCardContent({
   supportingSentences,
   isVisible,
 }: IdeaCardContentProps) {
-  const ideaRef = useRef<HTMLDivElement>(null);
-  const optimalFontSize = useFitText(ideaRef, ideaSentence);
+  const ideaRef = useRef<HTMLDivElement | null>(null);
+  // Cast ref to match useFitText signature - HTMLDivElement extends HTMLElement
+  const optimalFontSize = useFitText(ideaRef as React.RefObject<HTMLElement>, ideaSentence);
 
   return (
     <AnimatePresence mode="wait">
