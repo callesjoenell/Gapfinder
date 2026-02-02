@@ -76,7 +76,7 @@ export function BlobBackground({ phase, width, height }: BlobBackgroundProps) {
       </defs>
 
       {/* Render 6 blobs with animation */}
-      {BLOB_ZONES.map((zone, i) => {
+      {BLOB_ZONES.map((_zone, i) => {
         const blobPath = generateBlobPath(
           BLOB_SEEDS[i],
           blobTransforms[i].x,
