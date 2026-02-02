@@ -218,7 +218,9 @@ Plans:
 
 ---
 
-## Phase 6: Instructor View
+## Phase 6: Instructor View (DEFERRED TO V2)
+
+**Status:** Deferred to v2 — webinar/cohort version
 
 **Goal:** Instructor can see all participants and read their conversations to prep for sessions.
 
@@ -226,18 +228,20 @@ Plans:
 
 **Dependencies:** Phases 1-4 (participant data, conversations, phase tracking must exist)
 
-**Requirements:**
+**v1 Decision:** The instructor view is for the webinar/cohort version of Gap Finder. v1 is standalone user experience only — no cohorts, no instructors. This phase will be planned and implemented when v2 work begins.
+
+**Requirements (v2):**
 - INST-01: List all participants in a cohort
 - INST-02: Show current phase for each participant
 - INST-03: Click into any participant to read their full conversation history
 
-**Success Criteria:**
+**Success Criteria (v2):**
 1. Instructor sees list of all participants in their cohort
 2. Instructor can see at a glance which phase each participant is currently in
 3. Instructor clicks into a participant and can read their full conversation history
 4. Instructor can navigate between participants without losing context
 
-**Research Flags:**
+**Research Flags (v2):**
 - Read-only conversation view (no instructor intervention in v1)
 - Cohort filtering (instructor sees only their cohort)
 - Performance with ~10 participants per cohort
@@ -253,9 +257,10 @@ Plans:
 | 3 - Sessions | Complete | 3 | 100% |
 | 4 - Phase System | Complete | 4 | 100% |
 | 5 - Idea Card | Complete | 6 | 100% |
-| 6 - Instructor View | Not Started | 3 | 0% |
+| 6 - Instructor View | Deferred to v2 | 3 | — |
 
-**Total:** 28 requirements across 6 phases
+**v1 Total:** 25 requirements across 5 phases — **100% COMPLETE**
+**v2 Total:** 3 requirements (Phase 6)
 
 ---
 

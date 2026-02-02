@@ -10,7 +10,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 5 complete. Responsive layout, color transitions, testing mode, and visual refinements complete. IdeaCard fully integrated and polished.
+**Current Focus:** **v1 COMPLETE.** All 5 phases delivered. Phase 6 (Instructor View) deferred to v2 webinar/cohort version.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling), Motion (animations), d3-cloud (word layouts)
 
@@ -18,14 +18,14 @@
 
 ## Current Position
 
-**Phase:** 5 - Idea Card (Complete)
-**Plan:** 03 of 03 complete
-**Status:** Phase 5 complete - responsive layout, color transitions, testing mode, IdeaCard integrated into Chat with visual refinements
-**Last Activity:** 2026-02-02 - Completed 05-03-PLAN.md (Responsive Layout + Color Transitions + Testing Mode)
+**Milestone:** v1 COMPLETE
+**Phase:** All phases complete (1-5)
+**Status:** v1 shipped — Phase 6 (Instructor View) deferred to v2 webinar/cohort version
+**Last Activity:** 2026-02-02 - Marked v1 complete, deferred Phase 6 to v2
 
 **Progress:**
 ```
-[████████████████████████████] 100% (22/22 plans complete)
+[████████████████████████████] 100% (22/22 plans complete for v1)
 ```
 
 **Phase Breakdown:**
@@ -36,7 +36,7 @@
 | 3 - Sessions | 6 | Complete + Verified |
 | 4 - Phase System | 2 | Complete + Verified |
 | 5 - Idea Card | 3 | Complete + Verified |
-| 6 - Instructor View | 0 | Not Started |
+| 6 - Instructor View | — | Deferred to v2 |
 
 ---
 
@@ -207,8 +207,8 @@ Get key from: https://console.anthropic.com -> API Keys
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Last Action:** Completed 05-03-PLAN.md (Responsive Layout + Color Transitions + Testing Mode)
-**Next Action:** Plan Phase 6 (Instructor View) or verify Phase 5 end-to-end
+**Last Action:** Marked v1 complete — Phase 6 deferred to v2
+**Next Action:** Deploy v1 / Start v2 planning when ready for webinar version
 
 **Phase 5 Complete + Verified:**
 - [x] 05-01-PLAN.md - Blob Rendering Foundation (6 organic blobs, drift, convergence)
