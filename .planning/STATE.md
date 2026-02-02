@@ -10,7 +10,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** **v1 COMPLETE.** All 5 phases delivered. Phase 6 (Instructor View) deferred to v2 webinar/cohort version.
+**Current Focus:** Phase 7 (Research Tools) — MCP-powered research + manual research checklists. Phase 6 deferred to v2.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling), Motion (animations), d3-cloud (word layouts)
 
@@ -18,14 +18,14 @@
 
 ## Current Position
 
-**Milestone:** v1 COMPLETE
-**Phase:** All phases complete (1-5)
-**Status:** v1 shipped — Phase 6 (Instructor View) deferred to v2 webinar/cohort version
-**Last Activity:** 2026-02-02 - Marked v1 complete, deferred Phase 6 to v2
+**Milestone:** v1 continued
+**Phase:** 7 - Research Tools (Not Started)
+**Status:** Context gathered, ready to plan
+**Last Activity:** 2026-02-02 - Added Phase 7 to roadmap, gathered context for research tools
 
 **Progress:**
 ```
-[████████████████████████████] 100% (22/22 plans complete for v1)
+[████████████████████████░░░░] 81% (22/~27 plans complete for v1)
 ```
 
 **Phase Breakdown:**
@@ -37,6 +37,7 @@
 | 4 - Phase System | 2 | Complete + Verified |
 | 5 - Idea Card | 3 | Complete + Verified |
 | 6 - Instructor View | — | Deferred to v2 |
+| 7 - Research Tools | 0 | Context gathered, needs planning |
 
 ---
 
@@ -207,8 +208,8 @@ Get key from: https://console.anthropic.com -> API Keys
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Last Action:** Marked v1 complete — Phase 6 deferred to v2
-**Next Action:** Deploy v1 / Start v2 planning when ready for webinar version
+**Last Action:** Added Phase 7 (Research Tools) to roadmap, gathered context
+**Next Action:** `/gsd:plan-phase 7` to create execution plans
 
 **Phase 5 Complete + Verified:**
 - [x] 05-01-PLAN.md - Blob Rendering Foundation (6 organic blobs, drift, convergence)

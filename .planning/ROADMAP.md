@@ -22,6 +22,7 @@ Users should exit feeling **confident**, **capable**, **clear**, and with genuin
 | 4 - Phase System | Visual progress = momentum | "I'm making progress" |
 | 5 - Idea Card | Crystallization = clarity | "I can SEE my idea forming" |
 | 6 - Instructor | Support available = not alone | "Help is there if I need it" |
+| 7 - Research Tools | Real data backs instincts | "I have evidence, not just hunches" |
 
 ### Verification Question
 
@@ -248,6 +249,37 @@ Plans:
 
 ---
 
+## Phase 7: Research Tools
+
+**Goal:** Enhance methodology Phase 2 (Research) with actual research capabilities — MCP-powered auto-research where APIs exist, structured checklists for manual research elsewhere.
+
+**Emotional Purpose:** Users feel "I have evidence, not just hunches" — real data from Reddit, Hacker News, ProductHunt, Google Trends backs their instincts. Manual research checklists ensure they've done the work on Facebook Groups, LinkedIn, etc.
+
+**Dependencies:** Phase 2 (Chat Core — needs Claude conversation working)
+
+**Requirements:**
+- RESEARCH-01: MCP server connections for Reddit, Hacker News, ProductHunt, Google Trends, Tavily
+- RESEARCH-02: Claude can query these sources during Phase 1-2 conversations and display results
+- RESEARCH-03: Structured checklists for manual research (Facebook Groups, LinkedIn, Twitter/X, Amazon reviews)
+- RESEARCH-04: User can report back findings from manual research in structured format
+- RESEARCH-05: Research findings persist and inform later phases
+- RESEARCH-06: System prompt updated to orchestrate both auto and manual research
+
+**Success Criteria:**
+1. User in Phase 1 (Find Gaps) sees Claude query Reddit/HN for pain signals
+2. User sees Google Trends data for timing validation
+3. User receives structured checklist for Facebook Groups research with clear instructions
+4. User can fill in findings from manual research and see them reflected in conversation
+5. Research evidence carries forward to Phase 3 (Your Idea) summary
+
+**Research Flags:**
+- MCP server setup in Convex (which servers work in serverless?)
+- Facebook Groups research patterns (how to find relevant groups, what to look for)
+- Rate limiting and caching for external API calls
+- Checklist UI component design
+
+---
+
 ## Progress
 
 | Phase | Status | Requirements | Completion |
@@ -258,8 +290,10 @@ Plans:
 | 4 - Phase System | Complete | 4 | 100% |
 | 5 - Idea Card | Complete | 6 | 100% |
 | 6 - Instructor View | Deferred to v2 | 3 | — |
+| 7 - Research Tools | Not Started | 6 | 0% |
 
-**v1 Total:** 25 requirements across 5 phases — **100% COMPLETE**
+**v1 Total:** 31 requirements across 6 phases
+**v1 Complete:** 25/31 (81%)
 **v2 Total:** 3 requirements (Phase 6)
 
 ---
@@ -270,7 +304,7 @@ Plans:
 Phase 1: Foundation
     |
     v
-Phase 2: Chat Core
+Phase 2: Chat Core -----> Phase 7: Research Tools
     |
     v
 Phase 3: Sessions
@@ -281,10 +315,10 @@ Phase 4: Phase System
     +---> Phase 5: Idea Card
     |
     v
-Phase 6: Instructor View
+Phase 6: Instructor View (v2)
 ```
 
-Note: Phases 5 and 6 both depend on Phase 4 but are independent of each other. They could theoretically be parallelized, but sequential execution maintains focus.
+Note: Phase 7 (Research Tools) depends on Phase 2 (Chat Core) and can be built independently of Phases 3-5. It enhances the methodology's Phase 1-2 (Find Gaps, Research) with actual research capabilities.
 
 ---
 
