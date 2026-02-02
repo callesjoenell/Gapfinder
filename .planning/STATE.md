@@ -21,11 +21,11 @@
 **Milestone:** v1 continued
 **Phase:** 7 - Research Tools (In Progress)
 **Status:** Executing wave 2
-**Last Activity:** 2026-02-02 - Completed 07-02-PLAN.md (Research Action Backend)
+**Last Activity:** 2026-02-02 - Completed 07-03-PLAN.md (Manual Research Checklist)
 
 **Progress:**
 ```
-[██████████████████████████░░] 89% (24/~27 plans complete for v1)
+[███████████████████████████░] 93% (25/~27 plans complete for v1)
 ```
 
 **Phase Breakdown:**
@@ -37,7 +37,7 @@
 | 4 - Phase System | 2 | Complete + Verified |
 | 5 - Idea Card | 3 | Complete + Verified |
 | 6 - Instructor View | — | Deferred to v2 |
-| 7 - Research Tools | 2 | In Progress (07-01, 07-02 complete) |
+| 7 - Research Tools | 3 | In Progress (07-01, 07-02, 07-03 complete) |
 
 ---
 
@@ -126,6 +126,10 @@
 | Word text: 7% grey with blob color tints | Subtle appearance balancing readability with aesthetic integration | 2026-02-02 |
 | Responsive heights: 25vh desktop, 40vh mobile | Desktop maximizes chat space, mobile maintains blob visibility on smaller screens | 2026-02-02 |
 | Max 5 tool execution iterations | Prevents infinite loops while allowing thorough research | 2026-02-02 |
+| Config-driven checklist forms | CHECKLIST_CONFIGS defines fields, component renders dynamically | 2026-02-02 |
+| Flexible schema with optional fields | All checklist fields optional in data object since types use different subsets | 2026-02-02 |
+| Context formatting for manual research | getManualResearchForContext converts camelCase to readable, filters empties | 2026-02-02 |
+| react-hook-form for validation | 6KB bundle, uncontrolled inputs prevent re-renders, built-in validation | 2026-02-02 |
 | Sequential tool execution (not parallel) | Respects API rate limits for Reddit (60/min), others | 2026-02-02 |
 | Store top 5 results per finding | Limits data growth while preserving key evidence | 2026-02-02 |
 | Research findings as optional field | Backward compatible, no data migration required | 2026-02-02 |
@@ -229,11 +233,13 @@ Get key from: https://api.producthunt.com/v2/docs (requires approval)
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Last Action:** Completed 07-02-PLAN.md (Research Action Backend)
+**Last Action:** Completed 07-03-PLAN.md (Manual Research Checklist)
 **Next Action:** Continue Phase 7 execution with remaining plans
 
 **Phase 7 In Progress:**
 - [x] 07-01-PLAN.md - Research Tools Foundation (Claude tool definitions, API wrappers for Reddit/HN/Tavily/ProductHunt/SO)
+- [x] 07-02-PLAN.md - Research Action Backend (tool execution loop, result caching, conversation integration)
+- [x] 07-03-PLAN.md - Manual Research Checklist (forms for Facebook Groups, LinkedIn, Twitter, Amazon Reviews)
 - [x] 07-02-PLAN.md - Research Action Backend (chatWithResearch action with tool loop, schema extensions, findings persistence)
 
 **Phase 5 Complete + Verified:**
@@ -274,4 +280,4 @@ Get key from: https://api.producthunt.com/v2/docs (requires approval)
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-02-02 (Phase 7 wave 2 - 07-02 complete, research action backend with tool execution loop)*
+*Last updated: 2026-02-02 (Phase 7 wave 2 - 07-03 complete, manual research checklist with react-hook-form)*
