@@ -8,6 +8,8 @@ import { useStreamingChat } from "../hooks/useStreamingChat";
 import { useScrollRestoration } from "../hooks/useScrollRestoration";
 import { usePhaseProgress } from "../hooks/usePhaseProgress";
 import { usePhaseCompletion } from "../hooks/usePhaseCompletion";
+import { ResearchPanel } from "./research/ResearchPanel";
+import type { ChecklistType } from "./research/checklistConfig";
 
 interface ChatProps {
   sessionId: Id<"sessions">;
@@ -31,6 +33,7 @@ export function Chat({
   clearDraftMessage,
 }: ChatProps) {
   const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
+  const [showKeywordLookup, setShowKeywordLookup] = useState(false);
   const scrollToPhaseRef = useRef<((phase: number) => void) | null>(null);
   const lastMessageCountRef = useRef(0);
 
@@ -58,6 +61,8 @@ export function Chat({
     loadMore,
     isLoadingMore,
     canLoadMore,
+    detectedChecklistType,
+    clearChecklistType,
   } = useStreamingChat(sessionId, currentPhase, sessionPath);
 
   // Use scroll restoration hook
@@ -117,6 +122,24 @@ export function Chat({
       scrollToPhaseRef.current(phase);
     }
   };
+
+  // Handle checklist completion - could send a message to Claude with findings
+  const handleChecklistComplete = useCallback((_type: ChecklistType) => {
+    clearChecklistType();
+    // Optional: Auto-send a message like "I've completed the [type] research checklist"
+  }, [clearChecklistType]);
+
+  // Handle keyword results - could inject into conversation context
+  const handleKeywordResults = useCallback((_results: Array<{ keyword: string; volume: number; cpc: number; competition: number }>) => {
+    setShowKeywordLookup(false);
+    // Results are saved to session by the action, available for Claude context
+  }, []);
+
+  // Close research panel
+  const handleResearchPanelClose = useCallback(() => {
+    clearChecklistType();
+    setShowKeywordLookup(false);
+  }, [clearChecklistType]);
 
   return (
     <div className="flex flex-col h-full bg-gray-50 relative">
@@ -221,6 +244,16 @@ export function Chat({
           </div>
         </div>
       )}
+
+      {/* Research panel for checklists and keyword lookup */}
+      <ResearchPanel
+        sessionId={sessionId}
+        activeChecklistType={detectedChecklistType}
+        showKeywordLookup={showKeywordLookup}
+        onClose={handleResearchPanelClose}
+        onChecklistComplete={handleChecklistComplete}
+        onKeywordResults={handleKeywordResults}
+      />
     </div>
   );
 }
