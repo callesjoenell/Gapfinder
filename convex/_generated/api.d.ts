@@ -9,11 +9,22 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as billing from "../billing.js";
 import type * as claude from "../claude.js";
 import type * as http from "../http.js";
 import type * as ideas from "../ideas.js";
 import type * as ideasActions from "../ideasActions.js";
+import type * as manualResearch from "../manualResearch.js";
 import type * as messages from "../messages.js";
+import type * as research_executor from "../research/executor.js";
+import type * as research_hackernews from "../research/hackernews.js";
+import type * as research_keywords from "../research/keywords.js";
+import type * as research_producthunt from "../research/producthunt.js";
+import type * as research_reddit from "../research/reddit.js";
+import type * as research_stackoverflow from "../research/stackoverflow.js";
+import type * as research_tavily from "../research/tavily.js";
+import type * as research_tools from "../research/tools.js";
+import type * as researchActions from "../researchActions.js";
 import type * as sessions from "../sessions.js";
 import type * as summaries from "../summaries.js";
 
@@ -25,11 +36,22 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  billing: typeof billing;
   claude: typeof claude;
   http: typeof http;
   ideas: typeof ideas;
   ideasActions: typeof ideasActions;
+  manualResearch: typeof manualResearch;
   messages: typeof messages;
+  "research/executor": typeof research_executor;
+  "research/hackernews": typeof research_hackernews;
+  "research/keywords": typeof research_keywords;
+  "research/producthunt": typeof research_producthunt;
+  "research/reddit": typeof research_reddit;
+  "research/stackoverflow": typeof research_stackoverflow;
+  "research/tavily": typeof research_tavily;
+  "research/tools": typeof research_tools;
+  researchActions: typeof researchActions;
   sessions: typeof sessions;
   summaries: typeof summaries;
 }>;
