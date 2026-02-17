@@ -10,7 +10,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 7 (Research Tools) complete with suggestion chips and persistent queue. Phase 6 deferred to v2.
+**Current Focus:** Phase 9 (E2E Conversation Simulation) in progress. Plan 02 complete (research tools + homework loop). Phase 6 deferred to v2.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling), Motion (animations), d3-cloud (word layouts)
 
@@ -19,8 +19,8 @@
 ## Current Position
 
 **Milestone:** v1 continued
-**Phase:** 7 - Research Tools (Complete)
-**Status:** Ready to plan
+**Phase:** 9 - E2E Conversation Simulation (In Progress, Plan 2/3 complete)
+**Status:** Executing
 **Last Activity:** 2026-02-17
 
 **Progress:**
@@ -39,13 +39,14 @@
 | 6 - Instructor View | — | Deferred to v2 |
 | 7 - Research Tools | 6 | Complete (07-01 through 07-06) |
 | 8 - Conversation Design | 4 | Complete (08-01 through 08-04) |
+| 9 - E2E Conversation Simulation | 3 | In Progress (09-01, 09-02 complete) |
 
 ---
 
 ## Performance Metrics
 
-**Plans Completed:** 31
-**Plans Total:** 32 (Phases 1-5, 7-8)
+**Plans Completed:** 33
+**Plans Total:** 35 (Phases 1-5, 7-9)
 **Success Rate:** 100%
 **Blockers Resolved:** 13 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency, auth import pattern, TypeScript strict mode types, internal API functions, Convex tsconfig includes, Zod enum type)
 
@@ -148,6 +149,9 @@
 | Fire-and-forget coverage extraction | After each assistant response (non-blocking) | 2026-02-17 |
 | Internal API versions for conversationState | Actions call internal mutations/queries | 2026-02-17 |
 | Client-side pattern matching for suggestions | Immediate responsiveness without AI analysis; predictable, cost-free suggestion generation | 2026-02-17 |
+| Max 5 tool_use iterations in simulation | Prevents infinite research loops while allowing thorough multi-tool research | 2026-02-17 |
+| Dynamic idea extraction for homework debriefs | Debrief content adapts to actual conversation direction, not hardcoded | 2026-02-17 |
+| Homework trigger via regex pattern matching | Detects "go talk to people" patterns in Gap Finder responses at Phase 4 | 2026-02-17 |
 | Max 3 suggestions at once | Prevents UI overwhelm; prioritizes most relevant by priority then timestamp | 2026-02-17 |
 | Phase 0-2 gating for suggestions | Research phases are exploration (0-2); evaluation phases (3-9) have different needs | 2026-02-17 |
 | Queue status tracking (pending/completed/dismissed) | Enables filtering and badge count calculation for lifecycle management | 2026-02-17 |
@@ -157,6 +161,7 @@
 | Phase 08 P04 | 7m 12s | 2 tasks | 10 files |
 | Phase 07 P06 | 1h 41m | 6 tasks | 9 files |
 | Phase 09 P01 | 5m 37s | 2 tasks | 1 files |
+| Phase 09 P02 | 3m 54s | 2 tasks | 1 files |
 
 ### Technical Findings
 
@@ -267,9 +272,9 @@ Create account and purchase credits ($10 for 100K keywords)
 
 ## Session Continuity
 
-**Last Session:** 2026-02-17T20:30:17.645Z
-**Last Action:** Completed 07-06-PLAN.md (Research Suggestions & Queue)
-**Next Action:** v1 nearly complete (31/32 plans), one remaining plan to execute
+**Last Session:** 2026-02-17T20:35:08Z
+**Last Action:** Completed 09-02-PLAN.md (Research Tool Integration + Homework Loop)
+**Next Action:** Execute 09-03-PLAN.md (Evaluation rubric scoring and file output)
 
 **Phase 8 Complete:**
 - [x] 08-01-PLAN.md - Coverage Tracking Infrastructure (coverageState table, CRUD operations, Zod schemas for extraction/triggers/rescoring)
