@@ -774,6 +774,58 @@ Conversation:
 ${messages.map((m) => `${m.role.toUpperCase()}: ${m.content}`).join("\n\n")}`;
 }
 
+// ── Coverage Extraction ─────────────────────────────────────────────────────
+
+const DEPTH_ORDER = { not_mentioned: 0, surface: 1, moderate: 2, deep: 3 };
+
+function buildCoverageExtractionPrompt(phaseNumber, marcusMessage, gfResponse, currentCoverage) {
+  const phaseConfig = getPhaseConfig(phaseNumber);
+  if (!phaseConfig) return null;
+
+  const topicList = phaseConfig.coverageTopics
+    .map((t) => `- ${t.key}: ${t.label} (${t.description})`)
+    .join("\n");
+
+  const currentState = Object.keys(currentCoverage).length > 0
+    ? JSON.stringify(currentCoverage, null, 2)
+    : "{}";
+
+  return `Given this exchange in Phase ${phaseNumber} (${phaseConfig.name}), assess which topics were covered and to what depth.
+
+Topics for this phase:
+${topicList}
+
+Last exchange:
+User: ${marcusMessage}
+Assistant: ${gfResponse}
+
+Current coverage state:
+${currentState}
+
+Return JSON mapping topic keys to depth levels. Only include topics that were touched in this exchange. Depth levels: "surface" (brief mention), "moderate" (discussed with some specifics), "deep" (detailed exploration with examples/evidence).
+
+Return ONLY the JSON object, no other text.`;
+}
+
+function mergeCoverage(currentCoverage, extracted) {
+  const merged = { ...currentCoverage };
+  for (const [key, newDepth] of Object.entries(extracted)) {
+    const currentDepth = merged[key] || "not_mentioned";
+    if ((DEPTH_ORDER[newDepth] || 0) > (DEPTH_ORDER[currentDepth] || 0)) {
+      merged[key] = newDepth;
+    }
+  }
+  return merged;
+}
+
+function formatCoverageState(phaseNumber, coverageState) {
+  const phaseConfig = getPhaseConfig(phaseNumber);
+  if (!phaseConfig) return "";
+  return phaseConfig.coverageTopics
+    .map((t) => `${t.key}=${coverageState[t.key] || "not_mentioned"}`)
+    .join(", ");
+}
+
 // ── Energy Tracking ─────────────────────────────────────────────────────────
 
 function estimateEnergy(messageText) {
@@ -1050,6 +1102,31 @@ async function simulate() {
     phaseMessages.push({ role: "assistant", content: gfText });
 
     console.log(`\nGAP FINDER: ${gfText}`);
+
+    // ── Coverage extraction ───────────────────────────────────────────────
+
+    const lastMarcusMsg = marcusText;
+    const coveragePrompt = buildCoverageExtractionPrompt(currentPhase, lastMarcusMsg, gfText, coverageState);
+    if (coveragePrompt) {
+      try {
+        const coverageResult = await callClaude(
+          "You are a conversation analyst. Return only valid JSON.",
+          [{ role: "user", content: coveragePrompt }],
+          256,
+          "coverage"
+        );
+        if (coverageResult) {
+          const jsonMatch = coverageResult.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const extracted = JSON.parse(jsonMatch[0]);
+            coverageState = mergeCoverage(coverageState, extracted);
+          }
+        }
+      } catch (e) {
+        console.log(`  [coverage extraction failed: ${e.message} -- continuing]`);
+      }
+      console.log(`  [coverage: ${formatCoverageState(currentPhase, coverageState)}]`);
+    }
 
     // ── Detect phase transition signal ────────────────────────────────────
 
