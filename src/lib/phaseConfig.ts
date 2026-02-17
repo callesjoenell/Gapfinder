@@ -27,7 +27,7 @@ export const PHASES: PhaseConfig[] = [
       "User has clear direction for Phase 1 research",
     ],
     coverageTopics: [
-      { key: "life_situation", label: "Life Situation", description: "Pain lived personally" },
+      { key: "life_situation", label: "Life Situation", description: "Pain lived or experiences that shaped you" },
       { key: "profession", label: "Profession", description: "Insider knowledge others don't have" },
       { key: "hobbies", label: "Hobbies", description: "Enthusiasm + community access" },
       { key: "skills_others_pay_for", label: "Skills Others Pay For", description: "Proven market value" },
@@ -38,12 +38,14 @@ export const PHASES: PhaseConfig[] = [
     instructions: `Phase 0: Know Yourself
 
 Your goal: Help user discover their unfair advantages through excavating 6 starting points:
-1. Life Situation (pain lived personally)
+1. Life Situation (pain lived personally OR formative experiences)
 2. Profession (insider knowledge others don't have)
-3. Hobbies (enthusiasm + community access)
+3. Hobbies (enthusiasm + community access + passion)
 4. Skills Others Pay For (proven market value)
 5. Networks (relationship access advantage)
 6. Transformations Made (journey already completed)
+
+NOTE: Not all starting points lead to "problems to solve." Some lead to experiences to create, communities to build, or identities to enable. Follow the energy regardless of type.
 
 APPROACH:
 - Don't list all questions. Pick one area based on user's initial context.
@@ -67,7 +69,7 @@ ENERGY SIGNALS TO WATCH:
     name: "Find Gaps",
     shortName: "Gaps",
     path: "exploration",
-    description: "Research your domain to find specific gaps worth solving",
+    description: "Research your domain to find gaps worth filling — problems to solve OR experiences to create",
     completionCriteria: [
       "Specific gaps identified with rising energy signals",
       "Identity lens applied: who are people trying to become?",
@@ -89,10 +91,12 @@ Input from Phase 0: User has identified their unfair advantage area(s). Now rese
 
 APPROACH:
 - Identity Lens: "Who are people in this space trying to become? What identity are they constructing?"
-- Friction inventory: Where does the journey break down? What makes people quit?
-- Pain validation: Confirm with specific evidence, not assumptions
+- Gap inventory — TWO types to explore:
+  * Friction gaps: Where does the journey break down? What makes people quit?
+  * Aspiration gaps: What experience do people WISH existed? What would make them feel more connected/alive/capable?
+- Validation: Confirm with specific evidence, not assumptions
 - Distribution reality check: Can user actually reach these people?
-- Timing assessment: What's changed that makes this solvable NOW?
+- Timing assessment: What's changed that makes this possible NOW?
 
 TIMING FACTORS (assess at least 4):
 1. Technology: Is new tech making something possible?
@@ -102,14 +106,20 @@ TIMING FACTORS (assess at least 4):
 5. Economic: Are cost structures shifting?
 6. Platform: Are distribution channels opening?
 
-Watch for: User seeing gaps they've PERSONALLY experienced. Organic ideas from their life, not abstract market research.`,
+Watch for: User seeing gaps they've PERSONALLY experienced — whether pain they've felt OR experiences they've craved. Organic ideas from their life, not abstract market research.
+
+IMPORTANT: A "gap" isn't always a "problem." It can be:
+- Something broken that needs fixing (problem)
+- Something missing that people would love (opportunity)
+- A way to deepen connection, belonging, or identity (experience)
+- A new combination that nobody has tried (innovation)`,
   },
   {
     number: 2,
     name: "Research",
     shortName: "Research",
     path: "exploration",
-    description: "Validate gaps through evidence gathering",
+    description: "Validate gaps and opportunities through evidence gathering",
     completionCriteria: [
       "User has found 3+ external data points supporting the gap",
       "User has identified 2+ competitor/alternative approaches",
@@ -127,22 +137,31 @@ Watch for: User seeing gaps they've PERSONALLY experienced. Organic ideas from t
     timeEstimate: "25-30 min",
     instructions: `Phase 2: Research
 
-Goal: Validate the gap with external evidence, not just personal belief.
+Goal: Validate the gap or opportunity with external evidence, not just personal belief.
 
 APPROACH:
-- Help user find data points: market size, competitor gaps, customer complaints
+- Help user find data points: market size, competitor gaps, customer complaints OR desire signals
 - Apply Mom Test thinking: Look for what people DO, not what they SAY they'd do
-- Identify existing alternatives: How are people solving this now? (Even poorly)
+- Identify existing alternatives: How are people addressing this now? (Even poorly or partially)
 - Challenge assumptions: Where might user be wrong?
 
 EVIDENCE TYPES TO SEEK:
+For problem-driven ideas:
 - Reddit/forum complaints with engagement
 - Competitor reviews (1-2 stars reveal unmet needs)
 - Job postings (what companies are hiring for)
-- Industry reports with trend data
-- Pricing benchmarks (what people actually pay)
 
-ANTI-PATTERN: Don't let user rely on "everyone says..." without specifics.`,
+For opportunity/experience-driven ideas:
+- Communities showing strong identity/belonging signals
+- Viral content showing unmet desire ("I wish...", "Why doesn't X exist?")
+- Adjacent experiences people pay premium for (concerts, retreats, communities)
+- Cultural trends enabling new types of experiences
+
+For both:
+- Industry reports with trend data
+- Pricing benchmarks (what people actually pay for related things)
+
+ANTI-PATTERN: Don't let user rely on "everyone says..." without specifics. But also don't dismiss desire-driven ideas just because there's no "complaint" to point to.`,
   },
   {
     number: 3,
@@ -153,7 +172,7 @@ ANTI-PATTERN: Don't let user rely on "everyone says..." without specifics.`,
     completionCriteria: [
       "User has a one-sentence idea statement",
       "Idea connects unfair advantage (Phase 0) to validated gap (Phase 1-2)",
-      "User can articulate: Who is this for? What problem does it solve? Why them?",
+      "User can articulate: Who is this for? What does it solve or make possible? Why them?",
       "User has identified what makes this DIFFERENT from alternatives",
       "User expresses genuine ownership ('I want to build this' not 'This seems viable')",
     ],
@@ -175,8 +194,12 @@ APPROACH:
 - Challenge weak connections: "I see you mentioned X, but how does it connect to Y?"
 - Test ownership: User should defend the idea, not just accept it
 
-IDEA STATEMENT FORMAT:
-"I help [specific person] do [specific outcome] by [unique approach]."
+IDEA STATEMENT FORMAT (choose the one that fits):
+- Problem: "I help [specific person] solve [specific problem] by [unique approach]."
+- Opportunity: "I create [specific experience/outcome] for [specific person] by [unique approach]."
+- Identity: "I help [specific person] become [who they want to be] through [unique approach]."
+
+Don't force problem framing on experience/identity ideas.
 
 OWNERSHIP SIGNALS:
 - User uses first person ("I noticed", "I realized", "I want to")
@@ -195,14 +218,14 @@ OWNERSHIP SIGNALS:
     completionCriteria: [
       "User has specific customer profile (not generic persona)",
       "User knows WHERE these customers already gather",
-      "User has identified customer's 'struggling moment' (JTBD)",
+      "User has identified customer's trigger moment — struggling moment OR desire awakening (JTBD)",
       "User can describe customer's current workaround",
       "User has plan to reach 5+ potential customers for validation",
     ],
     coverageTopics: [
       { key: "customer_profile", label: "Customer Profile", description: "Specific individuals, not personas" },
       { key: "gathering_places", label: "Gathering Places", description: "Where do they hang out?" },
-      { key: "struggling_moment", label: "Struggling Moment", description: "Jobs-to-be-Done trigger" },
+      { key: "trigger_moment", label: "Trigger Moment", description: "Struggling moment OR desire awakening (JTBD)" },
       { key: "current_workaround", label: "Current Workaround", description: "How do they solve this now?" },
       { key: "reach_plan", label: "Reach Plan", description: "How will you reach 5+ customers?" },
     ],
@@ -212,14 +235,18 @@ OWNERSHIP SIGNALS:
 Goal: Move from "people who might use this" to SPECIFIC individuals you can reach.
 
 APPROACH (Switch Interview Style):
-- Find the struggling moment: "When did they first realize the old way wasn't working?"
+- Find the trigger moment — could be either:
+  * Struggling moment: "When did they first realize the old way wasn't working?"
+  * Desire moment: "When did they first wish this experience existed?" or "What made them crave more?"
 - Map the timeline: First thought -> Passive looking -> Active looking -> Decision
 - Identify Push (what's wrong), Pull (what's attractive), Anxiety (holds back), Habit (keeps stuck)
+- For experience/community ideas, also explore: belonging signals, identity investment, willingness to participate
 
 SPECIFICITY TEST:
 - Can user NAME 5 real people who fit? (Not just describe)
 - Can user describe their day-to-day work/life?
 - Does user know what these people read, where they hang out online?
+- For community/experience ideas: Are these people already finding each other? What do they do together now?
 
 WARNING: Generic personas = generic ideas. Push for REAL people.`,
   },
@@ -228,25 +255,25 @@ WARNING: Generic personas = generic ideas. Push for REAL people.`,
     name: "Problem",
     shortName: "Prob",
     path: "evaluation",
-    description: "Validate the problem is worth solving",
+    description: "Validate the problem or opportunity is worth pursuing",
     completionCriteria: [
       "User has talked to at least 3 potential customers",
-      "Problem confirmed through BEHAVIOR evidence (not just opinions)",
-      "User understands the cost of the problem (time/money/emotion)",
-      "Problem frequency established (daily? weekly? annually?)",
-      "User can rank problem urgency vs other customer priorities",
+      "Need confirmed through BEHAVIOR evidence (not just opinions) — what people DO or actively seek",
+      "User understands the stakes: cost of the problem OR value of the desired experience (time/money/emotion)",
+      "Frequency or intensity established (daily pain? seasonal desire? life-stage trigger?)",
+      "User can rank urgency vs other priorities in customer's life",
     ],
     coverageTopics: [
       { key: "customer_conversations", label: "Customer Conversations", description: "Talked to 3+ real people" },
       { key: "behavior_evidence", label: "Behavior Evidence", description: "What they do vs what they say" },
-      { key: "problem_cost", label: "Problem Cost", description: "Time/money/emotion impact" },
-      { key: "problem_frequency", label: "Problem Frequency", description: "How often does this happen?" },
-      { key: "urgency_ranking", label: "Urgency Ranking", description: "Priority vs other problems" },
+      { key: "stakes", label: "Stakes", description: "Cost of problem OR value of desired experience" },
+      { key: "frequency_intensity", label: "Frequency / Intensity", description: "How often or how strongly does this need arise?" },
+      { key: "priority_ranking", label: "Priority Ranking", description: "Where does this rank in their life?" },
     ],
     timeEstimate: "20-25 min",
-    instructions: `Phase 5: Problem
+    instructions: `Phase 5: Problem / Opportunity Validation
 
-Goal: Confirm the problem exists AND is urgent enough to pay for solving.
+Goal: Confirm the need exists AND is strong enough to pay for (or invest time/attention in).
 
 APPROACH (Mom Test):
 - Ask about their life, not your idea
@@ -254,33 +281,39 @@ APPROACH (Mom Test):
 - Compliments are not data
 - Specific facts trump opinions
 
-QUESTIONS TO EXPLORE:
+FOR PROBLEM-DRIVEN IDEAS:
 - "What happened last time you faced this?"
 - "What did you do? What did that cost you?"
 - "Have you tried to solve this before? What happened?"
 - "Why haven't you solved this already?"
 
-VALIDATION SIGNALS:
-- Customer has actively tried to solve this
-- Customer can quantify the cost (time/money)
-- Problem happens frequently enough to remember details
-- Customer gets emotional when describing it`,
+FOR EXPERIENCE/OPPORTUNITY-DRIVEN IDEAS:
+- "What's the closest thing to this that exists today? How often do you seek it out?"
+- "What would you give up to have this experience? (time, money, travel)"
+- "When you imagine this existing, what excites you most?"
+- "What do you do NOW to get even a partial version of this feeling?"
+
+VALIDATION SIGNALS (both types):
+- Customer has actively sought this (tried to solve OR sought the experience)
+- Customer can quantify what they'd invest (time/money/attention)
+- Need is frequent or intense enough to remember details
+- Customer gets emotional when describing it (frustration OR longing/excitement)`,
   },
   {
     number: 6,
     name: "Solution",
     shortName: "Sol",
     path: "evaluation",
-    description: "Design solution that uniquely fits the problem",
+    description: "Design solution or experience that uniquely fits the validated need",
     completionCriteria: [
-      "Solution directly addresses validated problem from Phase 5",
+      "Solution directly addresses validated need from Phase 5 (problem solved OR experience created)",
       "User can explain why THIS solution (not alternatives)",
-      "MVP scope defined (what's the smallest thing that solves core problem?)",
+      "MVP scope defined (what's the smallest thing that delivers the core value?)",
       "User understands technical feasibility at high level",
       "Solution leverages user's unfair advantage from Phase 0",
     ],
     coverageTopics: [
-      { key: "problem_solution_fit", label: "Problem-Solution Fit", description: "Solution addresses validated problem" },
+      { key: "need_solution_fit", label: "Need-Solution Fit", description: "Solution addresses validated need (problem or opportunity)" },
       { key: "why_this_solution", label: "Why This Solution", description: "Why not alternatives?" },
       { key: "mvp_scope", label: "MVP Scope", description: "Smallest viable version" },
       { key: "technical_feasibility", label: "Technical Feasibility", description: "Can this be built?" },
@@ -289,19 +322,20 @@ VALIDATION SIGNALS:
     timeEstimate: "20-25 min",
     instructions: `Phase 6: Solution
 
-Goal: Design minimum viable solution that uniquely fits validated problem.
+Goal: Design minimum viable solution or experience that uniquely fits validated need.
 
 APPROACH:
-- Start with problem, work backward to solution
-- What's the SMALLEST thing that solves the core problem?
-- Why is YOUR solution better than alternatives? (Connect to unfair advantage)
+- Start with the validated need, work backward to solution
+- What's the SMALLEST thing that delivers the core value?
+- Why is YOUR approach better than alternatives? (Connect to unfair advantage)
 - What can you NOT do in v1? (Scope discipline)
 
 TESTS:
 - Does solution require user's specific advantages?
 - Could user ship v1 in 2-4 weeks?
-- Is there a clear "magic moment" when user gets value?
-- What would make someone choose this over status quo?`,
+- Is there a clear "magic moment" when someone gets value?
+- What would make someone choose this over the status quo or doing nothing?
+- For experience ideas: What's the minimum that creates the emotional payoff?`,
   },
   {
     number: 7,
@@ -317,7 +351,7 @@ TESTS:
       "If proceed: user knows which weakness to address first",
     ],
     coverageTopics: [
-      { key: "problem_urgency", label: "Problem Urgency", description: "How badly do customers need this?" },
+      { key: "need_intensity", label: "Need Intensity", description: "How strongly do customers need or want this?" },
       { key: "solution_fit", label: "Solution Fit", description: "Does solution solve the problem?" },
       { key: "market_size", label: "Market Size", description: "Is market big enough?" },
       { key: "competitive_moat", label: "Competitive Moat", description: "Why can't others copy easily?" },
@@ -330,8 +364,8 @@ TESTS:
 Goal: Honest assessment of idea viability across key dimensions.
 
 SCORING DIMENSIONS (1-5 each):
-1. Problem urgency: How badly do customers need this solved?
-2. Solution fit: Does your solution actually solve the problem?
+1. Need intensity: How strongly do customers need or desire this? (urgent pain OR deep craving)
+2. Solution fit: Does your solution actually deliver the value?
 3. Market size: Is the market big enough to matter?
 4. Competitive moat: Why can't others copy this easily?
 5. Distribution: Can you reach customers efficiently?
