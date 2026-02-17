@@ -15,6 +15,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { execSync } from "child_process";
+import { gunzipSync } from "node:zlib";
 
 // ── CLI Args ────────────────────────────────────────────────────────────────
 
@@ -339,6 +340,201 @@ function getMaxTokens(role) {
     return role === "gapfinder" ? 512 : 256;
   }
   return role === "gapfinder" ? 1024 : 512;
+}
+
+// ── Research Tool Definitions (ported from convex/research/tools.ts) ────────
+
+const simulationTools = [
+  {
+    name: "search_reddit",
+    description: "Search Reddit for user pain signals, complaints, and discussions about problems. Use this to find real people talking about their frustrations and needs.",
+    input_schema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "The search query" },
+        subreddit: { type: "string", description: "Optional: specific subreddit to search within" },
+        limit: { type: "number", description: "Maximum number of results (default: 10, max: 25)" },
+      },
+      required: ["query"],
+    },
+  },
+  {
+    name: "search_hackernews",
+    description: "Search Hacker News for tech community sentiment, product discussions, and technical opinions.",
+    input_schema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "The search query" },
+        type: { type: "string", enum: ["story", "comment"], description: "Type of content: 'story' or 'comment' (default: story)" },
+      },
+      required: ["query"],
+    },
+  },
+  {
+    name: "search_tavily",
+    description: "Perform a general web search using Tavily AI-powered search. Use this for broad research, recent news, or topics not well-covered by specialized sources.",
+    input_schema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "The search query" },
+        max_results: { type: "number", description: "Maximum number of results (default: 5, max: 10)" },
+      },
+      required: ["query"],
+    },
+  },
+  {
+    name: "search_stackoverflow",
+    description: "Search Stack Overflow for technical problems and developer pain points.",
+    input_schema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "The search query (searches question titles)" },
+        tags: { type: "array", items: { type: "string" }, description: "Optional: filter by tags" },
+        limit: { type: "number", description: "Maximum number of questions (default: 10, max: 25)" },
+      },
+      required: ["query"],
+    },
+  },
+];
+
+// ── Research API Execution Functions ─────────────────────────────────────────
+
+async function searchReddit(query, subreddit, limit) {
+  const effectiveLimit = Math.min(limit || 10, 25);
+  let url;
+  if (subreddit) {
+    url = `https://www.reddit.com/r/${encodeURIComponent(subreddit)}/search.json?q=${encodeURIComponent(query)}&restrict_sr=on&sort=relevance&limit=${effectiveLimit}`;
+  } else {
+    url = `https://www.reddit.com/search.json?q=${encodeURIComponent(query)}&sort=relevance&limit=${effectiveLimit}`;
+  }
+
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "GapFinder/1.0" },
+    });
+    if (!res.ok) throw new Error(`Reddit API ${res.status}: ${res.statusText}`);
+    const data = await res.json();
+    const results = (data?.data?.children || []).map((child) => ({
+      title: child.data.title,
+      selftext: (child.data.selftext || "").slice(0, 200),
+      score: child.data.score,
+      url: child.data.url,
+      subreddit: child.data.subreddit,
+      num_comments: child.data.num_comments,
+    }));
+    return { source: "reddit", query, results };
+  } catch (error) {
+    return { source: "reddit", query, results: [], error: error.message };
+  }
+}
+
+async function searchHackerNews(query, type) {
+  const tag = type || "story";
+  const url = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=${tag}`;
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HN API ${res.status}: ${res.statusText}`);
+    const data = await res.json();
+    const results = (data?.hits || []).slice(0, 15).map((hit) => ({
+      title: hit.title || hit.story_title || "",
+      url: hit.url || `https://news.ycombinator.com/item?id=${hit.objectID}`,
+      points: hit.points || 0,
+      num_comments: hit.num_comments || 0,
+      author: hit.author || "",
+    }));
+    return { source: "hackernews", query, results };
+  } catch (error) {
+    return { source: "hackernews", query, results: [], error: error.message };
+  }
+}
+
+async function searchTavily(query, maxResults) {
+  let apiKey;
+  try {
+    apiKey = execSync("npx convex env get TAVILY_API_KEY 2>/dev/null", {
+      encoding: "utf-8",
+      cwd: process.cwd(),
+    }).trim();
+  } catch {
+    apiKey = process.env.TAVILY_API_KEY || "";
+  }
+
+  if (!apiKey) {
+    return { source: "tavily", query, results: [], error: "TAVILY_API_KEY not configured" };
+  }
+
+  try {
+    const res = await fetch("https://api.tavily.com/search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: apiKey,
+        query,
+        max_results: maxResults || 5,
+        search_depth: "basic",
+      }),
+    });
+    if (!res.ok) throw new Error(`Tavily API ${res.status}: ${res.statusText}`);
+    const data = await res.json();
+    const results = (data?.results || []).map((r) => ({
+      title: r.title,
+      url: r.url,
+      content: (r.content || "").slice(0, 300),
+    }));
+    return { source: "tavily", query, results };
+  } catch (error) {
+    return { source: "tavily", query, results: [], error: error.message };
+  }
+}
+
+async function searchStackOverflow(query, tags, limit) {
+  const effectiveLimit = Math.min(limit || 10, 25);
+  let url = `https://api.stackexchange.com/2.3/search?order=desc&sort=relevance&intitle=${encodeURIComponent(query)}&site=stackoverflow&pagesize=${effectiveLimit}`;
+  if (tags && tags.length > 0) {
+    url += `&tagged=${tags.join(";")}`;
+  }
+
+  try {
+    const res = await fetch(url, {
+      headers: { "Accept-Encoding": "gzip" },
+    });
+    if (!res.ok) throw new Error(`SO API ${res.status}: ${res.statusText}`);
+
+    // Stack Exchange API returns gzip-compressed responses
+    const buffer = Buffer.from(await res.arrayBuffer());
+    let jsonStr;
+    try {
+      jsonStr = gunzipSync(buffer).toString("utf-8");
+    } catch {
+      // If not actually gzipped, use as-is
+      jsonStr = buffer.toString("utf-8");
+    }
+    const data = JSON.parse(jsonStr);
+    const results = (data?.items || []).map((item) => ({
+      title: item.title,
+      link: item.link,
+      score: item.score,
+      answer_count: item.answer_count,
+      is_answered: item.is_answered,
+    }));
+    return { source: "stackoverflow", query, results };
+  } catch (error) {
+    return { source: "stackoverflow", query, results: [], error: error.message };
+  }
+}
+
+// Tool name -> execution function mapping
+const toolExecutors = {
+  search_reddit: (input) => searchReddit(input.query, input.subreddit, input.limit),
+  search_hackernews: (input) => searchHackerNews(input.query, input.type),
+  search_tavily: (input) => searchTavily(input.query, input.max_results),
+  search_stackoverflow: (input) => searchStackOverflow(input.query, input.tags, input.limit),
+};
+
+// Delay between API calls to respect rate limits
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // ── Get API key from Convex env ─────────────────────────────────────────────
@@ -893,7 +1089,10 @@ async function simulate() {
   let phaseTurns = 0;
   let pendingTransition = false;
 
-  // ── Helper: call Claude ─────────────────────────────────────────────────
+  // ── Research State ──────────────────────────────────────────────────────
+  const researchLog = [];
+
+  // ── Helper: call Claude (basic, no tools) ──────────────────────────────
 
   async function callClaude(systemPrompt, messages, maxTokens, label) {
     if (cumulativeCost > COST_ABORT) {
@@ -913,6 +1112,107 @@ async function simulate() {
     console.log(`  [${label} | tokens: in=${usage.inputTokens} out=${usage.outputTokens} cached=${usage.cacheRead} | cost: $${usage.cost.toFixed(4)} | total: $${usage.cumulative.toFixed(4)}]`);
 
     return text;
+  }
+
+  // ── Helper: call Claude with tool_use support (for Gap Finder) ────────
+
+  async function callClaudeWithTools(systemPrompt, messages, maxTokens, label) {
+    if (cumulativeCost > COST_ABORT) {
+      console.log(`\n!! COST LIMIT ($${COST_ABORT.toFixed(2)}) EXCEEDED -- aborting`);
+      return null;
+    }
+
+    let currentMessages = [...messages];
+    const MAX_TOOL_ITERATIONS = 5;
+
+    for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
+      const response = await client.messages.create({
+        model: MODEL,
+        max_tokens: maxTokens,
+        system: [{ type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } }],
+        messages: currentMessages,
+        tools: simulationTools,
+      });
+
+      const usage = trackCost(response.usage);
+      console.log(`  [${label}${iteration > 0 ? ` iter=${iteration + 1}` : ""} | tokens: in=${usage.inputTokens} out=${usage.outputTokens} cached=${usage.cacheRead} | cost: $${usage.cost.toFixed(4)} | total: $${usage.cumulative.toFixed(4)}]`);
+
+      // Check if the response contains tool_use blocks
+      if (response.stop_reason === "tool_use") {
+        const toolUseBlocks = response.content.filter((b) => b.type === "tool_use");
+        const toolResults = [];
+
+        for (const toolUse of toolUseBlocks) {
+          const executor = toolExecutors[toolUse.name];
+          if (!executor) {
+            console.log(`  [RESEARCH] Unknown tool: ${toolUse.name} -- skipping`);
+            toolResults.push({
+              type: "tool_result",
+              tool_use_id: toolUse.id,
+              content: JSON.stringify({ error: `Unknown tool: ${toolUse.name}` }),
+            });
+            continue;
+          }
+
+          // Add rate-limit delay between API calls
+          if (toolResults.length > 0) await delay(1000);
+
+          console.log(`  [RESEARCH] ${toolUse.name}: '${toolUse.input.query || JSON.stringify(toolUse.input)}'`);
+
+          try {
+            const result = await executor(toolUse.input);
+            const resultCount = result.results?.length || 0;
+            console.log(`  [RESEARCH] ${result.source}: '${result.query}' -> ${resultCount} results${result.error ? ` (error: ${result.error})` : ""}`);
+
+            // Track research state
+            searchedSources.push(`${result.source}:${result.query}`);
+            researchFindings.push({ source: result.source, query: result.query });
+            researchLog.push({
+              timestamp: new Date().toISOString(),
+              source: result.source,
+              query: result.query,
+              resultCount,
+              error: result.error || null,
+            });
+
+            toolResults.push({
+              type: "tool_result",
+              tool_use_id: toolUse.id,
+              content: JSON.stringify(result),
+            });
+          } catch (error) {
+            console.log(`  [RESEARCH] ${toolUse.name} FAILED: ${error.message}`);
+            toolResults.push({
+              type: "tool_result",
+              tool_use_id: toolUse.id,
+              content: JSON.stringify({ source: toolUse.name.replace("search_", ""), query: toolUse.input.query, results: [], error: error.message }),
+            });
+          }
+        }
+
+        // Append assistant response (with tool_use blocks) and tool_results to messages
+        currentMessages = [
+          ...currentMessages,
+          { role: "assistant", content: response.content },
+          { role: "user", content: toolResults },
+        ];
+
+        // Continue the loop to get the next response
+        continue;
+      }
+
+      // stop_reason is "end_turn" -- extract final text
+      const text = response.content
+        .filter((b) => b.type === "text")
+        .map((b) => b.text)
+        .join("");
+
+      return text;
+    }
+
+    // If we hit max iterations, extract whatever text we have from the last response
+    console.log(`  [WARNING] Hit max tool iterations (${MAX_TOOL_ITERATIONS})`);
+    return null;
   }
 
   // ── Helper: get current Gap Finder system prompt ────────────────────────
@@ -1005,9 +1305,9 @@ async function simulate() {
   console.log(`MARCUS: ${marcusOpening}`);
   console.log(`  [energy: moderate | ${marcusOpening.length} chars]`);
 
-  // Gap Finder responds
+  // Gap Finder responds (with tool support for research)
   const gfSystemPrompt = getCurrentGFPrompt();
-  const gfOpening = await callClaude(gfSystemPrompt, gfMessages, getMaxTokens("gapfinder"), "GapFinder");
+  const gfOpening = await callClaudeWithTools(gfSystemPrompt, gfMessages, getMaxTokens("gapfinder"), "GapFinder");
   if (!gfOpening) { console.log("Aborted."); return; }
 
   gfMessages.push({ role: "assistant", content: gfOpening });
@@ -1095,7 +1395,7 @@ async function simulate() {
       effectiveGFPrompt += "\n\nNote: Consider wrapping up this phase soon. The user seems ready for a transition.";
     }
 
-    const gfText = await callClaude(effectiveGFPrompt, gfMessages, getMaxTokens("gapfinder"), "GapFinder");
+    const gfText = await callClaudeWithTools(effectiveGFPrompt, gfMessages, getMaxTokens("gapfinder"), "GapFinder");
     if (!gfText) { console.log("Aborted."); break; }
 
     gfMessages.push({ role: "assistant", content: gfText });
@@ -1148,6 +1448,13 @@ async function simulate() {
   console.log(`  Final phase: ${currentPhase} (${getPhaseConfig(currentPhase)?.name})`);
   console.log(`  Total cost: $${cumulativeCost.toFixed(4)}`);
   console.log(`  Messages: ${gfMessages.length}`);
+  console.log(`  Research calls: ${researchLog.length}`);
+  if (researchLog.length > 0) {
+    console.log(`  Research log:`);
+    for (const entry of researchLog) {
+      console.log(`    - [${entry.timestamp}] ${entry.source}: "${entry.query}" -> ${entry.resultCount} results${entry.error ? ` (${entry.error})` : ""}`);
+    }
+  }
   console.log("=".repeat(70));
 }
 
