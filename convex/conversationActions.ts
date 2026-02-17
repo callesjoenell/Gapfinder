@@ -50,7 +50,7 @@ export const extractCoverage = action({
   handler: async (ctx, args) => {
     try {
       // Get current coverage state for merge-aware prompting
-      const currentCoverage = await ctx.runQuery(internal.conversationState.getCoverageState, {
+      const currentCoverage = await ctx.runQuery(internal.conversationState.getCoverageStateInternal, {
         sessionId: args.sessionId,
         phase: args.phase,
       });
@@ -141,7 +141,7 @@ export const extractCoverage = action({
       const coverageResult = validationResult.data;
 
       // Persist to Convex
-      await ctx.runMutation(internal.conversationState.upsertCoverageState, {
+      await ctx.runMutation(internal.conversationState.upsertCoverageStateInternal, {
         sessionId: args.sessionId,
         phase: args.phase,
         topics: coverageResult.topicsDiscussed,

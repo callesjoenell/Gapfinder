@@ -22,6 +22,6 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["./**/*"],
+  "include": ["./**/*", "../src/lib/schemas/**/*", "../src/lib/phaseConfig.ts"],
   "exclude": ["./_generated"]
 }

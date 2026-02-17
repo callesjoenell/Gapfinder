@@ -8,7 +8,7 @@ const depthEnum = z.enum(["not_mentioned", "surface", "moderate", "deep"]);
  */
 export function createCoverageSchema(phaseNumber: number) {
   const topicKeys = getTopicKeys(phaseNumber);
-  const topicsShape: Record<string, z.ZodEnum<["not_mentioned", "surface", "moderate", "deep"]>> = {};
+  const topicsShape: Record<string, typeof depthEnum> = {};
 
   for (const key of topicKeys) {
     topicsShape[key] = depthEnum;

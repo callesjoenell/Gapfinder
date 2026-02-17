@@ -105,7 +105,7 @@ export const chatWithResearch = action({
             });
 
             // Track searched source to prevent re-suggestion
-            await ctx.runMutation(internal.conversationState.addSearchedSource, {
+            await ctx.runMutation(internal.conversationState.addSearchedSourceInternal, {
               sessionId: args.sessionId,
               phase: args.phase,
               source: `${parsed.source}:${(toolUse.input as Record<string, unknown>).query as string || ""}`,
