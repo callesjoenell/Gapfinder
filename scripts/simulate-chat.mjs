@@ -1059,6 +1059,77 @@ function detectTransitionAgreement(marcusResponse) {
   return patterns.some((p) => p.test(text));
 }
 
+// ── Homework Loop Detection ──────────────────────────────────────────────────
+
+function detectHomeworkTrigger(gapFinderResponse) {
+  const text = gapFinderResponse.toLowerCase();
+  const patterns = [
+    /go talk to/,
+    /talk to \d+ people/,
+    /have these conversations/,
+    /go out and validate/,
+    /conversation prep/,
+    /go validate/,
+    /talk to potential/,
+    /reach out to/,
+    /interview \d+ people/,
+    /go have some conversations/,
+    /time to talk to real people/,
+    /go find \d+/,
+  ];
+  return patterns.some((p) => p.test(text));
+}
+
+function extractIdeaDirection(messages) {
+  // Look through recent messages for idea-related content
+  const recentMessages = messages.slice(-20);
+  const allText = recentMessages.map((m) => m.content).join(" ");
+
+  // Try to extract the current idea direction from the conversation
+  // Look for common idea markers
+  const ideaPatterns = [
+    /(?:idea|concept|product|building|create|tool|platform|app|service)\s+(?:around|about|for|that)\s+(.{20,100})/i,
+    /(?:help|helping)\s+(.{20,80})\s+(?:with|by|through)/i,
+    /(?:focused on|focusing on|working on)\s+(.{20,100})/i,
+  ];
+
+  for (const pattern of ideaPatterns) {
+    const match = allText.match(pattern);
+    if (match) return match[1].trim().slice(0, 100);
+  }
+
+  // Fallback: extract from the most recent substantial messages
+  const substantive = recentMessages
+    .filter((m) => m.content.length > 100)
+    .slice(-3)
+    .map((m) => m.content.slice(0, 200));
+
+  return substantive.join(" ").slice(0, 200) || "the idea they have been exploring";
+}
+
+function buildDebriefGenerationPrompt(ideaDirection) {
+  return `You are Marcus Lindqvist. You've been working with Gap Finder on a startup idea around: ${ideaDirection}
+
+You were told to go talk to 5 people to validate. You talked to these 4 people:
+NOTE: Adapt these to whatever idea actually emerged in the conversation.
+1. Someone from your professional network (marketing/advertising world)
+2. Someone from your music/festival world
+3. Someone who represents a potential customer for whatever idea emerged
+4. Your wife Karin -- who gives you honest, sometimes brutally direct feedback
+
+For each person, write a realistic debrief as Marcus would report it. Include:
+- Who they are (1 sentence)
+- The surprising thing they said
+- What confirmed your thinking
+- What challenged your thinking
+- Their exact words on the most interesting moment (a direct quote)
+- Would they use/pay for this? Be honest -- not everyone says yes.
+
+Write as Marcus: conversational, specific details, honest about pushback. 400-600 words total across all 4 debriefs.
+
+Format each debrief with the person's name as a header. Be specific to the idea direction mentioned above -- do NOT use generic placeholder text.`;
+}
+
 // ── Main Simulation ─────────────────────────────────────────────────────────
 
 async function simulate() {
@@ -1091,6 +1162,10 @@ async function simulate() {
 
   // ── Research State ──────────────────────────────────────────────────────
   const researchLog = [];
+
+  // ── Homework Loop State ────────────────────────────────────────────────
+  let homeworkLoopActive = false;
+  let homeworkData = null;
 
   // ── Helper: call Claude (basic, no tools) ──────────────────────────────
 
@@ -1257,6 +1332,91 @@ async function simulate() {
     return { keyFindings: [], unfairAdvantages: [], decisions: [], energySignals: [] };
   }
 
+  // ── Helper: execute homework loop (Phase 4 -> 5) ────────────────────────
+
+  async function executeHomeworkLoop() {
+    console.log("\n" + "=".repeat(70));
+    console.log("  HOMEWORK LOOP DETECTED");
+    console.log("=".repeat(70));
+
+    homeworkLoopActive = true;
+
+    // 1. Marcus acknowledges and "leaves"
+    const marcusAck = "Yeah, that makes sense. I think I know exactly who to talk to. Give me a few days -- I'll come back with what I find out.";
+    gfMessages.push({ role: "user", content: marcusAck });
+    phaseMessages.push({ role: "user", content: marcusAck });
+    console.log(`\nMARCUS: ${marcusAck}`);
+
+    // Gap Finder acknowledges
+    const gfAck = await callClaude(
+      getCurrentGFPrompt(),
+      gfMessages,
+      getMaxTokens("gapfinder"),
+      "GapFinder-homework-ack"
+    );
+    if (gfAck) {
+      gfMessages.push({ role: "assistant", content: gfAck });
+      phaseMessages.push({ role: "assistant", content: gfAck });
+      console.log(`\nGAP FINDER: ${gfAck}`);
+    }
+
+    // 2. Time break marker
+    const timeBreak = `
+${"=".repeat(55)}
+  HOMEWORK BREAK -- Marcus goes to talk to real people
+   Time marker: [3 days later]
+${"=".repeat(55)}`;
+    console.log(timeBreak);
+
+    // 3. Generate debrief forms
+    console.log("\n  Generating debrief forms...");
+    const ideaDirection = extractIdeaDirection(gfMessages);
+    console.log(`  [idea direction: "${ideaDirection}"]`);
+
+    const debriefPrompt = buildDebriefGenerationPrompt(ideaDirection);
+    const debriefContent = await callClaude(
+      "You are Marcus Lindqvist. Write realistic conversation debrief reports. Stay in character.",
+      [{ role: "user", content: debriefPrompt }],
+      1024,
+      "debrief-gen"
+    );
+
+    if (!debriefContent) {
+      console.log("  [WARNING] Failed to generate debrief content");
+      homeworkLoopActive = false;
+      return;
+    }
+
+    // Parse debrief names for console output
+    const debriefNames = debriefContent.match(/#+\s*(.+)/g) || [];
+    for (const name of debriefNames) {
+      console.log(`  Debrief: ${name.replace(/^#+\s*/, "")}`);
+    }
+
+    // 4. Marcus returns with debrief data
+    console.log("\n" + "=".repeat(70));
+    console.log("  MARCUS RETURNS FROM HOMEWORK");
+    console.log("=".repeat(70));
+
+    const marcusReturn = `Right, I'm back. Talked to four people over the past few days. Here's what happened:\n\n${debriefContent}\n\nWant me to go into more detail on any of these?`;
+
+    gfMessages.push({ role: "user", content: marcusReturn });
+    phaseMessages.push({ role: "user", content: marcusReturn });
+
+    console.log(`\nMARCUS: ${marcusReturn.slice(0, 200)}...`);
+    console.log(`  [full debrief: ${marcusReturn.length} chars]`);
+
+    // Store homework data for tracking
+    homeworkData = {
+      ideaDirection,
+      debriefContent,
+      debriefNames: debriefNames.map((n) => n.replace(/^#+\s*/, "")),
+      returnedAt: new Date().toISOString(),
+    };
+
+    homeworkLoopActive = false;
+  }
+
   // ── Helper: perform phase transition ────────────────────────────────────
 
   async function performTransition() {
@@ -1278,6 +1438,11 @@ async function simulate() {
       console.log(`  Summary: ${JSON.stringify(summaryData, null, 2)}`);
     }
 
+    // Execute homework loop at Phase 4 -> 5 boundary
+    if (fromPhase === 4 && toPhase === 5) {
+      await executeHomeworkLoop();
+    }
+
     // Advance
     currentPhase = toPhase;
     phaseTurns = 0;
@@ -1288,7 +1453,13 @@ async function simulate() {
     console.log("=".repeat(70));
 
     // Reset phase messages for new phase
-    phaseMessages = [];
+    // If homework loop ran, keep the debrief data in phase messages for Phase 5
+    if (fromPhase === 4 && homeworkData) {
+      // Start Phase 5 with the debrief context
+      phaseMessages = gfMessages.slice(-2); // Keep Marcus's debrief return message
+    } else {
+      phaseMessages = [];
+    }
   }
 
   // ── Opening ─────────────────────────────────────────────────────────────
@@ -1428,6 +1599,16 @@ async function simulate() {
       console.log(`  [coverage: ${formatCoverageState(currentPhase, coverageState)}]`);
     }
 
+    // ── Detect homework trigger in Phase 4 ──────────────────────────────
+
+    if (currentPhase === 4 && !homeworkLoopActive && detectHomeworkTrigger(gfText)) {
+      console.log(`  [HOMEWORK TRIGGER detected in Phase 4 -- initiating homework loop]`);
+      await executeHomeworkLoop();
+      // After homework, perform the Phase 4->5 transition
+      await performTransition();
+      continue; // Skip normal transition detection, jump to next turn
+    }
+
     // ── Detect phase transition signal ────────────────────────────────────
 
     if (detectPhaseTransitionSignal(gfText)) {
@@ -1454,6 +1635,11 @@ async function simulate() {
     for (const entry of researchLog) {
       console.log(`    - [${entry.timestamp}] ${entry.source}: "${entry.query}" -> ${entry.resultCount} results${entry.error ? ` (${entry.error})` : ""}`);
     }
+  }
+  console.log(`  Homework loop: ${homeworkData ? "completed" : "not reached"}`);
+  if (homeworkData) {
+    console.log(`    Idea direction: ${homeworkData.ideaDirection}`);
+    console.log(`    Debriefs: ${homeworkData.debriefNames.join(", ")}`);
   }
   console.log("=".repeat(70));
 }
