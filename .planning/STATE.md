@@ -10,7 +10,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 7 (Research Tools) — MCP-powered research + manual research checklists. Phase 6 deferred to v2.
+**Current Focus:** Phase 8 (Conversation Design) — Coverage tracking, implicit research triggers, dynamic rescoring. Phase 6 deferred to v2.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling), Motion (animations), d3-cloud (word layouts)
 
@@ -19,13 +19,13 @@
 ## Current Position
 
 **Milestone:** v1 continued
-**Phase:** 7 - Research Tools (In Progress)
-**Status:** Executing wave 2
-**Last Activity:** 2026-02-02 - Completed 07-04-PLAN.md (Keyword Volume Lookup)
+**Phase:** 8 - Conversation Design (In Progress)
+**Status:** Executing wave 1
+**Last Activity:** 2026-02-17 - Completed 08-01-PLAN.md (Coverage Tracking Infrastructure)
 
 **Progress:**
 ```
-[████████████████████████████] 96% (26/~27 plans complete for v1)
+[████████████████████████████] 97% (27/~31 plans complete for v1)
 ```
 
 **Phase Breakdown:**
@@ -37,14 +37,15 @@
 | 4 - Phase System | 2 | Complete + Verified |
 | 5 - Idea Card | 3 | Complete + Verified |
 | 6 - Instructor View | — | Deferred to v2 |
-| 7 - Research Tools | 4 | In Progress (07-01, 07-02, 07-03, 07-04 complete) |
+| 7 - Research Tools | 4 | Complete (07-01 through 07-04) |
+| 8 - Conversation Design | 4 | In Progress (08-01 complete) |
 
 ---
 
 ## Performance Metrics
 
-**Plans Completed:** 26
-**Plans Total:** 26 (Phases 1-5, 7)
+**Plans Completed:** 27
+**Plans Total:** 31 (Phases 1-5, 7-8)
 **Success Rate:** 100%
 **Blockers Resolved:** 10 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency, auth import pattern, TypeScript strict mode types)
 
@@ -138,6 +139,11 @@
 | Trial credits implementation | 50 free lookups via grantTrialCredits enables testing without payment setup | 2026-02-02 |
 | UI-side usage tracking | trackKeywordUsage called after success ensures only successful API calls deduct credits | 2026-02-02 |
 | Auth import pattern uses ./auth | Project convention: import from ./auth not @convex-dev/auth/server | 2026-02-02 |
+| v.any() for coverage topics field | Each phase has different topic keys; Zod enforces structure at extraction | 2026-02-17 |
+| Depth merge logic with ordering | deep=3 > moderate=2 > surface=1 > not_mentioned=0; always keep max | 2026-02-17 |
+| Dynamic schema generation via createCoverageSchema | Phase-specific Zod schemas built from coverageTopics config | 2026-02-17 |
+| Intensity-based trigger filtering | Low/medium/high modes balance noise vs research opportunity detection | 2026-02-17 |
+| Rescoring enforces honest assessment | Scores CAN go down, confidence levels required, explanations for all changes | 2026-02-17 |
 
 ### Technical Findings
 
@@ -244,17 +250,21 @@ Create account and purchase credits ($10 for 100K keywords)
 
 ## Session Continuity
 
-**Last Session:** 2026-02-17T08:57:49.643Z
-**Last Action:** Created 07-06-PLAN.md (Research Suggestions UI - context-aware chips + queue)
-**Next Action:** Complete 07-05 verification, then execute 07-06
+**Last Session:** 2026-02-17T09:37:53Z
+**Last Action:** Completed 08-01-PLAN.md (Coverage Tracking Infrastructure)
+**Next Action:** Execute 08-02-PLAN.md (Coverage Extraction Action)
 
-**Phase 7 In Progress:**
+**Phase 8 In Progress:**
+- [x] 08-01-PLAN.md - Coverage Tracking Infrastructure (coverageState table, CRUD operations, Zod schemas for extraction/triggers/rescoring)
+- [ ] 08-02-PLAN.md - Coverage Extraction Action
+- [ ] 08-03-PLAN.md - Trigger Detection Action
+- [ ] 08-04-PLAN.md - Dynamic Rescoring Action
+
+**Phase 7 Complete:**
 - [x] 07-01-PLAN.md - Research Tools Foundation (Claude tool definitions, API wrappers for Reddit/HN/Tavily/ProductHunt/SO)
 - [x] 07-02-PLAN.md - Research Action Backend (chatWithResearch action with tool loop, schema extensions, findings persistence)
 - [x] 07-03-PLAN.md - Manual Research Checklist (forms for Facebook Groups, LinkedIn, Twitter, Amazon Reviews)
 - [x] 07-04-PLAN.md - Keyword Volume Lookup (Keywords Everywhere API, credit billing, confirmation UI, Convex action)
-- [x] 07-05-PLAN.md - Chat Integration (research prompt, ResearchPanel, useStreamingChat wiring)
-- [ ] 07-06-PLAN.md - Research Suggestions UI (context-aware chips, save-for-later queue)
 
 **Phase 5 Complete + Verified:**
 - [x] 05-01-PLAN.md - Blob Rendering Foundation (6 organic blobs, drift, convergence)
@@ -294,4 +304,4 @@ Create account and purchase credits ($10 for 100K keywords)
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-02-02 (Phase 7 wave 2 - 07-04 complete, keyword volume lookup with credit billing)*
+*Last updated: 2026-02-17 (Phase 8 wave 1 - 08-01 complete, coverage tracking infrastructure with Zod schemas)*
