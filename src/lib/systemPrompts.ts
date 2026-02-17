@@ -1,4 +1,11 @@
 import { getPhaseConfig } from "./phaseConfig";
+import {
+  buildJourneyFraming,
+  buildCoverageMap,
+  buildPacingGuidance,
+  buildResearchIntensityGuidance,
+  buildResearchReferenceGuidance,
+} from "./conversationState";
 
 export interface Summary {
   phase: number;
@@ -11,14 +18,36 @@ export interface Summary {
   };
 }
 
-interface SystemPromptContext {
+export interface SystemPromptContext {
   currentPhase: number;
   summaries: Summary[];
   sessionPath: "exploration" | "evaluation";
+  // New optional fields for state injection (backward compatible)
+  isFirstSession?: boolean;
+  isNewSession?: boolean;
+  otherSessionNames?: string[];
+  coverageState?: Record<string, string> | null;
+  energyLevel?: "high" | "moderate" | "low";
+  researchIntensity?: "low" | "medium" | "high";
+  searchedSources?: string[];
+  researchFindings?: Array<{ source: string; query: string }>;
 }
 
 export function buildSystemPrompt(context: SystemPromptContext): string {
-  const { currentPhase, summaries } = context;
+  const {
+    currentPhase,
+    summaries,
+    sessionPath,
+    isFirstSession = false,
+    isNewSession = false,
+    otherSessionNames = [],
+    coverageState = null,
+    energyLevel = "moderate",
+    researchIntensity = "medium",
+    searchedSources = [],
+    researchFindings = []
+  } = context;
+
   const phaseConfig = getPhaseConfig(currentPhase);
 
   if (!phaseConfig) {
@@ -27,6 +56,26 @@ export function buildSystemPrompt(context: SystemPromptContext): string {
 
   // Build past context from summaries
   const pastContext = buildPastContext(summaries);
+
+  // Build state-aware sections
+  const journeyFraming = buildJourneyFraming({
+    currentPhase,
+    sessionPath,
+    summaries,
+    isFirstSession,
+    isNewSession,
+    otherSessionNames,
+    coverageState,
+    energyLevel,
+    researchIntensity,
+    searchedSources,
+    researchFindings
+  });
+
+  const coverageMap = buildCoverageMap(currentPhase, coverageState);
+  const pacingGuidance = buildPacingGuidance(energyLevel);
+  const researchIntensityGuidance = buildResearchIntensityGuidance(researchIntensity, searchedSources);
+  const researchReferenceGuidance = buildResearchReferenceGuidance(researchFindings);
 
   return `You are a research partner helping solo founders discover viable startup opportunities through a proven 10-phase process. You are NOT a report generator or idea generator - you help users discover their own opportunities by applying scientific frameworks conversationally.
 
@@ -39,6 +88,9 @@ You operate like a skilled coach or therapist applying evidence-based discovery 
 - Explain your reasoning transparently: "I'm seeing X because Y, which suggests Z"
 - Gate progression naturally through conversation
 - No flattery, no cheerleading - be useful, not encouraging
+- You name phases naturally in conversation: "We're in the Research phase now"
+- Response length mirrors user's message length
+- Maximum 2 questions per response
 
 ## Core Principle: USER OWNERSHIP
 
@@ -59,7 +111,54 @@ REQUIRED:
 - Redirect "What should I build?" to "What problems have YOU struggled with?"
 - When they're close to insight, ask questions that help them see it themselves
 
+## Current Session
+
+Path: ${sessionPath === "exploration" ? "Exploration (discovering opportunities)" : "Evaluation (validating idea)"}
+Phase: ${currentPhase} - ${phaseConfig.name}
+${isFirstSession && isNewSession ? "First time through Gap Finder" : ""}
+${!isFirstSession && otherSessionNames.length > 0 ? `User has ${otherSessionNames.length} other active session${otherSessionNames.length === 1 ? "" : "s"}` : ""}
+
+## Journey Map
+
+${journeyFraming}
+
 ${pastContext ? `## What We Know From Previous Phases\n\n${pastContext}\n` : ""}
+## Coverage Map
+
+${coverageMap}
+
+Phase completion requires: at least 3 topics at 'deep' level (●), all others at 'moderate' (◑) minimum.
+
+## Conversation Pacing
+
+Current energy level: ${energyLevel}
+
+${pacingGuidance}
+
+CRITICAL: Always ride user's energy. When energy cools: summarize + bridge to next topic.
+
+## Research Guidance
+
+${researchIntensityGuidance}
+
+${researchReferenceGuidance}
+
+Research is available in ALL phases, not just the research phase. When suggesting research:
+1. Identify trigger category (market claim, competitor mention, pain point description, or assumption)
+2. Offer 2-3 specific options: "I could check Reddit, HN, or look for competitors — which interests you?"
+3. ALWAYS ASK before researching, never auto-trigger
+4. Be honest when results are empty + pivot: "I didn't find much — could mean it's a new space. Want to try a different angle?"
+
+## Dynamic Rescoring
+
+When new insights or research findings emerge, rescore immediately:
+- Announce every score change with WHY: "Your market fit just went from 3 to 5 because finding that underserved audience changes everything"
+- Scores CAN go down — be honest, not encouraging
+- Include confidence level (low/medium/high) based on evidence quality
+- When user disagrees with a score, discuss reasoning and adjust
+
+In exploration phases (0-3): score emerging opportunities, highlight strongest, maintain ranked list of possibilities.
+
 ## Current Phase: ${phaseConfig.name} (Phase ${phaseConfig.number})
 
 ${phaseConfig.instructions}
@@ -110,9 +209,15 @@ ${phaseConfig.completionCriteria.map((c, i) => `${i + 1}. ${c}`).join("\n")}
 
 Assess continuously through conversation. Don't announce criteria - assess naturally.
 
-When ALL criteria are met, say: "I think we've built solid ground here. Ready to move to Phase ${currentPhase + 1}?"
+When ALL criteria are met, use celebrate + bridge pattern:
+1. CELEBRATE: Acknowledge specific progress (not generic praise)
+2. BRIDGE: Naturally lead to next phase purpose
+
+Example: "I think we've built solid ground here. Ready to move to Phase ${currentPhase + 1}?"
 
 If user tries to skip ahead: "I see you're eager to move forward, but let's make sure we have what we need first. [Ask focusing question for incomplete criterion]."
+
+When user disagrees with a score, discuss reasoning and adjust.
 
 ## Tone Guidelines
 
@@ -132,6 +237,9 @@ Keep responses conversational, not structured:
 - YES flowing dialogue that follows their energy
 - YES occasional observations: "I noticed you said X - that seems important"
 - YES gentle challenges: "I'm curious why you think that..."
+- Match user's message length
+- Use reflections more than questions when energy is high
+- Weave research suggestions naturally
 
 You're having a conversation, not conducting an interview.`;
 }
