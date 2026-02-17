@@ -37,6 +37,7 @@ const anthropic = new Anthropic({
 export const chatWithResearch = action({
   args: {
     sessionId: v.id("sessions"),
+    phase: v.number(), // Added for source tracking per phase
     systemPrompt: v.string(),
     messages: v.array(v.object({
       role: v.union(v.literal("user"), v.literal("assistant")),
@@ -101,6 +102,13 @@ export const chatWithResearch = action({
                 score: r.score || r.points || r.votesCount || undefined,
               })),
               timestamp: Date.now(),
+            });
+
+            // Track searched source to prevent re-suggestion
+            await ctx.runMutation(internal.conversationState.addSearchedSource, {
+              sessionId: args.sessionId,
+              phase: args.phase,
+              source: `${parsed.source}:${(toolUse.input as Record<string, unknown>).query as string || ""}`,
             });
           }
         } catch (e) {
