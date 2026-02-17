@@ -10,6 +10,7 @@ import { usePhaseProgress } from "../hooks/usePhaseProgress";
 import { usePhaseCompletion } from "../hooks/usePhaseCompletion";
 import { ResearchPanel } from "./research/ResearchPanel";
 import type { ChecklistType } from "./research/checklistConfig";
+import { useCoverageState } from "../hooks/useCoverageState";
 
 interface ChatProps {
   sessionId: Id<"sessions">;
@@ -37,8 +38,12 @@ export function Chat({
   const scrollToPhaseRef = useRef<((phase: number) => void) | null>(null);
   const lastMessageCountRef = useRef(0);
 
-  // Phase progress tracking (monotonic - never regresses)
-  const { currentProgress } = usePhaseProgress(currentPhase);
+  // Coverage state tracking (includes progress, topics, research intensity)
+  const { coverageProgress, topicDepths, researchIntensity } = useCoverageState(sessionId, currentPhase);
+
+  // Phase progress tracking (fallback to old heuristic if no coverage data)
+  const { currentProgress: heuristicProgress } = usePhaseProgress(currentPhase);
+  const currentProgress = coverageProgress > 0 ? coverageProgress : heuristicProgress;
 
   // Phase completion detection and advancement
   const {
@@ -145,10 +150,13 @@ export function Chat({
     <div className="flex flex-col h-full bg-gray-50 relative">
       <IdeaCard sessionId={sessionId} currentPhase={currentPhase} />
       <PhaseProgressBar
+        sessionId={sessionId}
         currentPhase={currentPhase}
         currentProgress={currentProgress}
         sessionPath={sessionPath}
         onPhaseClick={handlePhaseClick}
+        coverageTopics={topicDepths}
+        researchIntensity={researchIntensity}
       />
 
       {error && (
