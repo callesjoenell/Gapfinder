@@ -5,8 +5,10 @@ import type { Id } from "../../convex/_generated/dataModel";
 import { buildSystemPrompt } from "../lib/systemPrompts";
 import { streamWithRetry, translateError } from "../lib/streamingRetry";
 import { useThrottledStreamingText } from "./useThrottledStreamingText";
-import { getResearchPromptAddition, parseChecklistType } from "../lib/prompts/researchPrompt";
+import { parseChecklistType } from "../lib/prompts/researchPrompt";
 import type { ChecklistType } from "../components/research/checklistConfig";
+import { useCoverageState } from "./useCoverageState";
+import { inferEnergyLevel } from "../lib/conversationState";
 
 interface Message {
   _id: Id<"messages">;
@@ -34,7 +36,9 @@ interface UseStreamingChatResult {
 export function useStreamingChat(
   sessionId: Id<"sessions"> | null,
   currentPhase: number,
-  sessionPath: "exploration" | "evaluation"
+  sessionPath: "exploration" | "evaluation",
+  isFirstSession?: boolean,
+  otherSessionNames?: string[]
 ): UseStreamingChatResult {
   // Raw streaming state (high frequency updates)
   const [rawStreamingContent, setRawStreamingContent] = useState("");
@@ -69,8 +73,11 @@ export function useStreamingChat(
 
   // Mutations and actions
   const saveMessage = useMutation(api.messages.saveMessage);
-  const streamChat = useAction(api.claude.streamChat);
   const chatWithResearch = useAction(api.researchActions.chatWithResearch);
+  const extractCoverage = useAction(api.conversationActions.extractCoverage);
+
+  // Coverage state tracking
+  const coverageData = useCoverageState(sessionId, currentPhase);
 
   // State for detected checklist trigger (exposed to Chat.tsx)
   const [detectedChecklistType, setDetectedChecklistType] = useState<ChecklistType | null>(null);
@@ -112,30 +119,33 @@ export function useStreamingChat(
           content,
         });
 
-        // Build system prompt with current phase and summaries
+        // Build system prompt with expanded context
         const currentSummaries = (summaries || []).map((s) => ({
           phase: s.phase,
           completedAt: s.completedAt,
           data: s.data,
         }));
 
-        let systemPrompt = buildSystemPrompt({
+        // Infer energy level from recent messages
+        const energyLevel = inferEnergyLevel(messages.slice(-5));
+
+        // Build expanded system prompt context
+        const systemPrompt = buildSystemPrompt({
           currentPhase,
           summaries: currentSummaries.filter((s) => s.phase < currentPhase),
           sessionPath,
+          isFirstSession: isFirstSession || false,
+          isNewSession: messages.length === 0,
+          otherSessionNames: otherSessionNames || [],
+          coverageState: coverageData.coverageState,
+          energyLevel,
+          researchIntensity: coverageData.researchIntensity,
+          searchedSources: coverageData.searchedSources,
+          researchFindings: (researchFindings || []).map(f => ({
+            source: f.source,
+            query: f.query
+          })),
         });
-
-        // Add research prompt additions for phases 0-2 (exploration phases)
-        const isResearchPhase = currentPhase >= 0 && currentPhase <= 2;
-        if (isResearchPhase) {
-          const hasResearchFindings = (researchFindings?.length || 0) > 0;
-          const manualResearchContext = manualResearchFindings || null;
-
-          systemPrompt += getResearchPromptAddition(
-            hasResearchFindings,
-            manualResearchContext
-          );
-        }
 
         // Format messages for Claude (use current messages state)
         const formattedMessages = [
@@ -146,22 +156,15 @@ export function useStreamingChat(
           { role: "user" as const, content },
         ];
 
-        // Use research-enabled action for phases 0-2, standard action otherwise
-        const response = isResearchPhase
-          ? await streamWithRetry(() =>
-              chatWithResearch({
-                sessionId,
-                systemPrompt,
-                messages: formattedMessages,
-              })
-            )
-          : await streamWithRetry(() =>
-              streamChat({
-                sessionId,
-                systemPrompt,
-                messages: formattedMessages,
-              })
-            );
+        // Use chatWithResearch for ALL phases (research tools available everywhere)
+        const response = await streamWithRetry(() =>
+          chatWithResearch({
+            sessionId,
+            phase: currentPhase,
+            systemPrompt,
+            messages: formattedMessages,
+          })
+        );
 
         // Save assistant response with thinking
         await saveMessage({
@@ -171,6 +174,14 @@ export function useStreamingChat(
           content: response.text,
           thinking: response.thinking || undefined,
         });
+
+        // Fire-and-forget coverage extraction (post-turn analysis)
+        // Don't await - let it run in background without blocking conversation
+        extractCoverage({
+          sessionId,
+          phase: currentPhase,
+          recentMessages: formattedMessages.slice(-10),
+        }).catch(err => console.warn("Coverage extraction failed:", err));
 
         // Clear streaming state
         setRawStreamingContent("");
@@ -191,9 +202,12 @@ export function useStreamingChat(
       researchFindings,
       manualResearchFindings,
       isStreaming,
+      isFirstSession,
+      otherSessionNames,
+      coverageData,
       saveMessage,
-      streamChat,
       chatWithResearch,
+      extractCoverage,
     ]
   );
 
