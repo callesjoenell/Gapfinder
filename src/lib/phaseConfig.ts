@@ -72,6 +72,7 @@ ENERGY SIGNALS TO WATCH:
     description: "Research your domain to find gaps worth filling — problems to solve OR experiences to create",
     completionCriteria: [
       "Specific gaps identified with rising energy signals",
+      "Segment depth achieved: user has found the person for whom this is ESSENTIAL, not just convenient — can name specific individuals, not demographics",
       "Identity lens applied: who are people trying to become?",
       "Distribution path identified: can user reach these people?",
       "Timing assessed on at least 4 of 6 factors",
@@ -79,6 +80,7 @@ ENERGY SIGNALS TO WATCH:
     ],
     coverageTopics: [
       { key: "gap_identification", label: "Gap Identification", description: "Specific gaps with energy signals" },
+      { key: "segment_depth", label: "Segment Depth", description: "Found the person for whom this is ESSENTIAL, not just convenient" },
       { key: "identity_lens", label: "Identity Lens", description: "Who are people trying to become?" },
       { key: "distribution_path", label: "Distribution Path", description: "Can you reach these people?" },
       { key: "timing_factors", label: "Timing Factors", description: "Why is this solvable now?" },
@@ -97,6 +99,21 @@ APPROACH:
 - Validation: Confirm with specific evidence, not assumptions
 - Distribution reality check: Can user actually reach these people?
 - Timing assessment: What's changed that makes this possible NOW?
+
+SEGMENT DEPTH (Critical — refer to Need Depth System in main prompt):
+When a gap sounds broadly appealing, apply the Deepening Protocol:
+1. Name it — reflect that current positioning sounds like level 1-2 on the Need Depth Ladder
+2. Segment — help user identify 3-5 different types of people who might care, varying by life situation, emotional state, frequency of need, and failed alternatives
+3. Probe each — for each segment, assess: how often, what workarounds exist, what would they feel if this existed, would they tell others
+4. Find the peak — the segment with longest answers, most specifics, emotional language
+5. Reframe — rebuild the gap description around THAT person's specific situation
+
+SEGMENT DEPTH SIGNALS (marks "deep" on coverage):
+- User names a SPECIFIC person or vivid archetype, not a demographic
+- User can articulate WHY this is urgent/essential for that person (not just useful)
+- User describes what that person does TODAY without this (failed workarounds, emotional cost)
+- User shows personal connection — they've felt this need or deeply witnessed it in someone they know
+- The need sits at level 4-5 on the Need Depth Ladder: seeking or urgency, not just curiosity or interest
 
 TIMING FACTORS (assess at least 4):
 1. Technology: Is new tech making something possible?
@@ -124,11 +141,13 @@ IMPORTANT: A "gap" isn't always a "problem." It can be:
       "User has found 3+ external data points supporting the gap",
       "User has identified 2+ competitor/alternative approaches",
       "User understands why existing solutions fall short",
+      "Need acuity validated: evidence that target segment finds this essential, not just convenient",
       "Clear signal that market is big enough to matter",
       "User can articulate who is already spending money in this space",
     ],
     coverageTopics: [
       { key: "external_data_points", label: "External Data Points", description: "Evidence supporting the gap" },
+      { key: "need_acuity", label: "Need Acuity", description: "Evidence this is essential (not just nice-to-have) for the target segment" },
       { key: "competitor_analysis", label: "Competitor Analysis", description: "Who else is in this space?" },
       { key: "market_size", label: "Market Size", description: "Is the market big enough?" },
       { key: "money_signals", label: "Money Signals", description: "Who's spending money here?" },
@@ -161,6 +180,28 @@ For both:
 - Industry reports with trend data
 - Pricing benchmarks (what people actually pay for related things)
 
+NEED ACUITY VALIDATION (refer to Need Depth System in main prompt):
+The most important research question: WHERE does the target segment sit on the Need Depth Ladder?
+
+Research that reveals level 4-5 (seeking/urgency):
+- People actively searching for solutions (Reddit threads, forum posts asking "how do I...")
+- Emotional language in discussions (frustration, desperation, longing, relief when finding partial solutions)
+- People spending time/money on poor workarounds — the more effort, the higher the need
+- Recurring or high-intensity need (daily frustration, identity-level desire, life-stage pressure)
+- People describe transformation: how their life/identity would change, not just convenience gained
+
+Research that reveals level 1-2 (curiosity/interest):
+- Positive reactions but no follow-through ("cool idea" without action)
+- No existing workarounds — nobody has cared enough to cobble something together
+- Need only arises in specific events or rare occasions
+- "I'd try it if it was free" — willingness without investment
+- Discussion is about the product features, not about the person's experience
+
+If research shows level 1-2 for the current target: DON'T ABANDON THE IDEA. The product may be right but the audience is wrong. Apply the Deepening Protocol:
+- "Research shows mild interest from this broad audience. That's useful — it tells us this isn't the right PERSON yet. Who in this space has the most intense version of this need?"
+- Look for subgroups where the frequency, emotional weight, or identity connection is dramatically higher
+- Re-research with the new segment in mind
+
 ANTI-PATTERN: Don't let user rely on "everyone says..." without specifics. But also don't dismiss desire-driven ideas just because there's no "complaint" to point to.`,
   },
   {
@@ -170,9 +211,10 @@ ANTI-PATTERN: Don't let user rely on "everyone says..." without specifics. But a
     path: "exploration",
     description: "Crystallize the idea into a clear statement",
     completionCriteria: [
-      "User has a one-sentence idea statement",
+      "User has a one-sentence idea statement naming a SPECIFIC person with an URGENT need",
       "Idea connects unfair advantage (Phase 0) to validated gap (Phase 1-2)",
       "User can articulate: Who is this for? What does it solve or make possible? Why them?",
+      "The idea is positioned as ESSENTIAL for a specific segment, not convenient for a broad audience",
       "User has identified what makes this DIFFERENT from alternatives",
       "User expresses genuine ownership ('I want to build this' not 'This seems viable')",
     ],

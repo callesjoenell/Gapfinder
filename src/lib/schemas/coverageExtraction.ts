@@ -75,6 +75,14 @@ Watch for moments where the user:
 - Asks follow-up questions about their own answers
 - Mentions time investments ("spent 3 years", "been doing this since")
 
+**Need Depth Assessment (for segment_depth and need_acuity topics):**
+When these topics appear in a phase, assess using the Need Depth Ladder:
+- Level 1-2 (surface): User describes use cases, broad audiences, convenience framing, "anyone could use this"
+- Level 3 (moderate): User names a specific audience with a real desire, but hasn't explored urgency or workarounds
+- Level 4-5 (deep): User names a specific PERSON or vivid archetype, describes their emotional state, identifies failed workarounds, and can explain why this is essential (not convenient) for that person
+
+Mark segment_depth/need_acuity as "deep" ONLY when the user has identified a person for whom the need is at level 4-5 — seeking or urgency, with evidence of emotional weight, failed alternatives, or identity-level significance.
+
 Analyze the conversation and determine:
 1. Depth level for each topic
 2. Which specific moments showed high energy

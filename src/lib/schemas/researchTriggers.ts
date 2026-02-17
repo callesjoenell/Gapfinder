@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const TriggerDetectionSchema = z.object({
   triggers: z.array(z.object({
-    category: z.enum(["market_claim", "competitor_mention", "pain_point", "assumption"]),
+    category: z.enum(["market_claim", "competitor_mention", "pain_point", "assumption", "weak_positioning"]),
     quote: z.string().describe("Exact text from user that triggered detection"),
     suggestedSources: z.array(z.enum(["reddit", "hn", "producthunt", "tavily", "stackoverflow"])).max(3),
     researchAngle: z.string().describe("Specific search query or question to investigate"),
@@ -26,6 +26,7 @@ Only trigger on explicit claims with no supporting evidence:
 - User makes specific market size claims ("there are 2M people who...")
 - User states facts about competitors without verification
 - User claims problem severity without evidence
+- Weak positioning: User describes idea in terms of use cases rather than a person's need, positions broadly without specificity
 
 Do NOT trigger on:
 - General statements or opinions
@@ -38,6 +39,7 @@ Trigger on claims, competitor mentions, and clear pain point descriptions:
 - Competitor mentions (features, pricing, gaps)
 - Specific pain point descriptions ("every time I try X, Y happens")
 - Distribution assumptions ("I can reach them via...")
+- Weak positioning: idea described as broadly convenient rather than essential — user lists contexts/events, describes features without naming who specifically NEEDS this, or frames value as entertainment/convenience rather than relief/transformation
 
 Do NOT trigger on:
 - General brainstorming
@@ -52,6 +54,7 @@ Trigger on everything including implicit assumptions:
 - Timing/trend assumptions
 - Distribution assumptions
 - Technology feasibility assumptions
+- ALL weak positioning: any time the idea description lacks a specific person with an urgent need — demographic language, feature-first framing, convenience positioning, "everyone" language, inability to describe the customer's emotional state
 
 Be proactive — if there's ANY claim that could be validated, trigger it.`,
   };
@@ -69,6 +72,7 @@ ${intensityGuidance[intensitySetting]}
 2. **competitor_mention**: User mentions existing products, companies, or alternatives
 3. **pain_point**: User describes specific problems or frustrations people experience
 4. **assumption**: User assumes something about customers, behavior, or feasibility
+5. **weak_positioning**: Idea sits at level 1-2 on the Need Depth Ladder — user describes USE CASES instead of a PERSON, lists multiple contexts where it's "nice" without identifying who NEEDS it most, frames value as convenience/entertainment rather than relief/transformation, says "anyone could use this" or "it's for everyone", or can't describe what life looks like WITHOUT this for a specific person
 
 **For each trigger:**
 - Quote the exact text that triggered it
@@ -77,7 +81,7 @@ ${intensityGuidance[intensitySetting]}
 - Assign priority (high/medium/low) based on centrality to the idea
 
 **Priority Guidelines:**
-- HIGH: Core assumptions the idea depends on
+- HIGH: Core assumptions the idea depends on — AND weak_positioning triggers (level 1-2 on the Need Depth Ladder is the #1 idea killer — broad audience without specific urgency)
 - MEDIUM: Supporting claims that would strengthen/weaken the idea
 - LOW: Nice-to-know background information
 
