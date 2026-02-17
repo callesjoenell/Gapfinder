@@ -16,6 +16,8 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { execSync } from "child_process";
 import { gunzipSync } from "node:zlib";
+import { writeFileSync, mkdirSync } from "fs";
+import { join } from "path";
 
 // ── CLI Args ────────────────────────────────────────────────────────────────
 
@@ -315,6 +317,8 @@ const PRICING = {
 };
 
 let cumulativeCost = 0;
+let globalInputTokens = 0;
+let globalOutputTokens = 0;
 const COST_WARN = 2.50;
 const COST_ABORT = 3.00;
 
@@ -331,6 +335,8 @@ function trackCost(usage) {
     cacheCreation * PRICING.input +
     outputTokens * PRICING.output;
   cumulativeCost += cost;
+  globalInputTokens += inputTokens;
+  globalOutputTokens += outputTokens;
   return { cost, cumulative: cumulativeCost, inputTokens, outputTokens, cacheRead };
 }
 
@@ -1130,6 +1136,209 @@ Write as Marcus: conversational, specific details, honest about pushback. 400-60
 Format each debrief with the person's name as a header. Be specific to the idea direction mentioned above -- do NOT use generic placeholder text.`;
 }
 
+// ── Evaluation Rubric Scoring ────────────────────────────────────────────────
+
+async function evaluateSimulation(client, transcript, metadata) {
+  console.log("\n  Running evaluation scoring...");
+
+  // Truncate each message to 500 chars for the evaluation prompt
+  const truncatedTranscript = transcript
+    .map((t) => {
+      const content = t.content.length > 500 ? t.content.slice(0, 500) + "..." : t.content;
+      return `[Phase ${t.phase} | Turn ${t.turn} | Energy: ${t.energyLevel || "N/A"}] ${t.role}: ${content}`;
+    })
+    .join("\n\n");
+
+  const scoringPrompt = `You are evaluating a simulated Gap Finder conversation between "Marcus" (a persona played by Claude) and "Gap Finder" (the real system prompt, also Claude). Score each dimension honestly — this is a test of system quality, not a feel-good exercise.
+
+## Conversation Data
+
+Total turns: ${metadata.totalTurns}
+Phases completed: ${metadata.phasesCompleted}
+Research calls made: ${metadata.researchCallCount}
+Homework loop: ${metadata.homeworkCompleted ? "Yes" : "No"}
+
+## Full Transcript
+
+${truncatedTranscript}
+
+## Scoring Rubric
+
+Score each dimension. Provide: score (integer), evidence (2-3 specific examples from transcript), and improvement notes.
+
+### 1. Phase Depth (0-5 per phase, 30 total)
+For each phase completed, score 0-5:
+- Were all coverage topics addressed?
+- Did the conversation spend appropriate time (not rush)?
+- Were completion criteria met before transition?
+Score each phase individually, then sum.
+
+### 2. Conversation Quality (0-10)
+- Natural flow vs interview/checklist feel
+- Max 2 questions per response respected
+- Energy matching (responses mirror Marcus's length/intensity)
+- Challenge moments (Gap Finder pushes back when appropriate)
+
+### 3. Need Depth Progression (0-10)
+- Where did the idea start on the Need Depth Ladder? (1-2 expected initially)
+- Was the Deepening Protocol applied?
+- Did the PERSON change (segment discovery)?
+- Where did the idea end? (4-5 expected for right segment)
+
+### 4. Ownership (0-10)
+- Count "I realized" / "I noticed" / "I think" vs "you suggested" / "you said"
+- Did Marcus defend choices when challenged?
+- Did Marcus bring up concerns proactively?
+- Does the final idea feel like Marcus's discovery?
+
+### 5. Research Integration (0-10)
+- Were real API calls made?
+- Did findings change direction or deepen understanding?
+- Were empty results handled honestly?
+- Was research woven naturally into conversation (not dumped)?
+
+### 6. Homework Loop (0-10)
+- Was prep form provided by Gap Finder?
+- Did debrief analysis reveal new patterns?
+- Did Phase 5 build on debrief data specifically?
+- Were multiple perspectives represented in debriefs?
+
+### 7. Emergent Insights (0-10)
+- Did something unexpected come up?
+- Was the final idea richer than raw inputs?
+- Were connections surfaced that Marcus didn't see coming?
+- Did the idea evolve beyond the initial persona direction?
+
+### 8. Score Progression (0-10)
+- Did scores shift based on evidence during the conversation?
+- Did any scores go DOWN when warranted?
+- Was scoring honest, not encouraging?
+- Were confidence levels mentioned?
+
+Return JSON:
+{
+  "dimensions": [
+    {
+      "name": "Phase Depth",
+      "maxScore": 30,
+      "score": N,
+      "phaseBreakdown": { "0": N, "1": N, "2": N, "3": N, "4": N, "5": N },
+      "evidence": ["example 1", "example 2"],
+      "improvements": "what could be better"
+    },
+    {
+      "name": "Conversation Quality",
+      "maxScore": 10,
+      "score": N,
+      "evidence": ["example 1", "example 2"],
+      "improvements": "what could be better"
+    },
+    {
+      "name": "Need Depth Progression",
+      "maxScore": 10,
+      "score": N,
+      "evidence": ["example 1", "example 2"],
+      "improvements": "what could be better"
+    },
+    {
+      "name": "Ownership",
+      "maxScore": 10,
+      "score": N,
+      "evidence": ["example 1", "example 2"],
+      "improvements": "what could be better"
+    },
+    {
+      "name": "Research Integration",
+      "maxScore": 10,
+      "score": N,
+      "evidence": ["example 1", "example 2"],
+      "improvements": "what could be better"
+    },
+    {
+      "name": "Homework Loop",
+      "maxScore": 10,
+      "score": N,
+      "evidence": ["example 1", "example 2"],
+      "improvements": "what could be better"
+    },
+    {
+      "name": "Emergent Insights",
+      "maxScore": 10,
+      "score": N,
+      "evidence": ["example 1", "example 2"],
+      "improvements": "what could be better"
+    },
+    {
+      "name": "Score Progression",
+      "maxScore": 10,
+      "score": N,
+      "evidence": ["example 1", "example 2"],
+      "improvements": "what could be better"
+    }
+  ],
+  "totalScore": N,
+  "totalPossible": 100,
+  "summary": "2-3 sentence overall assessment",
+  "topStrength": "the best thing about this conversation",
+  "topWeakness": "the biggest area for improvement"
+}`;
+
+  try {
+    const response = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 4096,
+      messages: [{ role: "user", content: scoringPrompt }],
+    });
+
+    const usage = trackCost(response.usage);
+    console.log(`  [evaluation | tokens: in=${usage.inputTokens} out=${usage.outputTokens} | cost: $${usage.cost.toFixed(4)} | total: $${usage.cumulative.toFixed(4)}]`);
+
+    const text = response.content[0]?.text || "";
+
+    // Parse JSON -- handle markdown-wrapped JSON
+    const jsonMatch = text.match(/```json\s*([\s\S]*?)```/) || text.match(/(\{[\s\S]*\})/);
+    if (jsonMatch) {
+      const jsonStr = jsonMatch[1] || jsonMatch[0];
+      const evaluation = JSON.parse(jsonStr);
+
+      // Validate structure
+      if (!evaluation.dimensions || !Array.isArray(evaluation.dimensions)) {
+        throw new Error("Missing dimensions array");
+      }
+
+      // Recalculate total to ensure correctness
+      const calculatedTotal = evaluation.dimensions.reduce((sum, d) => sum + (d.score || 0), 0);
+      evaluation.totalScore = calculatedTotal;
+      evaluation.totalPossible = 100;
+
+      console.log(`  Evaluation complete: ${calculatedTotal}/100`);
+      return evaluation;
+    }
+
+    throw new Error("No JSON found in evaluation response");
+  } catch (error) {
+    console.log(`  [WARNING] Evaluation failed: ${error.message}`);
+    // Fallback evaluation
+    return {
+      dimensions: [
+        { name: "Phase Depth", maxScore: 30, score: 0, evidence: [], improvements: "Evaluation parsing failed" },
+        { name: "Conversation Quality", maxScore: 10, score: 0, evidence: [], improvements: "Evaluation parsing failed" },
+        { name: "Need Depth Progression", maxScore: 10, score: 0, evidence: [], improvements: "Evaluation parsing failed" },
+        { name: "Ownership", maxScore: 10, score: 0, evidence: [], improvements: "Evaluation parsing failed" },
+        { name: "Research Integration", maxScore: 10, score: 0, evidence: [], improvements: "Evaluation parsing failed" },
+        { name: "Homework Loop", maxScore: 10, score: 0, evidence: [], improvements: "Evaluation parsing failed" },
+        { name: "Emergent Insights", maxScore: 10, score: 0, evidence: [], improvements: "Evaluation parsing failed" },
+        { name: "Score Progression", maxScore: 10, score: 0, evidence: [], improvements: "Evaluation parsing failed" },
+      ],
+      totalScore: 0,
+      totalPossible: 100,
+      summary: `Evaluation parsing failed: ${error.message}`,
+      topStrength: "N/A",
+      topWeakness: "N/A",
+    };
+  }
+}
+
 // ── Main Simulation ─────────────────────────────────────────────────────────
 
 async function simulate() {
@@ -1156,6 +1365,11 @@ async function simulate() {
   // Messages for the current phase only (for summarization)
   let phaseMessages = [];
 
+  // Full transcript for output files
+  const transcript = [];
+  let totalInputTokens = 0;
+  let totalOutputTokens = 0;
+
   let totalTurns = 0;
   let phaseTurns = 0;
   let pendingTransition = false;
@@ -1166,6 +1380,9 @@ async function simulate() {
   // ── Homework Loop State ────────────────────────────────────────────────
   let homeworkLoopActive = false;
   let homeworkData = null;
+
+  // ── Duration Tracking ──────────────────────────────────────────────────
+  const startTime = Date.now();
 
   // ── Helper: call Claude (basic, no tools) ──────────────────────────────
 
@@ -1471,6 +1688,7 @@ ${"=".repeat(55)}`;
   const marcusOpening = "Hi, I just signed up. Not entirely sure what this is but someone recommended it to me.";
   gfMessages.push({ role: "user", content: marcusOpening });
   phaseMessages.push({ role: "user", content: marcusOpening });
+  transcript.push({ role: "Marcus", phase: 0, turn: 1, content: marcusOpening, energyLevel: "moderate" });
 
   console.log(`\nTurn 1/${DRY_RUN ? DRY_RUN_TURNS : TOTAL_TURN_LIMIT} (Phase 0: Know Yourself)`);
   console.log(`MARCUS: ${marcusOpening}`);
@@ -1483,6 +1701,7 @@ ${"=".repeat(55)}`;
 
   gfMessages.push({ role: "assistant", content: gfOpening });
   phaseMessages.push({ role: "assistant", content: gfOpening });
+  transcript.push({ role: "Gap Finder", phase: 0, turn: 1, content: gfOpening, energyLevel: "moderate" });
 
   console.log(`\nGAP FINDER: ${gfOpening}`);
   console.log("-".repeat(70));
@@ -1495,6 +1714,25 @@ ${"=".repeat(55)}`;
   const maxTurns = DRY_RUN ? DRY_RUN_TURNS : TOTAL_TURN_LIMIT;
 
   while (totalTurns < maxTurns && currentPhase <= 5) {
+    // Update partial data for SIGINT handler
+    partialData = {
+      metadata: {
+        persona: "Marcus Lindqvist",
+        model: MODEL,
+        timestamp: new Date().toISOString(),
+        totalTurns,
+        phasesCompleted: summaries.length,
+        durationMinutes: Math.round((Date.now() - startTime) / 60000),
+        estimatedCostUSD: parseFloat(((globalInputTokens * 3 + globalOutputTokens * 15) / 1_000_000).toFixed(2)),
+      },
+      transcript,
+      phaseSummaries: summaries,
+      researchLog,
+      homeworkLoop: { prepForm: null, debriefs: [], debriefContent: null, completed: !!homeworkData },
+      evaluation: { dimensions: [], totalScore: 0, totalPossible: 100, summary: "Simulation interrupted", topStrength: "N/A", topWeakness: "N/A" },
+      cumulativeCost,
+    };
+
     // Check cost
     if (cumulativeCost > COST_ABORT) {
       console.log(`\n!! COST LIMIT HIT ($${cumulativeCost.toFixed(4)}) -- stopping simulation`);
@@ -1536,6 +1774,7 @@ ${"=".repeat(55)}`;
 
     gfMessages.push({ role: "user", content: marcusText });
     phaseMessages.push({ role: "user", content: marcusText });
+    transcript.push({ role: "Marcus", phase: currentPhase, turn: totalTurns + 1, content: marcusText, energyLevel });
 
     totalTurns++;
     phaseTurns++;
@@ -1571,6 +1810,7 @@ ${"=".repeat(55)}`;
 
     gfMessages.push({ role: "assistant", content: gfText });
     phaseMessages.push({ role: "assistant", content: gfText });
+    transcript.push({ role: "Gap Finder", phase: currentPhase, turn: totalTurns, content: gfText, energyLevel, coverageState: { ...coverageState } });
 
     console.log(`\nGAP FINDER: ${gfText}`);
 
@@ -1619,33 +1859,275 @@ ${"=".repeat(55)}`;
     console.log("-".repeat(70));
   }
 
-  // ── Final Summary ─────────────────────────────────────────────────────────
+  // ── Summarize final phase if not already summarized ──────────────────────
 
-  console.log("\n" + "=".repeat(70));
-  console.log("SIMULATION COMPLETE");
-  console.log("=".repeat(70));
-  console.log(`  Total turns: ${totalTurns}`);
-  console.log(`  Phases completed: ${summaries.length}`);
-  console.log(`  Final phase: ${currentPhase} (${getPhaseConfig(currentPhase)?.name})`);
-  console.log(`  Total cost: $${cumulativeCost.toFixed(4)}`);
-  console.log(`  Messages: ${gfMessages.length}`);
-  console.log(`  Research calls: ${researchLog.length}`);
-  if (researchLog.length > 0) {
-    console.log(`  Research log:`);
-    for (const entry of researchLog) {
-      console.log(`    - [${entry.timestamp}] ${entry.source}: "${entry.query}" -> ${entry.resultCount} results${entry.error ? ` (${entry.error})` : ""}`);
+  if (phaseMessages.length > 0) {
+    const finalSummary = await summarizePhase(currentPhase, phaseMessages);
+    if (finalSummary) {
+      summaries.push({ phase: currentPhase, completedAt: Date.now(), data: finalSummary });
     }
   }
-  console.log(`  Homework loop: ${homeworkData ? "completed" : "not reached"}`);
-  if (homeworkData) {
-    console.log(`    Idea direction: ${homeworkData.ideaDirection}`);
-    console.log(`    Debriefs: ${homeworkData.debriefNames.join(", ")}`);
-  }
-  console.log("=".repeat(70));
+
+  // ── Evaluate ─────────────────────────────────────────────────────────────
+
+  const evaluation = await evaluateSimulation(client, transcript, {
+    totalTurns,
+    phasesCompleted: summaries.length,
+    researchCallCount: researchLog.length,
+    homeworkCompleted: !!homeworkData,
+  });
+
+  // ── Duration & Cost ────────────────────────────────────────────────────
+
+  const durationMs = Date.now() - startTime;
+  const durationMinutes = Math.round(durationMs / 60000);
+  const estimatedCost = (globalInputTokens * 3 + globalOutputTokens * 15) / 1_000_000;
+
+  // ── Return simulation data for file generation ─────────────────────────
+
+  return {
+    metadata: {
+      persona: "Marcus Lindqvist",
+      model: MODEL,
+      timestamp: new Date().toISOString(),
+      totalTurns,
+      phasesCompleted: summaries.length,
+      durationMinutes,
+      estimatedCostUSD: parseFloat(estimatedCost.toFixed(2)),
+    },
+    transcript,
+    phaseSummaries: summaries,
+    researchLog,
+    homeworkLoop: {
+      prepForm: homeworkData ? "Provided during Phase 4" : null,
+      debriefs: homeworkData ? homeworkData.debriefNames : [],
+      debriefContent: homeworkData ? homeworkData.debriefContent : null,
+      completed: !!homeworkData,
+    },
+    evaluation,
+    cumulativeCost,
+  };
 }
 
-simulate().catch((err) => {
-  console.error("Error:", err.message);
-  console.error(err.stack);
+// ── Output File Generation ──────────────────────────────────────────────────
+
+function generateTimestamp() {
+  return new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+}
+
+function generateTranscriptMd(data) {
+  const { metadata, transcript, phaseSummaries, researchLog, homeworkLoop } = data;
+
+  let md = `# Gap Finder Simulation: Marcus Lindqvist
+
+**Date:** ${metadata.timestamp}
+**Model:** ${metadata.model}
+**Total Turns:** ${metadata.totalTurns}
+**Phases Completed:** ${metadata.phasesCompleted}
+**Duration:** ${metadata.durationMinutes} minutes
+
+---
+
+`;
+
+  let currentPhase = -1;
+  for (const entry of transcript) {
+    if (entry.phase !== currentPhase) {
+      if (currentPhase !== -1) {
+        // Add phase transition marker
+        const summary = phaseSummaries.find((s) => s.phase === currentPhase);
+        if (summary) {
+          md += `\n${"=".repeat(3)} PHASE TRANSITION: Phase ${currentPhase} -> Phase ${entry.phase} ${"=".repeat(3)}\n`;
+          md += `**Phase ${currentPhase} Summary:** ${JSON.stringify(summary.data)}\n\n---\n\n`;
+        }
+      }
+      currentPhase = entry.phase;
+      const phaseConfig = PHASES.find((p) => p.number === entry.phase);
+      md += `## Phase ${entry.phase}: ${phaseConfig?.name || "Unknown"}\n\n`;
+    }
+
+    md += `### Turn ${entry.turn}\n`;
+    md += `**${entry.role}:** ${entry.content}\n\n`;
+  }
+
+  // Research Log
+  if (researchLog.length > 0) {
+    md += `---\n\n## Research Log\n\n`;
+    md += `| Time | Source | Query | Results |\n`;
+    md += `|------|--------|-------|---------|\n`;
+    for (const entry of researchLog) {
+      md += `| ${entry.timestamp} | ${entry.source} | "${entry.query}" | ${entry.resultCount} results${entry.error ? ` (${entry.error})` : ""} |\n`;
+    }
+    md += "\n";
+  }
+
+  // Homework Loop
+  if (homeworkLoop.completed) {
+    md += `## Homework Loop\n\n`;
+    md += `### Prep Form\nProvided by Gap Finder during Phase 4\n\n`;
+    md += `### Time Break\n3 days later...\n\n`;
+    if (homeworkLoop.debriefContent) {
+      md += `### Debriefs\n\n${homeworkLoop.debriefContent}\n\n`;
+    }
+  }
+
+  // Stats
+  const marcusMessages = transcript.filter((t) => t.role === "Marcus").length;
+  const gfMessages = transcript.filter((t) => t.role === "Gap Finder").length;
+  md += `## Stats\n\n`;
+  md += `- Total messages: ${transcript.length}\n`;
+  md += `- Marcus messages: ${marcusMessages}\n`;
+  md += `- Gap Finder messages: ${gfMessages}\n`;
+  md += `- Research calls: ${researchLog.length}\n`;
+  md += `- Phases completed: ${metadata.phasesCompleted}\n`;
+  md += `- Total duration: ${metadata.durationMinutes} minutes\n`;
+  md += `- Estimated API cost: ~$${metadata.estimatedCostUSD}\n`;
+
+  return md;
+}
+
+function generateEvaluationMd(data) {
+  const { metadata, evaluation } = data;
+
+  let md = `# Evaluation: Marcus Lindqvist Simulation
+
+**Date:** ${metadata.timestamp}
+**Total Score:** ${evaluation.totalScore}/${evaluation.totalPossible}
+
+---
+
+## Scoring
+
+| Dimension | Score | Max | Notes |
+|-----------|-------|-----|-------|
+`;
+
+  for (const dim of evaluation.dimensions) {
+    const brief = (dim.improvements || "").slice(0, 60);
+    md += `| ${dim.name} | ${dim.score} | ${dim.maxScore} | ${brief} |\n`;
+  }
+  md += `| **TOTAL** | **${evaluation.totalScore}** | **${evaluation.totalPossible}** | |\n`;
+
+  md += `\n---\n\n## Detailed Analysis\n\n`;
+
+  for (let i = 0; i < evaluation.dimensions.length; i++) {
+    const dim = evaluation.dimensions[i];
+    md += `### ${i + 1}. ${dim.name} (${dim.score}/${dim.maxScore})\n\n`;
+
+    if (dim.phaseBreakdown) {
+      md += `**Phase Breakdown:**\n`;
+      for (const [phase, score] of Object.entries(dim.phaseBreakdown)) {
+        md += `- Phase ${phase}: ${score}/5\n`;
+      }
+      md += "\n";
+    }
+
+    if (dim.evidence && dim.evidence.length > 0) {
+      md += `**Evidence:**\n`;
+      for (const e of dim.evidence) {
+        md += `- ${e}\n`;
+      }
+      md += "\n";
+    }
+
+    if (dim.improvements) {
+      md += `**Improvements:** ${dim.improvements}\n\n`;
+    }
+  }
+
+  md += `---\n\n## Summary\n\n${evaluation.summary}\n\n`;
+  md += `**Top Strength:** ${evaluation.topStrength}\n`;
+  md += `**Top Weakness:** ${evaluation.topWeakness}\n`;
+
+  return md;
+}
+
+function writeOutputFiles(data) {
+  const outputDir = join(process.cwd(), "scripts", "simulations");
+  mkdirSync(outputDir, { recursive: true });
+
+  const ts = generateTimestamp();
+  const baseName = `marcus-${ts}`;
+
+  const transcriptPath = join(outputDir, `${baseName}.md`);
+  const evalPath = join(outputDir, `${baseName}-eval.md`);
+  const jsonPath = join(outputDir, `${baseName}.json`);
+
+  writeFileSync(transcriptPath, generateTranscriptMd(data), "utf-8");
+  writeFileSync(evalPath, generateEvaluationMd(data), "utf-8");
+  writeFileSync(jsonPath, JSON.stringify(data, null, 2), "utf-8");
+
+  return { transcriptPath, evalPath, jsonPath };
+}
+
+// ── Graceful shutdown handler ───────────────────────────────────────────────
+
+let partialData = null;
+
+process.on("SIGINT", () => {
+  console.log("\n\nSIGINT received -- saving partial results...");
+  if (partialData) {
+    try {
+      const files = writeOutputFiles(partialData);
+      console.log("Partial results saved:");
+      console.log(`  ${files.transcriptPath}`);
+      console.log(`  ${files.jsonPath}`);
+    } catch (err) {
+      console.error("Failed to save partial results:", err.message);
+    }
+  }
   process.exit(1);
 });
+
+// ── Entry Point ─────────────────────────────────────────────────────────────
+
+async function main() {
+  try {
+    const data = await simulate();
+    if (!data) {
+      console.log("Simulation aborted early.");
+      return;
+    }
+
+    // Store for SIGINT handler
+    partialData = data;
+
+    // Write output files
+    const files = writeOutputFiles(data);
+
+    // CLI output
+    console.log("\n" + "=".repeat(55));
+    console.log("SIMULATION COMPLETE");
+    console.log("=".repeat(55));
+    console.log();
+    console.log(`Total Score: ${data.evaluation.totalScore}/${data.evaluation.totalPossible}`);
+    console.log(`Duration: ${data.metadata.durationMinutes} minutes`);
+    console.log(`Estimated Cost: $${data.metadata.estimatedCostUSD}`);
+    console.log(`Phases Completed: ${data.metadata.phasesCompleted}`);
+    console.log();
+    console.log("Files:");
+    console.log(`  ${files.transcriptPath}`);
+    console.log(`  ${files.evalPath}`);
+    console.log(`  ${files.jsonPath}`);
+    console.log("=".repeat(55));
+  } catch (err) {
+    console.error("Error:", err.message);
+    console.error(err.stack);
+
+    // Try to save partial results
+    if (partialData) {
+      console.log("\nSaving partial results...");
+      try {
+        const files = writeOutputFiles(partialData);
+        console.log(`  ${files.transcriptPath}`);
+        console.log(`  ${files.jsonPath}`);
+      } catch (saveErr) {
+        console.error("Failed to save partial results:", saveErr.message);
+      }
+    }
+
+    process.exit(1);
+  }
+}
+
+main();
