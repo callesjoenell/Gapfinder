@@ -365,6 +365,19 @@ Phase 6: Instructor View (v2)
 
 Note: Phase 7 (Research Tools) depends on Phase 2 (Chat Core) and can be built independently of Phases 3-5. It enhances the methodology's Phase 1-2 (Find Gaps, Research) with actual research capabilities.
 
+### Phase 9: E2E Conversation Simulation
+
+**Goal:** End-to-end test of the Gap Finder conversation system using a simulated user persona (Marcus Lindqvist) played by Claude, validating conversation quality, phase progression, research integration, homework loops, and idea evolution across all 6 phases (0-5).
+
+**Depends on:** Phase 8
+
+**Plans:** 3 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Core simulation engine: Marcus persona (organic ideas), system prompt port, phase transitions, energy/coverage tracking
+- [ ] 09-02-PLAN.md — Research integration (real API calls via tool_use) + homework loop simulation (Phase 4→5)
+- [ ] 09-03-PLAN.md — Evaluation rubric (8-dimension auto-scoring) + output file generation (transcript, eval, JSON)
+
 ---
 
 *Roadmap created: 2025-01-22*
