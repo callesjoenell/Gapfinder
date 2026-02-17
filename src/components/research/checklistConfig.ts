@@ -1,4 +1,4 @@
-export type ChecklistType = "facebook_groups" | "linkedin" | "twitter" | "amazon_reviews";
+export type ChecklistType = "facebook_groups" | "linkedin" | "twitter" | "amazon_reviews" | "conversation_prep" | "conversation_debrief";
 
 export interface ChecklistField {
   id: string;
@@ -83,6 +83,51 @@ export const CHECKLIST_CONFIGS: Record<ChecklistType, ChecklistConfig> = {
       { id: "productsReviewed", label: "Products Reviewed", placeholder: "List 2-3 products you analyzed", type: "text", required: true },
       { id: "topComplaints", label: "Top Complaints (from 1-2 star)", placeholder: "What do negative reviews say? Copy specific quotes.", type: "textarea", required: true, helpText: "Focus on recurring themes, not one-off issues" },
       { id: "missingFeatures", label: "Missing Features Mentioned", placeholder: "What do reviewers wish the product had?", type: "textarea" },
+    ],
+  },
+
+  conversation_prep: {
+    type: "conversation_prep",
+    title: "Customer Conversation Prep",
+    description: "Prepare for real conversations with potential customers. Print or screenshot this before you go.",
+    instructions: [
+      "Identify 3-5 specific people to talk to (from Phase 4)",
+      "Reach out via warm intro, DM, or community — say you're exploring an idea and want 15 minutes",
+      "Use the questions below as a guide, not a script — follow their energy",
+      "Don't pitch. Don't sell. Just listen and learn.",
+    ],
+    fields: [
+      { id: "person1", label: "Person 1", placeholder: "Name + how you'll reach them (e.g., 'Sarah — DM on LinkedIn')", type: "text", required: true },
+      { id: "person2", label: "Person 2", placeholder: "Name + how you'll reach them", type: "text", required: true },
+      { id: "person3", label: "Person 3", placeholder: "Name + how you'll reach them", type: "text" },
+      { id: "person4", label: "Person 4", placeholder: "Name + how you'll reach them", type: "text" },
+      { id: "person5", label: "Person 5", placeholder: "Name + how you'll reach them", type: "text" },
+      { id: "openingQuestion", label: "Your Opening Question", placeholder: "e.g., 'Tell me about the last time you tried to...' or 'What does your ideal [experience] look like?'", type: "textarea", required: true, helpText: "Start broad. Let them talk. Follow the energy." },
+      { id: "keyAssumptions", label: "Key Assumptions to Test", placeholder: "What do you BELIEVE but haven't confirmed? List 2-3 assumptions.", type: "textarea", required: true, helpText: "These are the things that need to be true for your idea to work." },
+      { id: "whatToListenFor", label: "What to Listen For", placeholder: "e.g., 'Do they mention workarounds? Do they light up when describing the experience? Do they get emotional?'", type: "textarea", helpText: "Behavior and emotion > opinions and politeness" },
+    ],
+  },
+
+  conversation_debrief: {
+    type: "conversation_debrief",
+    title: "Customer Conversation Debrief",
+    description: "Capture what you learned from a real conversation. Fill this in right after — details fade fast.",
+    instructions: [
+      "Fill this in within an hour of each conversation",
+      "Focus on what they DID and FELT, not what they SAID they'd do",
+      "Be honest — 'polite interest' is not validation",
+      "One form per conversation (submit multiple)",
+    ],
+    fields: [
+      { id: "personName", label: "Who did you talk to?", placeholder: "Name + brief context (role, background)", type: "text", required: true },
+      { id: "relationship", label: "How do you know them?", placeholder: "e.g., 'Friend of a friend', 'Cold DM on Twitter', 'Met at meetup'", type: "text", required: true },
+      { id: "topInsight", label: "Single biggest insight", placeholder: "If you could only remember one thing from this conversation, what is it?", type: "textarea", required: true, helpText: "The thing that surprised you or changed your thinking" },
+      { id: "behaviorEvidence", label: "What are they DOING today?", placeholder: "How do they currently handle this? What workarounds, tools, or rituals do they use?", type: "textarea", required: true, helpText: "Actions > words. What they DO is more revealing than what they SAY." },
+      { id: "emotionalMoments", label: "Emotional moments", placeholder: "When did they lean in, get animated, frustrated, or light up? What triggered it?", type: "textarea", required: true, helpText: "Energy = signal. Track what made them come alive or get frustrated." },
+      { id: "moneyTimeSignals", label: "Money/time signals", placeholder: "Have they spent money or significant time on this? What and how much?", type: "textarea", helpText: "Past spending is the strongest validation signal" },
+      { id: "surprises", label: "What surprised you?", placeholder: "What did you learn that you didn't expect? Where were your assumptions wrong?", type: "textarea" },
+      { id: "quotableLines", label: "Quotable lines", placeholder: "Exact phrases they used that stuck with you. Their words, not yours.", type: "textarea", helpText: "These become your marketing copy later" },
+      { id: "strengthenedOrWeakened", label: "Did this strengthen or weaken your idea?", placeholder: "Be honest. 'They were polite about it' = weakened. 'They asked when they could use it' = strengthened.", type: "textarea", required: true },
     ],
   },
 };

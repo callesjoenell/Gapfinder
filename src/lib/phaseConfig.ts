@@ -232,7 +232,7 @@ OWNERSHIP SIGNALS:
     timeEstimate: "20-25 min",
     instructions: `Phase 4: Customers
 
-Goal: Move from "people who might use this" to SPECIFIC individuals you can reach.
+Goal: Move from "people who might use this" to SPECIFIC individuals you can reach — then prepare to actually talk to them.
 
 APPROACH (Switch Interview Style):
 - Find the trigger moment — could be either:
@@ -248,7 +248,17 @@ SPECIFICITY TEST:
 - Does user know what these people read, where they hang out online?
 - For community/experience ideas: Are these people already finding each other? What do they do together now?
 
-WARNING: Generic personas = generic ideas. Push for REAL people.`,
+WARNING: Generic personas = generic ideas. Push for REAL people.
+
+HOMEWORK LOOP — SENDING THEM OUT:
+Once user has identified 3-5 specific people to talk to:
+1. Help them prepare: what to ask, what to listen for, what assumptions to test
+2. Tell them: "Type 'show conversation prep' to get a prep form you can take with you"
+3. Be explicit: "Go have these conversations. Take notes. Come back and we'll debrief."
+4. When they return, open Phase 5 by saying: "Welcome back. Tell me — who did you talk to, and what happened?"
+5. Tell them: "Type 'show debrief' to capture your conversation while it's fresh — one per person"
+
+This is the CRITICAL moment in the process. Everything before was thinking. This is doing. Don't rush past it.`,
   },
   {
     number: 5,
@@ -273,7 +283,17 @@ WARNING: Generic personas = generic ideas. Push for REAL people.`,
     timeEstimate: "20-25 min",
     instructions: `Phase 5: Problem / Opportunity Validation
 
-Goal: Confirm the need exists AND is strong enough to pay for (or invest time/attention in).
+Goal: Confirm the need exists AND is strong enough to pay for (or invest time/attention in) — based on REAL conversations, not assumptions.
+
+OPENING — DEBRIEF FIRST:
+If user has conversation debrief forms submitted, start by analyzing them:
+- "I can see you talked to [N] people. Let's unpack what you learned."
+- Look for PATTERNS across conversations, not individual anecdotes
+- Highlight: where did multiple people light up? Where did they go quiet?
+
+If user hasn't submitted debriefs yet:
+- "Before we validate, I need to know what happened in your conversations. Type 'show debrief' to capture each one."
+- Don't proceed with validation until at least 2-3 debriefs are submitted
 
 APPROACH (Mom Test):
 - Ask about their life, not your idea
@@ -281,23 +301,33 @@ APPROACH (Mom Test):
 - Compliments are not data
 - Specific facts trump opinions
 
+DEBRIEF ANALYSIS QUESTIONS:
+- "Across your conversations, what came up more than once?"
+- "Who seemed most energized? What were they talking about when that happened?"
+- "Did anyone surprise you — said something you didn't expect?"
+- "Did anyone's reaction make you doubt your idea? That's valuable data."
+
 FOR PROBLEM-DRIVEN IDEAS:
-- "What happened last time you faced this?"
-- "What did you do? What did that cost you?"
-- "Have you tried to solve this before? What happened?"
-- "Why haven't you solved this already?"
+- "What happened last time they faced this?"
+- "What did they do? What did that cost them?"
+- "Have they tried to solve this before? What happened?"
 
 FOR EXPERIENCE/OPPORTUNITY-DRIVEN IDEAS:
-- "What's the closest thing to this that exists today? How often do you seek it out?"
-- "What would you give up to have this experience? (time, money, travel)"
-- "When you imagine this existing, what excites you most?"
-- "What do you do NOW to get even a partial version of this feeling?"
+- "What's the closest thing to this that exists today? How often do they seek it out?"
+- "What would they give up to have this experience? (time, money, travel)"
+- "What do they do NOW to get even a partial version of this feeling?"
 
 VALIDATION SIGNALS (both types):
 - Customer has actively sought this (tried to solve OR sought the experience)
 - Customer can quantify what they'd invest (time/money/attention)
 - Need is frequent or intense enough to remember details
-- Customer gets emotional when describing it (frustration OR longing/excitement)`,
+- Customer gets emotional when describing it (frustration OR longing/excitement)
+- Multiple people independently confirm the same pattern
+
+RED FLAGS:
+- "That sounds cool" with no follow-up = polite disinterest
+- User can't get people to agree to a 15-minute call = weak signal
+- Everyone was nice but nobody asked "when can I use this?" = validate harder`,
   },
   {
     number: 6,

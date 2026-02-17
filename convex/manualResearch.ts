@@ -9,6 +9,7 @@ export const submitManualResearch = mutation({
     type: v.string(), // "facebook_groups", "linkedin", "twitter", "amazon_reviews"
     data: v.object({
       // Flexible fields - all optional since different types have different fields
+      // Platform research fields
       groupName: v.optional(v.string()),
       groupSize: v.optional(v.string()),
       topPainPosts: v.optional(v.string()),
@@ -25,6 +26,25 @@ export const submitManualResearch = mutation({
       productsReviewed: v.optional(v.string()),
       topComplaints: v.optional(v.string()),
       missingFeatures: v.optional(v.string()),
+      // Conversation prep fields
+      person1: v.optional(v.string()),
+      person2: v.optional(v.string()),
+      person3: v.optional(v.string()),
+      person4: v.optional(v.string()),
+      person5: v.optional(v.string()),
+      openingQuestion: v.optional(v.string()),
+      keyAssumptions: v.optional(v.string()),
+      whatToListenFor: v.optional(v.string()),
+      // Conversation debrief fields
+      personName: v.optional(v.string()),
+      relationship: v.optional(v.string()),
+      topInsight: v.optional(v.string()),
+      behaviorEvidence: v.optional(v.string()),
+      emotionalMoments: v.optional(v.string()),
+      moneyTimeSignals: v.optional(v.string()),
+      surprises: v.optional(v.string()),
+      quotableLines: v.optional(v.string()),
+      strengthenedOrWeakened: v.optional(v.string()),
     }),
   },
   handler: async (ctx, args) => {
@@ -99,6 +119,8 @@ export const getManualResearchForContext = query({
         linkedin: "LinkedIn Research",
         twitter: "Twitter/X Research",
         amazon_reviews: "Amazon Reviews Research",
+        conversation_prep: "Customer Conversation Prep",
+        conversation_debrief: "Customer Conversation Debrief",
       };
 
       const entries = Object.entries(f.data)

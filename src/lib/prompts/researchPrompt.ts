@@ -87,9 +87,11 @@ export function getChecklistTriggerPatterns(): RegExp[] {
  */
 export function parseChecklistType(
   message: string
-): "facebook_groups" | "linkedin" | "twitter" | "amazon_reviews" | null {
+): "facebook_groups" | "linkedin" | "twitter" | "amazon_reviews" | "conversation_prep" | "conversation_debrief" | null {
   const lower = message.toLowerCase();
 
+  if (lower.includes("conversation prep") || lower.includes("interview prep") || lower.includes("prep checklist")) return "conversation_prep";
+  if (lower.includes("conversation debrief") || lower.includes("debrief") || lower.includes("talked to") && lower.includes("checklist")) return "conversation_debrief";
   if (lower.includes("facebook")) return "facebook_groups";
   if (lower.includes("linkedin")) return "linkedin";
   if (lower.includes("twitter") || lower.includes("x ")) return "twitter";
