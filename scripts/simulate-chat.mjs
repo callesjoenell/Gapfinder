@@ -1280,7 +1280,16 @@ Return JSON:
   "totalPossible": 100,
   "summary": "2-3 sentence overall assessment",
   "topStrength": "the best thing about this conversation",
-  "topWeakness": "the biggest area for improvement"
+  "topWeakness": "the biggest area for improvement",
+  "ideaEvolution": {
+    "phase0_threads": "What life threads emerged during Know Yourself (2-3 bullet points)",
+    "phase1_gaps": "What gaps/opportunities were identified in Find Gaps (2-3 bullet points)",
+    "phase2_research": "What research confirmed or challenged (1-2 bullet points)",
+    "phase3_idea": "The crystallized idea at Phase 3 — one clear sentence of what Marcus decided to pursue",
+    "phase4_customers": "Who the target customer became and key assumptions",
+    "phase5_final": "The final validated idea after homework debriefs — how it evolved from phase 3",
+    "evolution_summary": "2-3 sentences: how the idea transformed from scattered threads to final form. What was the key turning point?"
+  }
 }`;
 
   try {
@@ -1335,6 +1344,7 @@ Return JSON:
       summary: `Evaluation parsing failed: ${error.message}`,
       topStrength: "N/A",
       topWeakness: "N/A",
+      ideaEvolution: null,
     };
   }
 }
@@ -2035,6 +2045,19 @@ function generateEvaluationMd(data) {
     }
   }
 
+  // Idea Evolution section
+  if (evaluation.ideaEvolution) {
+    const ie = evaluation.ideaEvolution;
+    md += `---\n\n## Idea Evolution\n\n`;
+    md += `### Phase 0: Know Yourself — Threads\n${ie.phase0_threads}\n\n`;
+    md += `### Phase 1: Find Gaps — Opportunities\n${ie.phase1_gaps}\n\n`;
+    md += `### Phase 2: Research — Evidence\n${ie.phase2_research}\n\n`;
+    md += `### Phase 3: Your Idea — Crystallized\n**${ie.phase3_idea}**\n\n`;
+    md += `### Phase 4: Customers — Target\n${ie.phase4_customers}\n\n`;
+    md += `### Phase 5: Validation — Final Idea\n**${ie.phase5_final}**\n\n`;
+    md += `### How It Evolved\n${ie.evolution_summary}\n\n`;
+  }
+
   md += `---\n\n## Summary\n\n${evaluation.summary}\n\n`;
   md += `**Top Strength:** ${evaluation.topStrength}\n`;
   md += `**Top Weakness:** ${evaluation.topWeakness}\n`;
@@ -2104,6 +2127,20 @@ async function main() {
     console.log(`Duration: ${data.metadata.durationMinutes} minutes`);
     console.log(`Estimated Cost: $${data.metadata.estimatedCostUSD}`);
     console.log(`Phases Completed: ${data.metadata.phasesCompleted}`);
+
+    if (data.evaluation.ideaEvolution) {
+      const ie = data.evaluation.ideaEvolution;
+      console.log();
+      console.log("-".repeat(55));
+      console.log("IDEA EVOLUTION");
+      console.log("-".repeat(55));
+      console.log(`Phase 3 idea: ${ie.phase3_idea}`);
+      console.log(`Final idea:   ${ie.phase5_final}`);
+      console.log();
+      console.log(ie.evolution_summary);
+      console.log("-".repeat(55));
+    }
+
     console.log();
     console.log("Files:");
     console.log(`  ${files.transcriptPath}`);
