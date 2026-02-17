@@ -19,13 +19,13 @@
 ## Current Position
 
 **Milestone:** v1 continued
-**Phase:** 8 - Conversation Design (In Progress)
-**Status:** Executing wave 2
-**Last Activity:** 2026-02-17 - Completed 08-03-PLAN.md (Conversation Analysis Actions)
+**Phase:** 8 - Conversation Design (Complete)
+**Status:** Phase complete - all 4 plans executed
+**Last Activity:** 2026-02-17 - Completed 08-04-PLAN.md (End-to-End Integration)
 
 **Progress:**
-[█████████░] 91%
-[█████████░] 88% (28/32 plans complete for v1)
+[█████████░] 94%
+[█████████░] 94% (30/32 plans complete for v1)
 ```
 
 **Phase Breakdown:**
@@ -38,16 +38,16 @@
 | 5 - Idea Card | 3 | Complete + Verified |
 | 6 - Instructor View | — | Deferred to v2 |
 | 7 - Research Tools | 4 | Complete (07-01 through 07-04) |
-| 8 - Conversation Design | 4 | In Progress (08-01, 08-02 complete) |
+| 8 - Conversation Design | 4 | Complete (08-01 through 08-04) |
 
 ---
 
 ## Performance Metrics
 
-**Plans Completed:** 29
+**Plans Completed:** 30
 **Plans Total:** 32 (Phases 1-5, 7-8)
 **Success Rate:** 100%
-**Blockers Resolved:** 10 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency, auth import pattern, TypeScript strict mode types)
+**Blockers Resolved:** 13 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency, auth import pattern, TypeScript strict mode types, internal API functions, Convex tsconfig includes, Zod enum type)
 
 ---
 
@@ -144,8 +144,12 @@
 | Dynamic schema generation via createCoverageSchema | Phase-specific Zod schemas built from coverageTopics config | 2026-02-17 |
 | Intensity-based trigger filtering | Low/medium/high modes balance noise vs research opportunity detection | 2026-02-17 |
 | Rescoring enforces honest assessment | Scores CAN go down, confidence levels required, explanations for all changes | 2026-02-17 |
+| Coverage progress replaces old heuristic when available | Fallback preserved for backward compatibility | 2026-02-17 |
+| Fire-and-forget coverage extraction | After each assistant response (non-blocking) | 2026-02-17 |
+| Internal API versions for conversationState | Actions call internal mutations/queries | 2026-02-17 |
 | Phase 08 P02 | 251 | 2 tasks | 2 files |
 | Phase 08 P03 | 5m 29s | 2 tasks | 2 files |
+| Phase 08 P04 | 7m 12s | 2 tasks | 10 files |
 
 ### Technical Findings
 
@@ -252,15 +256,15 @@ Create account and purchase credits ($10 for 100K keywords)
 
 ## Session Continuity
 
-**Last Session:** 2026-02-17T09:49:56.911Z
-**Last Action:** Completed 08-03-PLAN.md (Conversation Analysis Actions)
-**Next Action:** Execute 08-02-PLAN.md (Coverage Extraction Action) or 08-04-PLAN.md (Dynamic Rescoring Action)
+**Last Session:** 2026-02-17T10:59:47Z
+**Last Action:** Completed 08-04-PLAN.md (End-to-End Integration)
+**Next Action:** Review Phase 8 completion, proceed to remaining v1 phases
 
-**Phase 8 In Progress:**
+**Phase 8 Complete:**
 - [x] 08-01-PLAN.md - Coverage Tracking Infrastructure (coverageState table, CRUD operations, Zod schemas for extraction/triggers/rescoring)
-- [ ] 08-02-PLAN.md - Coverage Extraction Action
+- [x] 08-02-PLAN.md - System Prompt Overhaul (journey framing, pacing, coverage maps, research intensity)
 - [x] 08-03-PLAN.md - Conversation Analysis Actions (extractCoverage + detectTriggers actions, all-phase research with source tracking)
-- [ ] 08-04-PLAN.md - Dynamic Rescoring Action
+- [x] 08-04-PLAN.md - End-to-End Integration (useStreamingChat wiring, coverage UI, research intensity control)
 
 **Phase 7 Complete:**
 - [x] 07-01-PLAN.md - Research Tools Foundation (Claude tool definitions, API wrappers for Reddit/HN/Tavily/ProductHunt/SO)
@@ -306,4 +310,4 @@ Create account and purchase credits ($10 for 100K keywords)
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-02-17 (Phase 8 wave 1 - 08-01 complete, coverage tracking infrastructure with Zod schemas)*
+*Last updated: 2026-02-17 (Phase 8 complete - all 4 plans executed, conversation design system live)*
