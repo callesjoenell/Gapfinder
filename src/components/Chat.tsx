@@ -11,6 +11,8 @@ import { usePhaseCompletion } from "../hooks/usePhaseCompletion";
 import { ResearchPanel } from "./research/ResearchPanel";
 import type { ChecklistType } from "./research/checklistConfig";
 import { useCoverageState } from "../hooks/useCoverageState";
+import { useResearchSuggestions } from "../hooks/useResearchSuggestions";
+import { SuggestionChips, ResearchQueue, ResearchQueueBadge } from "./research";
 
 interface ChatProps {
   sessionId: Id<"sessions">;
@@ -35,6 +37,7 @@ export function Chat({
 }: ChatProps) {
   const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
   const [showKeywordLookup, setShowKeywordLookup] = useState(false);
+  const [isQueueOpen, setIsQueueOpen] = useState(false);
   const scrollToPhaseRef = useRef<((phase: number) => void) | null>(null);
   const lastMessageCountRef = useRef(0);
 
@@ -69,6 +72,24 @@ export function Chat({
     detectedChecklistType,
     clearChecklistType,
   } = useStreamingChat(sessionId, currentPhase, sessionPath);
+
+  // Research suggestions based on conversation context
+  const {
+    suggestions,
+    queuedItems,
+    queueCount,
+    triggerSuggestion,
+    saveForLater,
+    dismissSuggestion,
+    triggerQueueItem,
+    dismissQueueItem,
+    pendingResearch,
+    clearPendingResearch,
+  } = useResearchSuggestions(
+    sessionId,
+    messages ? messages.map(m => ({ role: m.role, content: m.content })) : [],
+    currentPhase
+  );
 
   // Use scroll restoration hook
   const containerRef = useScrollRestoration({
@@ -113,6 +134,24 @@ export function Chat({
     }
   }, [messages, shouldAssess, assessCompletion, isAssessing]);
 
+  // Handle research triggers from suggestions/queue
+  useEffect(() => {
+    if (!pendingResearch) return;
+
+    if (pendingResearch.type === "checklist" && pendingResearch.checklistType) {
+      // Send message to trigger checklist
+      sendMessage(`show checklist for ${pendingResearch.checklistType.replace("_", " ")}`);
+    } else if (pendingResearch.type === "keywords") {
+      setShowKeywordLookup(true);
+    } else if (pendingResearch.type === "auto") {
+      // For auto research, send a message that triggers Claude to use research tools
+      const researchPrompt = `Please research this topic: ${pendingResearch.query}`;
+      sendMessage(researchPrompt);
+    }
+
+    clearPendingResearch();
+  }, [pendingResearch, clearPendingResearch, sendMessage]);
+
   // Handle scroll to phase callback from MessageList
   const handleScrollToPhaseReady = useCallback(
     (scrollFn: (phase: number) => void) => {
@@ -148,6 +187,14 @@ export function Chat({
 
   return (
     <div className="flex flex-col h-full bg-gray-50 relative">
+      {/* Research queue badge - shown when items are saved */}
+      <div className="absolute top-2 right-2 z-10">
+        <ResearchQueueBadge
+          count={queueCount}
+          onClick={() => setIsQueueOpen(true)}
+        />
+      </div>
+
       <IdeaCard sessionId={sessionId} currentPhase={currentPhase} />
       <PhaseProgressBar
         sessionId={sessionId}
@@ -202,6 +249,16 @@ export function Chat({
             />
           </svg>
         </button>
+      )}
+
+      {/* Suggestion chips - only show for research phases */}
+      {currentPhase <= 2 && (
+        <SuggestionChips
+          suggestions={suggestions}
+          onTrigger={triggerSuggestion}
+          onSaveForLater={saveForLater}
+          onDismiss={dismissSuggestion}
+        />
       )}
 
       <MessageInput
@@ -261,6 +318,15 @@ export function Chat({
         onClose={handleResearchPanelClose}
         onChecklistComplete={handleChecklistComplete}
         onKeywordResults={handleKeywordResults}
+      />
+
+      {/* Research queue drawer */}
+      <ResearchQueue
+        items={queuedItems}
+        isOpen={isQueueOpen}
+        onClose={() => setIsQueueOpen(false)}
+        onTrigger={triggerQueueItem}
+        onDismiss={dismissQueueItem}
       />
     </div>
   );
