@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Simulation output files (generated, may contain large transcripts)
+scripts/simulations/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
