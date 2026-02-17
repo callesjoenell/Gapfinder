@@ -121,4 +121,19 @@ export default defineSchema({
     searchedSources: v.optional(v.array(v.string())),
     lastUpdated: v.number(),
   }).index("by_session_phase", ["sessionId", "phase"]),
+
+  // Research queue for saved suggestions (07-06)
+  researchQueue: defineTable({
+    sessionId: v.id("sessions"),
+    type: v.string(),
+    label: v.string(),
+    description: v.string(),
+    query: v.string(),
+    source: v.string(),
+    priority: v.number(),
+    status: v.union(v.literal("pending"), v.literal("completed"), v.literal("dismissed")),
+    createdAt: v.number(),
+    completedAt: v.optional(v.number()),
+  }).index("by_session", ["sessionId"])
+    .index("by_session_status", ["sessionId", "status"]),
 });
