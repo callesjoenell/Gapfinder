@@ -121,6 +121,14 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **DATA-04**: Link participants to cohorts
 - [ ] **DATA-05**: Store named sessions per participant
 
+### Conversation Design
+
+- [ ] **CONV-01**: Each path (exploration/evaluation) opens with clear journey framing — what to expect, what "done" looks like
+- [ ] **CONV-02**: Claude proactively triggers research when user mentions claims, markets, competitors, or trends (not just phases 0-2)
+- [ ] **CONV-03**: Phase completion tracked through implicit conversation extraction, not explicit checklist questioning
+- [ ] **CONV-04**: Conversational pacing prevents question bombardment — follow energy, depth over breadth
+- [ ] **CONV-05**: Background coverage tracking tells Claude what's been covered vs what's thin, without exposing checklist to user
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -195,6 +203,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-03 | Phase 1 - Foundation | Complete |
 | DATA-04 | Phase 1 - Foundation | Deferred |
 | DATA-05 | Phase 1 - Foundation | Complete |
+| CONV-01 | Phase 8 - Conversation Design | Pending |
+| CONV-02 | Phase 8 - Conversation Design | Pending |
+| CONV-03 | Phase 8 - Conversation Design | Pending |
+| CONV-04 | Phase 8 - Conversation Design | Pending |
+| CONV-05 | Phase 8 - Conversation Design | Pending |
 
 **Coverage:**
 - v1 requirements: 28 total
