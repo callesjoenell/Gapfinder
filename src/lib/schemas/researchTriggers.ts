@@ -72,7 +72,7 @@ ${intensityGuidance[intensitySetting]}
 2. **competitor_mention**: User mentions existing products, companies, or alternatives
 3. **pain_point**: User describes specific problems or frustrations people experience
 4. **assumption**: User assumes something about customers, behavior, or feasibility
-5. **weak_positioning**: Idea sits at level 1-2 on the Need Depth Ladder — user describes USE CASES instead of a PERSON, lists multiple contexts where it's "nice" without identifying who NEEDS it most, frames value as convenience/entertainment rather than relief/transformation, says "anyone could use this" or "it's for everyone", or can't describe what life looks like WITHOUT this for a specific person
+5. **weak_positioning**: Idea sits at level 1-2 on the Need Depth Ladder — user describes USE CASES instead of a PERSON, lists multiple contexts where it's "nice" without identifying who NEEDS it most, says "anyone could use this" or "it's for everyone", or can't describe what a specific person's life/identity/community would look like WITH vs WITHOUT this. Applies equally to pain-driven ideas (no specific sufferer) AND aspiration/community ideas (no specific person longing for this experience or identity)
 
 **For each trigger:**
 - Quote the exact text that triggered it

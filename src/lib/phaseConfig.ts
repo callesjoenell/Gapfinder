@@ -27,7 +27,7 @@ export const PHASES: PhaseConfig[] = [
       "User has clear direction for Phase 1 research",
     ],
     coverageTopics: [
-      { key: "life_situation", label: "Life Situation", description: "Pain lived or experiences that shaped you" },
+      { key: "life_situation", label: "Life Situation", description: "Experiences that shaped you — pain overcome, joy discovered, or transformation made" },
       { key: "profession", label: "Profession", description: "Insider knowledge others don't have" },
       { key: "hobbies", label: "Hobbies", description: "Enthusiasm + community access" },
       { key: "skills_others_pay_for", label: "Skills Others Pay For", description: "Proven market value" },
@@ -111,9 +111,11 @@ When a gap sounds broadly appealing, apply the Deepening Protocol:
 SEGMENT DEPTH SIGNALS (marks "deep" on coverage):
 - User names a SPECIFIC person or vivid archetype, not a demographic
 - User can articulate WHY this is urgent/essential for that person (not just useful)
-- User describes what that person does TODAY without this (failed workarounds, emotional cost)
-- User shows personal connection — they've felt this need or deeply witnessed it in someone they know
-- The need sits at level 4-5 on the Need Depth Ladder: seeking or urgency, not just curiosity or interest
+- For pain-driven ideas: user describes failed workarounds and emotional cost of the status quo
+- For aspiration-driven ideas: user describes what the person does TODAY to get even a partial version (communities they join, premium they pay, DIY rituals they create) and what's still missing
+- For community/identity ideas: user describes the longing to belong, the identity they're building, what finding "their people" would mean
+- User shows personal connection — they've felt this need, this longing, or deeply witnessed it
+- The need sits at level 4-5 on the Need Depth Ladder: seeking or urgency (pain OR aspiration form)
 
 TIMING FACTORS (assess at least 4):
 1. Technology: Is new tech making something possible?
@@ -184,18 +186,27 @@ NEED ACUITY VALIDATION (refer to Need Depth System in main prompt):
 The most important research question: WHERE does the target segment sit on the Need Depth Ladder?
 
 Research that reveals level 4-5 (seeking/urgency):
+
+For pain-driven ideas:
 - People actively searching for solutions (Reddit threads, forum posts asking "how do I...")
-- Emotional language in discussions (frustration, desperation, longing, relief when finding partial solutions)
+- Emotional language: frustration, desperation, relief when finding partial solutions
 - People spending time/money on poor workarounds — the more effort, the higher the need
-- Recurring or high-intensity need (daily frustration, identity-level desire, life-stage pressure)
-- People describe transformation: how their life/identity would change, not just convenience gained
+- Recurring need (daily frustration, life-stage pressure)
+
+For aspiration/identity/community ideas (equally valid at level 4-5):
+- People forming communities around this desire (Discord servers, meetups, subreddits, hashtags)
+- People paying premium for adjacent experiences (retreats, masterclasses, memberships, festivals)
+- People creating DIY versions or rituals to get even a partial version of the feeling
+- Emotional language: longing, yearning, "I wish I could find...", "I want to be someone who..."
+- Identity investment: people already adopting labels, aesthetics, or behaviors associated with the aspiration
+- People describe how finding this community/experience would change who they ARE, not just what they DO
 
 Research that reveals level 1-2 (curiosity/interest):
 - Positive reactions but no follow-through ("cool idea" without action)
-- No existing workarounds — nobody has cared enough to cobble something together
-- Need only arises in specific events or rare occasions
+- No existing workarounds AND no existing communities forming around this desire
+- Need only arises in rare or low-stakes moments
 - "I'd try it if it was free" — willingness without investment
-- Discussion is about the product features, not about the person's experience
+- Discussion is about the product features, not about the person's experience or identity
 
 If research shows level 1-2 for the current target: DON'T ABANDON THE IDEA. The product may be right but the audience is wrong. Apply the Deepening Protocol:
 - "Research shows mild interest from this broad audience. That's useful — it tells us this isn't the right PERSON yet. Who in this space has the most intense version of this need?"
@@ -349,22 +360,30 @@ DEBRIEF ANALYSIS QUESTIONS:
 - "Did anyone surprise you — said something you didn't expect?"
 - "Did anyone's reaction make you doubt your idea? That's valuable data."
 
-FOR PROBLEM-DRIVEN IDEAS:
+FOR PROBLEM-DRIVEN IDEAS — find the STRUGGLING MOMENT:
 - "What happened last time they faced this?"
 - "What did they do? What did that cost them?"
 - "Have they tried to solve this before? What happened?"
 
-FOR EXPERIENCE/OPPORTUNITY-DRIVEN IDEAS:
-- "What's the closest thing to this that exists today? How often do they seek it out?"
-- "What would they give up to have this experience? (time, money, travel)"
-- "What do they do NOW to get even a partial version of this feeling?"
+FOR EXPERIENCE/IDENTITY/COMMUNITY IDEAS — find the CALLING MOMENT:
+- "When did they first realize they wanted to be this kind of person? What triggered that?"
+- "What's the closest thing to this that exists today? How often do they seek it out? What's missing?"
+- "What would they give up to have this experience or find this community? (time, money, travel, comfort)"
+- "What do they do NOW to get even a partial version of this feeling? (DIY rituals, adjacent communities, premium experiences)"
+- "What would it mean to finally FIND their people or BECOME who they want to be?"
 
-VALIDATION SIGNALS (both types):
-- Customer has actively sought this (tried to solve OR sought the experience)
+The calling moment is as powerful as the struggling moment. It sounds like:
+- "I've always wanted to..." / "I've been searching for..." / "I want to be someone who..."
+- The person has ALREADY been investing (time, money, identity) in the direction of this aspiration
+- They can describe specific attempts to get closer to this experience or identity
+
+VALIDATION SIGNALS (all types):
+- Customer has actively sought this (tried to solve, sought the experience, OR joined adjacent communities)
 - Customer can quantify what they'd invest (time/money/attention)
 - Need is frequent or intense enough to remember details
-- Customer gets emotional when describing it (frustration OR longing/excitement)
+- Customer gets emotional when describing it (frustration OR longing/excitement OR belonging hunger)
 - Multiple people independently confirm the same pattern
+- For community/identity ideas: people already forming informal groups, adopting identity markers, or paying premium for partial versions of this experience
 
 RED FLAGS:
 - "That sounds cool" with no follow-up = polite disinterest
@@ -436,11 +455,16 @@ TESTS:
 Goal: Honest assessment of idea viability across key dimensions.
 
 SCORING DIMENSIONS (1-5 each):
-1. Need intensity: How strongly do customers need or desire this? (urgent pain OR deep craving)
+1. Need intensity: How strongly do customers need or desire this? Assess on the Need Depth Ladder:
+   - 1 = Level 1-2 (curiosity/interest — no one is seeking this)
+   - 2-3 = Level 3 (desire — people want it but manage without)
+   - 4 = Level 4 (seeking — actively trying workarounds OR paying for partial versions of the experience)
+   - 5 = Level 5 (urgency — would rearrange priorities, either pain relief OR identity/belonging/transformation need)
+   Note: Pain-driven AND aspiration-driven needs can score 5. "I desperately need to solve X" and "I need to find my people / become this person" are equally powerful.
 2. Solution fit: Does your solution actually deliver the value?
 3. Market size: Is the market big enough to matter?
-4. Competitive moat: Why can't others copy this easily?
-5. Distribution: Can you reach customers efficiently?
+4. Competitive moat: Why can't others copy this easily? For community/identity ideas, moat often comes from network effects, culture, and belonging — not just features.
+5. Distribution: Can you reach customers efficiently? For community ideas, distribution is often organic — people who belong will recruit others.
 6. Founder fit: Does this leverage YOUR specific advantages?
 
 SCORING GUIDELINES:

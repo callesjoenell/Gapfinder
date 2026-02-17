@@ -71,17 +71,23 @@ ${currentCoverageText}
 Watch for moments where the user:
 - Provides longer, more detailed answers
 - Uses specific examples and stories
-- Shows emotional language ("frustrated", "obsessed", "love", "hate")
+- Shows emotional language — BOTH pain ("frustrated", "hate", "exhausted") AND aspiration ("obsessed", "love", "longing", "dream of", "called to", "yearning", "inspired")
 - Asks follow-up questions about their own answers
 - Mentions time investments ("spent 3 years", "been doing this since")
+- Describes identity or belonging signals ("I want to be someone who...", "I want to find my people", "I've always wanted to...")
+
+IMPORTANT: Aspiration and belonging signals are EQUALLY powerful energy signals as pain signals. A short but deeply felt message about identity ("I want to help people become who they really are") can carry as much energy as a long frustrated rant. Watch for emotional weight, not just message length.
 
 **Need Depth Assessment (for segment_depth and need_acuity topics):**
 When these topics appear in a phase, assess using the Need Depth Ladder:
 - Level 1-2 (surface): User describes use cases, broad audiences, convenience framing, "anyone could use this"
-- Level 3 (moderate): User names a specific audience with a real desire, but hasn't explored urgency or workarounds
-- Level 4-5 (deep): User names a specific PERSON or vivid archetype, describes their emotional state, identifies failed workarounds, and can explain why this is essential (not convenient) for that person
+- Level 3 (moderate): User names a specific audience with a real desire, but hasn't explored what they DO about it today
+- Level 4-5 (deep): User names a specific PERSON or vivid archetype AND one of these:
+  - Pain path: describes failed workarounds, emotional cost of status quo, urgency to change
+  - Aspiration path: describes what person does TODAY to chase this feeling (communities joined, premium paid, DIY rituals), what identity they're building, what "finding their people" would mean
+  - Community path: describes people already forming groups, adopting shared identity markers, creating informal versions of this experience
 
-Mark segment_depth/need_acuity as "deep" ONLY when the user has identified a person for whom the need is at level 4-5 — seeking or urgency, with evidence of emotional weight, failed alternatives, or identity-level significance.
+Mark segment_depth/need_acuity as "deep" when evidence shows level 4-5 need — whether the driver is pain relief, identity becoming, community belonging, or experience creation.
 
 Analyze the conversation and determine:
 1. Depth level for each topic
