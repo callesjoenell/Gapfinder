@@ -38,6 +38,8 @@ export default defineSchema({
       })),
       timestamp: v.number(),
     }))),
+    // Research intensity preference (08-01)
+    researchIntensity: v.optional(v.union(v.literal("low"), v.literal("medium"), v.literal("high"))),
     createdAt: v.number(),
     lastActiveAt: v.number(),
   })
@@ -105,4 +107,18 @@ export default defineSchema({
     creditsUsed: v.number(),
     lastUpdated: v.number(),
   }).index("by_user", ["userId"]),
+
+  // Coverage state for conversation tracking (08-01)
+  coverageState: defineTable({
+    sessionId: v.id("sessions"),
+    phase: v.number(),
+    topics: v.any(), // JSON object: { topicKey: "not_mentioned"|"surface"|"moderate"|"deep" }
+    energyPeaks: v.array(v.string()),
+    currentFocus: v.optional(v.string()),
+    readyForCompletion: v.boolean(),
+    whatsMissing: v.optional(v.array(v.string())),
+    researchIntensity: v.optional(v.union(v.literal("low"), v.literal("medium"), v.literal("high"))),
+    searchedSources: v.optional(v.array(v.string())),
+    lastUpdated: v.number(),
+  }).index("by_session_phase", ["sessionId", "phase"]),
 });

@@ -6,6 +6,8 @@ export interface PhaseConfig {
   description: string;
   completionCriteria: string[];
   instructions: string;
+  coverageTopics: Array<{ key: string; label: string; description: string }>;
+  timeEstimate: string;
 }
 
 export const PHASES: PhaseConfig[] = [
@@ -24,6 +26,15 @@ export const PHASES: PhaseConfig[] = [
       "User has articulated WHY this area gives unfair advantage",
       "User has clear direction for Phase 1 research",
     ],
+    coverageTopics: [
+      { key: "life_situation", label: "Life Situation", description: "Pain lived personally" },
+      { key: "profession", label: "Profession", description: "Insider knowledge others don't have" },
+      { key: "hobbies", label: "Hobbies", description: "Enthusiasm + community access" },
+      { key: "skills_others_pay_for", label: "Skills Others Pay For", description: "Proven market value" },
+      { key: "networks", label: "Networks", description: "Relationship access advantage" },
+      { key: "transformations", label: "Transformations", description: "Journey already completed" },
+    ],
+    timeEstimate: "15-20 min",
     instructions: `Phase 0: Know Yourself
 
 Your goal: Help user discover their unfair advantages through excavating 6 starting points:
@@ -64,6 +75,14 @@ ENERGY SIGNALS TO WATCH:
       "Timing assessed on at least 4 of 6 factors",
       "User has connected gap to their unfair advantage from Phase 0",
     ],
+    coverageTopics: [
+      { key: "gap_identification", label: "Gap Identification", description: "Specific gaps with energy signals" },
+      { key: "identity_lens", label: "Identity Lens", description: "Who are people trying to become?" },
+      { key: "distribution_path", label: "Distribution Path", description: "Can you reach these people?" },
+      { key: "timing_factors", label: "Timing Factors", description: "Why is this solvable now?" },
+      { key: "advantage_connection", label: "Advantage Connection", description: "Links gap to unfair advantage" },
+    ],
+    timeEstimate: "20-25 min",
     instructions: `Phase 1: Find Gaps
 
 Input from Phase 0: User has identified their unfair advantage area(s). Now research THAT specific domain - not random ideation.
@@ -98,6 +117,14 @@ Watch for: User seeing gaps they've PERSONALLY experienced. Organic ideas from t
       "Clear signal that market is big enough to matter",
       "User can articulate who is already spending money in this space",
     ],
+    coverageTopics: [
+      { key: "external_data_points", label: "External Data Points", description: "Evidence supporting the gap" },
+      { key: "competitor_analysis", label: "Competitor Analysis", description: "Who else is in this space?" },
+      { key: "market_size", label: "Market Size", description: "Is the market big enough?" },
+      { key: "money_signals", label: "Money Signals", description: "Who's spending money here?" },
+      { key: "assumption_challenges", label: "Assumption Challenges", description: "Where might you be wrong?" },
+    ],
+    timeEstimate: "25-30 min",
     instructions: `Phase 2: Research
 
 Goal: Validate the gap with external evidence, not just personal belief.
@@ -130,6 +157,14 @@ ANTI-PATTERN: Don't let user rely on "everyone says..." without specifics.`,
       "User has identified what makes this DIFFERENT from alternatives",
       "User expresses genuine ownership ('I want to build this' not 'This seems viable')",
     ],
+    coverageTopics: [
+      { key: "idea_statement", label: "Idea Statement", description: "Clear one-sentence crystallization" },
+      { key: "advantage_connection", label: "Advantage Connection", description: "Links Phase 0 to validated gap" },
+      { key: "target_audience", label: "Target Audience", description: "Who is this for?" },
+      { key: "differentiation", label: "Differentiation", description: "What makes this different?" },
+      { key: "ownership_signals", label: "Ownership Signals", description: "User defends and owns the idea" },
+    ],
+    timeEstimate: "15-20 min",
     instructions: `Phase 3: Your Idea
 
 Goal: Crystallize everything into a clear idea statement the user OWNS.
@@ -164,6 +199,14 @@ OWNERSHIP SIGNALS:
       "User can describe customer's current workaround",
       "User has plan to reach 5+ potential customers for validation",
     ],
+    coverageTopics: [
+      { key: "customer_profile", label: "Customer Profile", description: "Specific individuals, not personas" },
+      { key: "gathering_places", label: "Gathering Places", description: "Where do they hang out?" },
+      { key: "struggling_moment", label: "Struggling Moment", description: "Jobs-to-be-Done trigger" },
+      { key: "current_workaround", label: "Current Workaround", description: "How do they solve this now?" },
+      { key: "reach_plan", label: "Reach Plan", description: "How will you reach 5+ customers?" },
+    ],
+    timeEstimate: "20-25 min",
     instructions: `Phase 4: Customers
 
 Goal: Move from "people who might use this" to SPECIFIC individuals you can reach.
@@ -193,6 +236,14 @@ WARNING: Generic personas = generic ideas. Push for REAL people.`,
       "Problem frequency established (daily? weekly? annually?)",
       "User can rank problem urgency vs other customer priorities",
     ],
+    coverageTopics: [
+      { key: "customer_conversations", label: "Customer Conversations", description: "Talked to 3+ real people" },
+      { key: "behavior_evidence", label: "Behavior Evidence", description: "What they do vs what they say" },
+      { key: "problem_cost", label: "Problem Cost", description: "Time/money/emotion impact" },
+      { key: "problem_frequency", label: "Problem Frequency", description: "How often does this happen?" },
+      { key: "urgency_ranking", label: "Urgency Ranking", description: "Priority vs other problems" },
+    ],
+    timeEstimate: "20-25 min",
     instructions: `Phase 5: Problem
 
 Goal: Confirm the problem exists AND is urgent enough to pay for solving.
@@ -228,6 +279,14 @@ VALIDATION SIGNALS:
       "User understands technical feasibility at high level",
       "Solution leverages user's unfair advantage from Phase 0",
     ],
+    coverageTopics: [
+      { key: "problem_solution_fit", label: "Problem-Solution Fit", description: "Solution addresses validated problem" },
+      { key: "why_this_solution", label: "Why This Solution", description: "Why not alternatives?" },
+      { key: "mvp_scope", label: "MVP Scope", description: "Smallest viable version" },
+      { key: "technical_feasibility", label: "Technical Feasibility", description: "Can this be built?" },
+      { key: "advantage_leverage", label: "Advantage Leverage", description: "Uses unfair advantage from Phase 0" },
+    ],
+    timeEstimate: "20-25 min",
     instructions: `Phase 6: Solution
 
 Goal: Design minimum viable solution that uniquely fits validated problem.
@@ -257,6 +316,15 @@ TESTS:
       "User has decided: proceed, pivot, or pause",
       "If proceed: user knows which weakness to address first",
     ],
+    coverageTopics: [
+      { key: "problem_urgency", label: "Problem Urgency", description: "How badly do customers need this?" },
+      { key: "solution_fit", label: "Solution Fit", description: "Does solution solve the problem?" },
+      { key: "market_size", label: "Market Size", description: "Is market big enough?" },
+      { key: "competitive_moat", label: "Competitive Moat", description: "Why can't others copy easily?" },
+      { key: "distribution", label: "Distribution", description: "Can you reach customers efficiently?" },
+      { key: "founder_fit", label: "Founder Fit", description: "Leverages your specific advantages?" },
+    ],
+    timeEstimate: "15-20 min",
     instructions: `Phase 7: Score
 
 Goal: Honest assessment of idea viability across key dimensions.
@@ -291,6 +359,14 @@ TOTAL: 25+ with no 1s = Strong. 20-24 = Workable. <20 = Reconsider.`,
       "Go-to-market approach is clearer than before scoring",
       "User confidence has either increased (proceed) or decreased (pivot/pause)",
     ],
+    coverageTopics: [
+      { key: "weakness_plans", label: "Weakness Plans", description: "Plans for low-scoring dimensions" },
+      { key: "positioning", label: "Positioning", description: "Refined pitch statement" },
+      { key: "risk_mitigation", label: "Risk Mitigation", description: "Key risks and how to test early" },
+      { key: "go_to_market", label: "Go-to-Market", description: "Clearer approach than Phase 7" },
+      { key: "confidence_assessment", label: "Confidence Assessment", description: "Proceed, pivot, or pause?" },
+    ],
+    timeEstimate: "20-25 min",
     instructions: `Phase 8: Refine
 
 Goal: Turn weaknesses into action plans, sharpen the idea.
@@ -319,6 +395,14 @@ POSITIONING REFINEMENT:
       "User knows their 'one metric that matters'",
       "User has completed the Gap Finder journey with clarity",
     ],
+    coverageTopics: [
+      { key: "next_actions", label: "Next Actions", description: "Concrete next 3 steps" },
+      { key: "mvp_timeline", label: "MVP Timeline", description: "When can you ship?" },
+      { key: "validation_plan", label: "Validation Plan", description: "How will you test pre-launch?" },
+      { key: "key_metric", label: "Key Metric", description: "One metric that matters" },
+      { key: "final_reflection", label: "Final Reflection", description: "Journey completion insights" },
+    ],
+    timeEstimate: "15-20 min",
     instructions: `Phase 9: Launch
 
 Goal: Exit with actionable plan, not just ideas.
@@ -351,3 +435,12 @@ export function getPhaseByPath(
 export const PHASE_NAMES: Record<number, string> = Object.fromEntries(
   PHASES.map((p) => [p.number, p.name])
 );
+
+/**
+ * Get the topic keys for a specific phase
+ */
+export function getTopicKeys(phaseNumber: number): string[] {
+  const phase = getPhaseConfig(phaseNumber);
+  if (!phase) return [];
+  return phase.coverageTopics.map((topic) => topic.key);
+}
