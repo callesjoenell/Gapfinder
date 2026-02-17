@@ -23,6 +23,7 @@ Users should exit feeling **confident**, **capable**, **clear**, and with genuin
 | 5 - Idea Card | Crystallization = clarity | "I can SEE my idea forming" |
 | 6 - Instructor | Support available = not alone | "Help is there if I need it" |
 | 7 - Research Tools | Real data backs instincts | "I have evidence, not just hunches" |
+| 8 - Conversation Design | Guided journey with natural flow | "This conversation knows where it's going" |
 
 ### Verification Question
 
@@ -257,14 +258,15 @@ Plans:
 
 **Dependencies:** Phase 2 (Chat Core — needs Claude conversation working)
 
-**Plans:** 5 plans
+**Plans:** 6 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Research API infrastructure: tool definitions + HN/Tavily/Reddit/ProductHunt/SO wrappers
-- [ ] 07-02-PLAN.md — Schema + research action: findings persistence + tool execution loop
-- [ ] 07-03-PLAN.md — Manual research checklists: Facebook Groups/LinkedIn/Twitter/Amazon forms + mutations
-- [ ] 07-04-PLAN.md — Paid keyword lookup: Keywords Everywhere API + credit tracking
-- [ ] 07-05-PLAN.md — System prompt + Chat integration: research orchestration + UI wiring
+- [x] 07-01-PLAN.md — Research API infrastructure: tool definitions + HN/Tavily/Reddit/ProductHunt/SO wrappers
+- [x] 07-02-PLAN.md — Schema + research action: findings persistence + tool execution loop
+- [x] 07-03-PLAN.md — Manual research checklists: Facebook Groups/LinkedIn/Twitter/Amazon forms + mutations
+- [x] 07-04-PLAN.md — Paid keyword lookup: Keywords Everywhere API + credit tracking
+- [x] 07-05-PLAN.md — System prompt + Chat integration: research orchestration + UI wiring
+- [ ] 07-06-PLAN.md — Research suggestions UI: context-aware chips + save-for-later queue
 
 **Requirements:**
 - RESEARCH-01: Claude tool use for Reddit, Hacker News, ProductHunt, Tavily, Stack Overflow
@@ -290,6 +292,38 @@ Plans:
 
 ---
 
+## Phase 8: Conversation Design
+
+**Goal:** Users get clear journey framing per path, Claude proactively researches when conversation cues arise, and phase progression tracks implicitly through natural conversation rather than explicit checklist questioning.
+
+**Emotional Purpose:** Users feel "This conversation knows where it's going" — not lost in endless questions, but guided through a clear journey where research happens naturally and progress emerges from genuine dialogue.
+
+**Dependencies:** Phase 7 (Research Tools — needs research infrastructure), Phase 2 (Chat Core — modifies system prompts and streaming)
+
+**Plans:** 4 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Coverage tracking infrastructure: schema, Convex CRUD, phaseConfig topics, Zod schemas
+- [ ] 08-02-PLAN.md — System prompt overhaul: journey framing, pacing, coverage injection, research intensity
+- [ ] 08-03-PLAN.md — Conversation actions: post-turn coverage extraction, trigger detection, all-phase research
+- [ ] 08-04-PLAN.md — UI integration: useStreamingChat wiring, coverage progress bar, intensity control
+
+**Requirements:** [CONV-01, CONV-02, CONV-03, CONV-04, CONV-05]
+
+**Success Criteria:**
+1. New user in exploration path sees clear framing of the 4-phase journey in first response
+2. New user in evaluation path sees clear framing of the 6-phase journey in first response
+3. Claude proactively searches when user mentions a market claim or competitor without being asked
+4. User completes a phase without ever being asked to "rate something 1-5" — scores inferred from conversation
+5. Claude stays on one thread when energy is high, moves on naturally when it drops
+
+**Research Flags:**
+- Prompt engineering for implicit extraction vs explicit questioning
+- Research trigger patterns (what conversation cues should activate tools)
+- Background assessment redesign (coverage map vs boolean completion)
+
+---
+
 ## Progress
 
 | Phase | Status | Requirements | Completion |
@@ -300,7 +334,8 @@ Plans:
 | 4 - Phase System | Complete | 4 | 100% |
 | 5 - Idea Card | Complete | 6 | 100% |
 | 6 - Instructor View | Deferred to v2 | 3 | — |
-| 7 - Research Tools | Planning Complete | 8 | 0% |
+| 7 - Research Tools | In Progress | 8 | 83% (5/6 plans) |
+| 8 - Conversation Design | Planned | 5 | 0% |
 
 **v1 Total:** 33 requirements across 6 phases
 **v1 Complete:** 25/31 (81%)
@@ -314,7 +349,7 @@ Plans:
 Phase 1: Foundation
     |
     v
-Phase 2: Chat Core -----> Phase 7: Research Tools
+Phase 2: Chat Core -----> Phase 7: Research Tools -----> Phase 8: Conversation Design
     |
     v
 Phase 3: Sessions
@@ -333,4 +368,4 @@ Note: Phase 7 (Research Tools) depends on Phase 2 (Chat Core) and can be built i
 ---
 
 *Roadmap created: 2025-01-22*
-*Last updated: 2026-02-02*
+*Last updated: 2026-02-17*
