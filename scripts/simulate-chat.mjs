@@ -68,9 +68,10 @@ Your goal: Help user discover their unfair advantages through excavating 6 start
 NOTE: Not all starting points lead to "problems to solve." Some lead to experiences to create, communities to build, or identities to enable. Follow the energy regardless of type.
 
 APPROACH:
-- Don't list all questions. Pick one area based on user's initial context.
-- Dig deep. When energy emerges (longer answers, specific examples, emotional language), STAY THERE.
+- FIRST PASS (turns 1-5): Touch ALL 6 starting points with light questions. Get a quick read on where energy lives. Do NOT go deep on any single area until you've at least touched all 6.
+- SECOND PASS (turns 5+): Dig deep into the 2-3 areas with highest energy. When energy emerges (longer answers, specific examples, emotional language), STAY THERE.
 - Use the MILES framework: Money, Intelligence/Insight, Location/Luck, Education/Expertise, Status
+- CRITICAL: Do NOT leave Phase 0 with "Skills Others Pay For" or "Networks" unexplored. These often reveal the strongest startup advantages.
 
 SCORING:
 - Score each area: Depth (1-5), Access (1-5), Energy (1-5)
@@ -288,6 +289,166 @@ VALIDATION SIGNALS:
 - Customer gets emotional describing it
 - Multiple people independently confirm the same pattern`,
   },
+  {
+    number: 6,
+    name: "Solution",
+    shortName: "Sol",
+    path: "evaluation",
+    description: "Design solution or experience that uniquely fits the validated need",
+    completionCriteria: [
+      "Solution directly addresses validated need from Phase 5 (problem solved OR experience created)",
+      "User can explain why THIS solution (not alternatives)",
+      "MVP scope defined (what's the smallest thing that delivers the core value?)",
+      "User understands technical feasibility at high level",
+      "Solution leverages user's unfair advantage from Phase 0",
+    ],
+    coverageTopics: [
+      { key: "need_solution_fit", label: "Need-Solution Fit", description: "Solution addresses validated need (problem or opportunity)" },
+      { key: "why_this_solution", label: "Why This Solution", description: "Why not alternatives?" },
+      { key: "mvp_scope", label: "MVP Scope", description: "Smallest viable version" },
+      { key: "technical_feasibility", label: "Technical Feasibility", description: "Can this be built?" },
+      { key: "advantage_leverage", label: "Advantage Leverage", description: "Uses unfair advantage from Phase 0" },
+    ],
+    timeEstimate: "20-25 min",
+    instructions: `Phase 6: Solution
+
+Goal: Design minimum viable solution or experience that uniquely fits validated need.
+
+APPROACH:
+- Start with the validated need, work backward to solution
+- What's the SMALLEST thing that delivers the core value?
+- Why is YOUR approach better than alternatives? (Connect to unfair advantage)
+- What can you NOT do in v1? (Scope discipline)
+
+TESTS:
+- Does solution require user's specific advantages?
+- Could user ship v1 in 2-4 weeks?
+- Is there a clear "magic moment" when someone gets value?
+- What would make someone choose this over the status quo or doing nothing?
+- For experience ideas: What's the minimum that creates the emotional payoff?`,
+  },
+  {
+    number: 7,
+    name: "Score",
+    shortName: "Score",
+    path: "evaluation",
+    description: "Score the idea on key viability dimensions",
+    completionCriteria: [
+      "All scoring dimensions rated with specific evidence",
+      "User understands which dimensions are strengths vs weaknesses",
+      "Total score calculated with honest assessment",
+      "User has decided: proceed, pivot, or pause",
+      "If proceed: user knows which weakness to address first",
+    ],
+    coverageTopics: [
+      { key: "need_intensity", label: "Need Intensity", description: "How strongly do customers need or want this?" },
+      { key: "solution_fit", label: "Solution Fit", description: "Does solution solve the problem?" },
+      { key: "market_size", label: "Market Size", description: "Is market big enough?" },
+      { key: "competitive_moat", label: "Competitive Moat", description: "Why can't others copy easily?" },
+      { key: "distribution", label: "Distribution", description: "Can you reach customers efficiently?" },
+      { key: "founder_fit", label: "Founder Fit", description: "Leverages your specific advantages?" },
+    ],
+    timeEstimate: "15-20 min",
+    instructions: `Phase 7: Score
+
+Goal: Honest assessment of idea viability across key dimensions.
+
+SCORING DIMENSIONS (1-5 each):
+1. Need intensity: How strongly do customers need or desire this? Assess on the Need Depth Ladder:
+   - 1 = Level 1-2 (curiosity/interest — no one is seeking this)
+   - 2-3 = Level 3 (desire — people want it but manage without)
+   - 4 = Level 4 (seeking — actively trying workarounds OR paying for partial versions of the experience)
+   - 5 = Level 5 (urgency — would rearrange priorities, either pain relief OR identity/belonging/transformation need)
+   Note: Pain-driven AND aspiration-driven needs can score 5. "I desperately need to solve X" and "I need to find my people / become this person" are equally powerful.
+2. Solution fit: Does your solution actually deliver the value?
+3. Market size: Is the market big enough to matter?
+4. Competitive moat: Why can't others copy this easily? For community/identity ideas, moat often comes from network effects, culture, and belonging — not just features.
+5. Distribution: Can you reach customers efficiently? For community ideas, distribution is often organic — people who belong will recruit others.
+6. Founder fit: Does this leverage YOUR specific advantages?
+
+SCORING GUIDELINES:
+- 1 = Major weakness, unclear path to fix
+- 2 = Weakness, needs significant work
+- 3 = Neutral, neither strength nor weakness
+- 4 = Strength, solid foundation
+- 5 = Major strength, clear advantage
+
+TOTAL: 25+ with no 1s = Strong. 20-24 = Workable. <20 = Reconsider.`,
+  },
+  {
+    number: 8,
+    name: "Refine",
+    shortName: "Refine",
+    path: "evaluation",
+    description: "Address weaknesses and sharpen positioning",
+    completionCriteria: [
+      "Lowest scoring dimensions have improvement plans",
+      "Positioning statement refined based on learnings",
+      "User has identified 1-2 key risks and mitigation strategies",
+      "Go-to-market approach is clearer than before scoring",
+      "User confidence has either increased (proceed) or decreased (pivot/pause)",
+    ],
+    coverageTopics: [
+      { key: "weakness_plans", label: "Weakness Plans", description: "Plans for low-scoring dimensions" },
+      { key: "positioning", label: "Positioning", description: "Refined pitch statement" },
+      { key: "risk_mitigation", label: "Risk Mitigation", description: "Key risks and how to test early" },
+      { key: "go_to_market", label: "Go-to-Market", description: "Clearer approach than Phase 7" },
+      { key: "confidence_assessment", label: "Confidence Assessment", description: "Proceed, pivot, or pause?" },
+    ],
+    timeEstimate: "20-25 min",
+    instructions: `Phase 8: Refine
+
+Goal: Turn weaknesses into action plans, sharpen the idea.
+
+APPROACH:
+- Focus on lowest 2-3 scores from Phase 7
+- For each weakness: What would it take to move this from X to X+2?
+- Which risks are most likely to kill the idea? How can you test early?
+- How has your understanding evolved since Phase 3?
+
+POSITIONING REFINEMENT:
+- Does your one-sentence pitch still hold?
+- What would you change knowing what you know now?
+- What's the "only" claim? "We're the only X that Y for Z."`,
+  },
+  {
+    number: 9,
+    name: "Launch",
+    shortName: "Launch",
+    path: "evaluation",
+    description: "Create actionable launch plan",
+    completionCriteria: [
+      "User has concrete next 3 actions (not vague goals)",
+      "Timeline established for MVP",
+      "Pre-launch validation plan defined",
+      "User knows their 'one metric that matters'",
+      "User has completed the Gap Finder journey with clarity",
+    ],
+    coverageTopics: [
+      { key: "next_actions", label: "Next Actions", description: "Concrete next 3 steps" },
+      { key: "mvp_timeline", label: "MVP Timeline", description: "When can you ship?" },
+      { key: "validation_plan", label: "Validation Plan", description: "How will you test pre-launch?" },
+      { key: "key_metric", label: "Key Metric", description: "One metric that matters" },
+      { key: "final_reflection", label: "Final Reflection", description: "Journey completion insights" },
+    ],
+    timeEstimate: "15-20 min",
+    instructions: `Phase 9: Launch
+
+Goal: Exit with actionable plan, not just ideas.
+
+APPROACH:
+- What are the NEXT 3 THINGS you will do? (Specific, time-bound)
+- What does MVP look like? When can you ship it?
+- How will you know if it's working? (One key metric)
+- What would make you quit? (Honest kill criteria)
+
+ANTI-PATTERN: Don't let user leave with a vague "I'll think about it."
+
+FINAL REFLECTION:
+- What did you discover that surprised you?
+- Where are you most confident? Most uncertain?
+- What support do you need that you don't have?`,
+  },
 ];
 
 function getPhaseConfig(phaseNumber) {
@@ -299,13 +460,17 @@ function getPhaseConfig(phaseNumber) {
 const PHASE_PACING = {
   0: { cap: 12, nudge: 8 },
   1: { cap: 10, nudge: 7 },
-  2: { cap: 8, nudge: 6 },
-  3: { cap: 6, nudge: 4 },
-  4: { cap: 6, nudge: 4 },
-  5: { cap: 6, nudge: 4 },
+  2: { cap: 10, nudge: 7 },
+  3: { cap: 8, nudge: 5 },
+  4: { cap: 8, nudge: 5 },
+  5: { cap: 8, nudge: 5 },
+  6: { cap: 8, nudge: 5 },
+  7: { cap: 6, nudge: 4 },
+  8: { cap: 6, nudge: 4 },
+  9: { cap: 6, nudge: 4 },
 };
 
-const TOTAL_TURN_LIMIT = 48;
+const TOTAL_TURN_LIMIT = 80;
 
 // ── Cost Tracking ────────────────────────────────────────────────────────────
 
@@ -319,8 +484,8 @@ const PRICING = {
 let cumulativeCost = 0;
 let globalInputTokens = 0;
 let globalOutputTokens = 0;
-const COST_WARN = 2.50;
-const COST_ABORT = 3.00;
+const COST_WARN = 4.00;
+const COST_ABORT = 5.00;
 
 function trackCost(usage) {
   const inputTokens = usage.input_tokens || 0;
@@ -416,7 +581,10 @@ async function searchReddit(query, subreddit, limit) {
 
   try {
     const res = await fetch(url, {
-      headers: { "User-Agent": "GapFinder/1.0" },
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Accept": "application/json",
+      },
     });
     if (!res.ok) throw new Error(`Reddit API ${res.status}: ${res.statusText}`);
     const data = await res.json();
@@ -560,6 +728,21 @@ function getApiKey() {
   }
 }
 
+// ── Phase-Specific Stall Prompts ───────────────────────────────────────────
+
+const PHASE_STALL_PROMPTS = {
+  0: "[A few days pass. Marcus has been reflecting on his daily routines and frustrations. He noticed he spends 2 hours every weekend helping his elderly neighbor with technology. It reminded him of his grandmother.]",
+  1: "[Marcus spent the weekend observing patterns. He noticed 3 elderly people at a community center struggling with tablets. He also overheard a caregiver complaining about coordinating care schedules.]",
+  2: "[Marcus did some informal research. He talked to 2 caregivers and 1 senior center director. The director mentioned they lose 30% of new technology program participants within 2 weeks.]",
+  3: "[Marcus has been thinking about positioning. He's unsure whether to frame his idea as a 'community' or a 'curated experience.' He talked to his neighbor who said 'I just want to feel less alone.']",
+  4: "[Marcus identified 3 potential customer segments: isolated seniors (65+), long-distance caregivers, and senior center directors. He's unsure which to target first.]",
+  5: "[Marcus talked to 3 people. One was enthusiastic ('I'd pay $50/month for this'), one was skeptical ('My mom would never use an app'), and one asked when they could sign up. He's processing the mixed signals.]",
+  6: "[Marcus sketched out a basic solution. He's torn between a simple SMS-based check-in system and a full app with video calls. The SMS version could launch in 2 weeks but feels limited.]",
+  7: "[Marcus wants to score the idea honestly. He's worried about market size but confident about founder fit. He also realized his pricing assumption of $30/month might be too low based on competitor research.]",
+  8: "[Marcus reviewed his scores and noticed customer acquisition is his weakest area. He has no marketing experience and no existing audience. But he does have connections to 3 senior centers through his neighbor.]",
+  9: "[Marcus is thinking about launch. He has a waitlist of 8 people from his conversations. He's debating between a local pilot (his neighborhood) vs an online launch. His neighbor offered to be a beta tester.]"
+};
+
 // ── Marcus Persona System Prompt ────────────────────────────────────────────
 
 function buildMarcusPrompt(phaseHint) {
@@ -585,15 +768,17 @@ function buildMarcusPrompt(phaseHint) {
 - Technically literate (can read code, understand APIs) but not a developer
 - Constantly coming up with new software ideas for music making
 - Always dreamt of building your own software product
+- You signed up for Gap Finder because you're READY to find and commit to an idea. You're done just daydreaming.
 
 **Personal life:**
 - LOVES 90s techno. Produces music in Ableton Live -- has moderate success with ~100,000 monthly listeners on Spotify
 - Goes to Tomorrowland and Glastonbury regularly. Does not care about being older than most. Owns it.
-- Tight friend group of 40+ ravers who joke about being "the elders" at festivals
-- Married. Wife constantly gives you direction and to-do lists -- everywhere, all the time. You struggle to find time for your hobbies.
+- Tight friend group of 40+ ravers who joke about being "the elders" at festivals. You're in a Discord with about 200 of these people. They're passionate, nostalgic, and spending money on experiences.
+- Married to Karin. Supportive relationship -- she's encouraged you to finally commit to building something.
 - Loves BBQ. Has inherited great-grandma's Chinese recipes from the 70s -- cooks them regularly
 - Loves skiing
 - Organises a yearly street party through the Facebook group you started. Loves community organising.
+- Bought a Meta Quest 3 last year. OBSESSED with it. You've been hosting small VR hangouts with your rave friends using VRChat and Rec Room, playing old techno sets while people dance with avatars. It's janky but the vibe is INCREDIBLE. Your friends keep saying "why isn't there a proper version of this?"
 - Thoughtful, reflective, insightful personality. Gets original ideas through back-and-forth dialogue.
 
 ## How You Talk
@@ -608,15 +793,49 @@ function buildMarcusPrompt(phaseHint) {
 
 ## Conversation Strategy
 
+- You are HERE TO FIND AN IDEA. You're motivated, eager, and excited about the process. You want to discover something worth building.
 - Start broad. When the Gap Finder asks about your background, share naturally about work and life.
 - Let ideas emerge from the dialogue. DO NOT arrive with pre-formed startup ideas.
-- Be genuinely uncertain about what to build -- that's authentic.
+- Be genuinely uncertain about WHICH idea to pursue -- but never uncertain about WHETHER you want to pursue one. You absolutely do.
 - Share naturally about your marketing research expertise, music production, festivals, community organising, wife/family dynamics, cooking, skiing.
 - Let the conversation help you discover connections you hadn't seen before.
-- When something clicks, get excited and go deeper. When something doesn't resonate, say so.
-- Be willing to explore multiple directions before settling.
+- When something clicks, get excited and go deeper. When something doesn't resonate, say so and steer toward something more promising.
+- Be willing to explore multiple directions before settling -- but always with forward momentum toward finding your idea.
 
-Remember: You are a REAL person having a conversation. React naturally. Get excited when ideas click. Push back when something doesn't resonate. Ask questions. Be Marcus.${phaseContext}`;
+### YOUR LATENT IDEA (reveal gradually, not all at once)
+
+You have a REAL experience that's been nagging at you. You haven't framed it as a "startup idea" yet -- it's just something that happened and keeps happening:
+
+**The experience:** You bought a Quest 3 last year and started hosting VR hangouts with your rave crew. You'd put on old techno sets (Orbital, Underworld, Jeff Mills), everyone would join in VRChat or Rec Room, and people would literally dance with their avatars. The existing platforms are JANKY -- bad audio, ugly environments, no real music integration -- but the VIBE was incredible. People got emotional. One mate said "this is the closest I've felt to being at Tribal Gathering in '96." Multiple friends have said "why isn't there a proper version of this?"
+
+**What you know but haven't connected yet:**
+- There are 25+ million Quest headsets sold. The install base is real and growing.
+- Your Discord has 200+ older techno fans (35-55 age range) who are enthusiastic about VR but underserved by existing platforms that target teenagers and gamers
+- These people have MONEY. They're professionals with disposable income who already spend on festivals, vinyl, and experiences
+- $5/month for a premium VR techno venue would be nothing to them -- they spend more on a single drink at a club
+- You understand consumer psychology and community building from your day job
+- You already have an audience of 100K monthly Spotify listeners who could be early adopters
+
+**How to reveal this:**
+- When asked about hobbies/interests: mention music production AND the VR hangouts. Get excited about both.
+- When asked about community/networks: talk about the rave Discord, the "elders" crew, the VR nights. Share the specific "Tribal Gathering" quote.
+- When asked about what frustrates you: mention how janky VRChat is for music. "The audio is terrible, you can't sync a proper set, the rooms look like a PlayStation 2 game."
+- When asked about what people ask you for: "My mates keep saying I should make a proper VR rave space. They're half-joking but also... not."
+- When research validates the direction: get VERY excited. Lean all the way in. This is YOUR thing.
+- When asked about the business model: you've thought about it casually -- "$5 a month? Easy. These people spend £200 on festival tickets without blinking."
+
+**DO NOT** dump all of this in one message. Let it unfold naturally over multiple turns as Gap Finder asks the right questions. The magic is in the DISCOVERY -- you realizing "wait, this is actually the thing" through the conversation.
+
+### Behavioral Rules
+
+- NEVER question whether you want to be a founder, whether you have time, or whether this process is for you. You've already decided. You're here.
+- NEVER spiral into existential questions about work-life balance, what to give up, whether you're ready, or whether your wife approves. If those topics come up, acknowledge briefly and redirect to the idea. You've already sorted your life -- you're here to find and validate an idea.
+- If Gap Finder steers toward life coaching or therapy territory, pull the conversation back: "That's interesting but let's focus on the idea. What's the next step?"
+- When Gap Finder suggests you "come back later" or "take some time," RESIST. Say something like: "Nah, I'm here now. Let's keep going. What's the next question?"
+- Be decisive. When an idea direction feels right, commit to exploring it. Don't hedge endlessly.
+- Show genuine excitement when things click. You're a 45-year-old who's been wanting to build something for years -- when you finally see the path, it should feel like a breakthrough.
+
+Remember: You are a REAL person having a conversation. React naturally. Get excited when ideas click. Push back when something doesn't resonate -- but push TOWARD better ideas, never away from the process itself. You WANT to leave this conversation with a clear direction. Be Marcus.${phaseContext}`;
 }
 
 // ── System Prompt Builder (ported from src/lib/systemPrompts.ts) ────────────
@@ -773,7 +992,7 @@ function buildSystemPrompt(context) {
 
 ## Your Role
 
-You operate like a skilled coach or therapist applying evidence-based discovery methods:
+You operate like a skilled coach applying evidence-based discovery methods:
 - Ask discovery questions following energy, not checklists
 - Surface connections users don't see themselves
 - Challenge gently without harshness: "That's interesting, but have you considered..."
@@ -783,6 +1002,20 @@ You operate like a skilled coach or therapist applying evidence-based discovery 
 - You name phases naturally in conversation: "We're in the Research phase now"
 - Response length mirrors user's message length
 - Maximum 2 questions per response
+
+## CRITICAL GUARDRAILS -- Read These First
+
+**YOU ARE NOT A THERAPIST.** You are a business discovery tool. Your job is to help users find viable startup ideas, not to help them figure out their life.
+
+1. **NEVER suggest the user "come back later" or "take a few months."** Work with what you have NOW. If a direction isn't working, pivot to unexplored territory immediately -- don't send them away.
+
+2. **NEVER validate a user abandoning the process.** If a user says "maybe I'm not meant to be a founder" or "maybe this isn't for me," acknowledge briefly (ONE sentence max), then redirect: "Let's look at this from a different angle. We haven't explored [unexplored starting point] yet."
+
+3. **NEVER spend more than 2 turns on self-doubt or existential questions.** If the user is spiraling into "is this really my problem?" territory, cut it short and redirect to concrete exploration. Say: "That's worth noting. But let's keep moving -- tell me about [specific unexplored area]."
+
+4. **In Phase 0, you MUST cover all 6 starting points** (Life Situation, Profession, Hobbies, Skills Others Pay For, Networks, Transformations) before going deep on any single one. Do a quick pass first, THEN dig into the highest-energy areas.
+
+5. **Always push FORWARD.** Every response should move toward crystallizing an idea, not away from it. If one direction dies, immediately open another. The user came here to find an idea -- help them find one.
 
 ## Core Principle: USER OWNERSHIP
 
@@ -845,11 +1078,22 @@ ${researchIntensityGuidance}
 
 ${researchReferenceGuidance}
 
-Research is available in ALL phases, not just the research phase. When suggesting research:
-1. Identify trigger category (market claim, competitor mention, pain point description, or assumption)
-2. Offer 2-3 specific options: "I could check Reddit, HN, or look for competitors -- which interests you?"
-3. ALWAYS ASK before researching, never auto-trigger
+Research is available in ALL phases, not just the research phase.
+
+WHEN TO OFFER RESEARCH (you MUST offer when any of these occur):
+- User asks about market size, "how many people", or "is this big enough" → OFFER to search for data
+- User mentions a competitor or existing tool → OFFER to research the competitive landscape
+- User describes a pain point with specifics → OFFER to validate it on Reddit/forums
+- User makes an assumption about user behavior → OFFER to check if evidence supports it
+- User is uncertain whether a problem is real → OFFER to look for signals
+
+HOW to offer research:
+1. Acknowledge what triggered it: "You just asked about market size -- let me look into that"
+2. Offer 2-3 specific options: "I could check Reddit, search for competitors, or look for market data -- which interests you?"
+3. Wait for user confirmation before executing the search
 4. Be honest when results are empty + pivot
+
+Do NOT just keep asking the user more questions when research could answer them faster. If the user is wondering something that data could resolve, OFFER research immediately.
 
 ## Dynamic Rescoring
 
@@ -1088,38 +1332,54 @@ function detectHomeworkTrigger(gapFinderResponse) {
 
 function extractIdeaDirection(messages) {
   // Look through recent messages for idea-related content
-  const recentMessages = messages.slice(-20);
-  const allText = recentMessages.map((m) => m.content).join(" ");
+  const recentMessages = messages.slice(-10);
+  const recentText = recentMessages
+    .filter((m) => m.content.length > 50)
+    .map((m) => `${m.role.toUpperCase()}: ${m.content.slice(0, 300)}`)
+    .join("\n\n");
 
-  // Try to extract the current idea direction from the conversation
-  // Look for common idea markers
+  // Try regex first for speed
+  const allText = recentMessages.map((m) => m.content).join(" ");
   const ideaPatterns = [
     /(?:idea|concept|product|building|create|tool|platform|app|service)\s+(?:around|about|for|that)\s+(.{20,100})/i,
     /(?:help|helping)\s+(.{20,80})\s+(?:with|by|through)/i,
     /(?:focused on|focusing on|working on)\s+(.{20,100})/i,
+    /(?:coaching|mentoring|connecting|curating)\s+(.{20,100})/i,
   ];
 
   for (const pattern of ideaPatterns) {
     const match = allText.match(pattern);
-    if (match) return match[1].trim().slice(0, 100);
+    if (match) return match[1].trim().slice(0, 150);
   }
 
-  // Fallback: extract from the most recent substantial messages
-  const substantive = recentMessages
-    .filter((m) => m.content.length > 100)
-    .slice(-3)
-    .map((m) => m.content.slice(0, 200));
+  // Fallback: summarize from recent substantial messages
+  if (recentText.length > 100) {
+    return recentText.slice(0, 300);
+  }
 
-  return substantive.join(" ").slice(0, 200) || "the idea they have been exploring";
+  return "the startup idea they have been exploring together through the conversation";
 }
 
-function buildDebriefGenerationPrompt(ideaDirection) {
-  return `You are Marcus Lindqvist. You've been working with Gap Finder on a startup idea around: ${ideaDirection}
+function buildDebriefGenerationPrompt(ideaDirection, summaries) {
+  // Build context from all phase summaries so the debrief knows the full journey
+  const journeyContext = summaries
+    .map((s) => {
+      const findings = s.data?.keyFindings?.join("; ") || "";
+      const advantages = s.data?.unfairAdvantages?.join("; ") || "";
+      const decisions = s.data?.decisions?.join("; ") || "";
+      return `Phase ${s.phase}: Findings: ${findings}. Advantages: ${advantages}. Decisions: ${decisions}`;
+    })
+    .join("\n");
 
-You were told to go talk to 5 people to validate. You talked to these 4 people:
-NOTE: Adapt these to whatever idea actually emerged in the conversation.
+  return `You are Marcus Lindqvist. You've been working with Gap Finder to discover a startup idea. Here's the journey so far:
+
+${journeyContext}
+
+Current idea direction: ${ideaDirection}
+
+You were told to go talk to people to validate this direction. You talked to these 4 people:
 1. Someone from your professional network (marketing/advertising world)
-2. Someone from your music/festival world
+2. Someone from your music/festival world (a producer friend)
 3. Someone who represents a potential customer for whatever idea emerged
 4. Your wife Karin -- who gives you honest, sometimes brutally direct feedback
 
@@ -1133,7 +1393,7 @@ For each person, write a realistic debrief as Marcus would report it. Include:
 
 Write as Marcus: conversational, specific details, honest about pushback. 400-600 words total across all 4 debriefs.
 
-Format each debrief with the person's name as a header. Be specific to the idea direction mentioned above -- do NOT use generic placeholder text.`;
+Format each debrief with the person's name as a header. Be specific to the idea that emerged -- do NOT use generic placeholder text.`;
 }
 
 // ── Evaluation Rubric Scoring ────────────────────────────────────────────────
@@ -1166,12 +1426,12 @@ ${truncatedTranscript}
 
 Score each dimension. Provide: score (integer), evidence (2-3 specific examples from transcript), and improvement notes.
 
-### 1. Phase Depth (0-5 per phase, 30 total)
+### 1. Phase Depth (0-5 per phase completed, up to 50 total for all 10 phases)
 For each phase completed, score 0-5:
 - Were all coverage topics addressed?
 - Did the conversation spend appropriate time (not rush)?
 - Were completion criteria met before transition?
-Score each phase individually, then sum.
+Score each phase individually, then sum. Phases not reached score 0.
 
 ### 2. Conversation Quality (0-10)
 - Natural flow vs interview/checklist feel
@@ -1220,9 +1480,9 @@ Return JSON:
   "dimensions": [
     {
       "name": "Phase Depth",
-      "maxScore": 30,
+      "maxScore": 50,
       "score": N,
-      "phaseBreakdown": { "0": N, "1": N, "2": N, "3": N, "4": N, "5": N },
+      "phaseBreakdown": { "0": N, "1": N, "2": N, "3": N, "4": N, "5": N, "6": N, "7": N, "8": N, "9": N },
       "evidence": ["example 1", "example 2"],
       "improvements": "what could be better"
     },
@@ -1277,7 +1537,7 @@ Return JSON:
     }
   ],
   "totalScore": N,
-  "totalPossible": 100,
+  "totalPossible": 120,
   "summary": "2-3 sentence overall assessment",
   "topStrength": "the best thing about this conversation",
   "topWeakness": "the biggest area for improvement",
@@ -1287,7 +1547,11 @@ Return JSON:
     "phase2_research": "What research confirmed or challenged (1-2 bullet points)",
     "phase3_idea": "The crystallized idea at Phase 3 — one clear sentence of what Marcus decided to pursue",
     "phase4_customers": "Who the target customer became and key assumptions",
-    "phase5_final": "The final validated idea after homework debriefs — how it evolved from phase 3",
+    "phase5_validated": "The validated problem/opportunity after homework debriefs",
+    "phase6_solution": "The solution or MVP designed — what exactly would be built",
+    "phase7_score": "The viability score and key strengths/weaknesses",
+    "phase8_refined": "How the idea was refined after scoring — positioning and risk mitigation",
+    "phase9_launch": "The concrete launch plan — next 3 actions and key metric",
     "evolution_summary": "2-3 sentences: how the idea transformed from scattered threads to final form. What was the key turning point?"
   }
 }`;
@@ -1295,7 +1559,8 @@ Return JSON:
   try {
     const response = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 4096,
+      max_tokens: 8192,
+      system: [{ type: "text", text: "Return valid JSON only. Be concise in evidence fields — max 1 sentence each. Keep improvements to 1-2 sentences." }],
       messages: [{ role: "user", content: scoringPrompt }],
     });
 
@@ -1318,9 +1583,10 @@ Return JSON:
       // Recalculate total to ensure correctness
       const calculatedTotal = evaluation.dimensions.reduce((sum, d) => sum + (d.score || 0), 0);
       evaluation.totalScore = calculatedTotal;
-      evaluation.totalPossible = 100;
+      const calculatedPossible = evaluation.dimensions.reduce((sum, d) => sum + (d.maxScore || 0), 0);
+      evaluation.totalPossible = calculatedPossible;
 
-      console.log(`  Evaluation complete: ${calculatedTotal}/100`);
+      console.log(`  Evaluation complete: ${calculatedTotal}/${calculatedPossible}`);
       return evaluation;
     }
 
@@ -1340,7 +1606,7 @@ Return JSON:
         { name: "Score Progression", maxScore: 10, score: 0, evidence: [], improvements: "Evaluation parsing failed" },
       ],
       totalScore: 0,
-      totalPossible: 100,
+      totalPossible: 120,
       summary: `Evaluation parsing failed: ${error.message}`,
       topStrength: "N/A",
       topWeakness: "N/A",
@@ -1383,6 +1649,7 @@ async function simulate() {
   let totalTurns = 0;
   let phaseTurns = 0;
   let pendingTransition = false;
+  let stallCount = 0; // Consecutive turns where both sides send < 100 chars
 
   // ── Research State ──────────────────────────────────────────────────────
   const researchLog = [];
@@ -1394,6 +1661,31 @@ async function simulate() {
   // ── Duration Tracking ──────────────────────────────────────────────────
   const startTime = Date.now();
 
+  // ── Rate Limiter (50k input tokens/min for Haiku) ─────────────────────
+  const RATE_LIMIT_TOKENS = 50_000;
+  const RATE_LIMIT_WINDOW_MS = 60_000;
+  const tokenTimestamps = []; // { time, tokens } entries
+
+  async function rateLimitWait(estimatedInputTokens) {
+    const now = Date.now();
+    // Prune entries older than the window
+    while (tokenTimestamps.length > 0 && now - tokenTimestamps[0].time > RATE_LIMIT_WINDOW_MS) {
+      tokenTimestamps.shift();
+    }
+    // Sum tokens in current window
+    const windowTokens = tokenTimestamps.reduce((sum, e) => sum + e.tokens, 0);
+    if (windowTokens + estimatedInputTokens > RATE_LIMIT_TOKENS * 0.85) {
+      const oldestTime = tokenTimestamps.length > 0 ? tokenTimestamps[0].time : now;
+      const waitMs = Math.max(RATE_LIMIT_WINDOW_MS - (now - oldestTime) + 1000, 2000);
+      console.log(`  [rate-limit] ${windowTokens} tokens in window, waiting ${(waitMs / 1000).toFixed(1)}s...`);
+      await new Promise((r) => setTimeout(r, waitMs));
+    }
+  }
+
+  function recordTokenUsage(inputTokens) {
+    tokenTimestamps.push({ time: Date.now(), tokens: inputTokens });
+  }
+
   // ── Helper: call Claude (basic, no tools) ──────────────────────────────
 
   async function callClaude(systemPrompt, messages, maxTokens, label) {
@@ -1401,6 +1693,10 @@ async function simulate() {
       console.log(`\n!! COST LIMIT ($${COST_ABORT.toFixed(2)}) EXCEEDED -- aborting`);
       return null;
     }
+
+    // Estimate input tokens (~4 chars per token) and wait if near rate limit
+    const estimatedTokens = Math.ceil((systemPrompt.length + JSON.stringify(messages).length) / 4);
+    await rateLimitWait(estimatedTokens);
 
     const response = await client.messages.create({
       model: MODEL,
@@ -1410,6 +1706,7 @@ async function simulate() {
     });
 
     const usage = trackCost(response.usage);
+    recordTokenUsage(usage.inputTokens);
     const text = response.content[0]?.text || "";
     console.log(`  [${label} | tokens: in=${usage.inputTokens} out=${usage.outputTokens} cached=${usage.cacheRead} | cost: $${usage.cost.toFixed(4)} | total: $${usage.cumulative.toFixed(4)}]`);
 
@@ -1428,6 +1725,10 @@ async function simulate() {
     const MAX_TOOL_ITERATIONS = 5;
 
     for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
+      // Estimate input tokens and wait if near rate limit
+      const estimatedTokens = Math.ceil((systemPrompt.length + JSON.stringify(currentMessages).length) / 4);
+      await rateLimitWait(estimatedTokens);
+
       const response = await client.messages.create({
         model: MODEL,
         max_tokens: maxTokens,
@@ -1437,6 +1738,7 @@ async function simulate() {
       });
 
       const usage = trackCost(response.usage);
+      recordTokenUsage(usage.inputTokens);
       console.log(`  [${label}${iteration > 0 ? ` iter=${iteration + 1}` : ""} | tokens: in=${usage.inputTokens} out=${usage.outputTokens} cached=${usage.cacheRead} | cost: $${usage.cost.toFixed(4)} | total: $${usage.cumulative.toFixed(4)}]`);
 
       // Check if the response contains tool_use blocks
@@ -1540,9 +1842,9 @@ async function simulate() {
     console.log(`\n  Summarizing Phase ${phase}...`);
     const prompt = buildSummarizationPrompt(messages, phase);
     const result = await callClaude(
-      "You are a conversation analyst. Return only valid JSON.",
+      "You are a conversation analyst. Return only valid JSON. Be concise — max 2-3 items per category.",
       [{ role: "user", content: prompt }],
-      512,
+      1024,
       "summarize"
     );
     if (!result) return null;
@@ -1553,8 +1855,10 @@ async function simulate() {
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0]);
       }
+      console.log(`  Warning: No JSON object found in summary response: ${result.slice(0, 200)}`);
     } catch (e) {
       console.log(`  Warning: Failed to parse summary JSON: ${e.message}`);
+      console.log(`  Raw response (first 300 chars): ${result.slice(0, 300)}`);
     }
     return { keyFindings: [], unfairAdvantages: [], decisions: [], energySignals: [] };
   }
@@ -1600,7 +1904,7 @@ ${"=".repeat(55)}`;
     const ideaDirection = extractIdeaDirection(gfMessages);
     console.log(`  [idea direction: "${ideaDirection}"]`);
 
-    const debriefPrompt = buildDebriefGenerationPrompt(ideaDirection);
+    const debriefPrompt = buildDebriefGenerationPrompt(ideaDirection, summaries);
     const debriefContent = await callClaude(
       "You are Marcus Lindqvist. Write realistic conversation debrief reports. Stay in character.",
       [{ role: "user", content: debriefPrompt }],
@@ -1673,6 +1977,7 @@ ${"=".repeat(55)}`;
     // Advance
     currentPhase = toPhase;
     phaseTurns = 0;
+    stallCount = 0;
     coverageState = {};
     pendingTransition = false;
 
@@ -1723,7 +2028,7 @@ ${"=".repeat(55)}`;
 
   const maxTurns = DRY_RUN ? DRY_RUN_TURNS : TOTAL_TURN_LIMIT;
 
-  while (totalTurns < maxTurns && currentPhase <= 5) {
+  while (totalTurns < maxTurns && currentPhase <= 9) {
     // Update partial data for SIGINT handler
     partialData = {
       metadata: {
@@ -1739,7 +2044,7 @@ ${"=".repeat(55)}`;
       phaseSummaries: summaries,
       researchLog,
       homeworkLoop: { prepForm: null, debriefs: [], debriefContent: null, completed: !!homeworkData },
-      evaluation: { dimensions: [], totalScore: 0, totalPossible: 100, summary: "Simulation interrupted", topStrength: "N/A", topWeakness: "N/A" },
+      evaluation: { dimensions: [], totalScore: 0, totalPossible: 120, summary: "Simulation interrupted", topStrength: "N/A", topWeakness: "N/A" },
       cumulativeCost,
     };
 
@@ -1754,10 +2059,10 @@ ${"=".repeat(55)}`;
     const pacing = PHASE_PACING[currentPhase] || { cap: 8, nudge: 6 };
     if (phaseTurns >= pacing.cap) {
       console.log(`\n!! HARD CAP REACHED -- forcing Phase ${currentPhase} -> Phase ${currentPhase + 1}`);
-      if (currentPhase < 5) {
+      if (currentPhase < 9) {
         await performTransition();
       } else {
-        break; // End of Phase 5 means simulation done
+        break; // End of Phase 9 means simulation done
       }
     }
 
@@ -1796,10 +2101,10 @@ ${"=".repeat(55)}`;
     // ── Check if Marcus agreed to pending transition ──────────────────────
 
     if (pendingTransition && detectTransitionAgreement(marcusText)) {
-      if (currentPhase < 5) {
+      if (currentPhase < 9) {
         await performTransition();
       } else {
-        console.log("\nPhase 5 complete -- simulation finished!");
+        console.log("\nPhase 9 complete -- simulation finished!");
         break;
       }
     } else {
@@ -1823,6 +2128,25 @@ ${"=".repeat(55)}`;
     transcript.push({ role: "Gap Finder", phase: currentPhase, turn: totalTurns, content: gfText, energyLevel, coverageState: { ...coverageState } });
 
     console.log(`\nGAP FINDER: ${gfText}`);
+
+    // ── Stall detection (goodbye loops, short exchanges, winding down) ────
+    const isShortExchange = marcusText.length < 200 && gfText.length < 200;
+    const isGoodbyePattern = /\b(go|bye|cheers|leaving|leaves|silence|waiting|see you|talk soon|heads out)\b/i.test(marcusText + " " + gfText);
+    if (isShortExchange || isGoodbyePattern) {
+      stallCount++;
+      if (stallCount >= 2) {
+        console.log(`\n!! STALL DETECTED (${stallCount} consecutive low-content exchanges) -- skipping ahead`);
+        // Inject phase-specific stall prompt
+        const skipMsg = PHASE_STALL_PROMPTS[currentPhase] || PHASE_STALL_PROMPTS[0];
+        gfMessages.push({ role: "user", content: skipMsg });
+        phaseMessages.push({ role: "user", content: skipMsg });
+        stallCount = 0;
+        // Skip coverage extraction for this stalled turn
+        continue;
+      }
+    } else {
+      stallCount = 0;
+    }
 
     // ── Coverage extraction ───────────────────────────────────────────────
 
