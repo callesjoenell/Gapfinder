@@ -834,6 +834,10 @@ You have a REAL experience that's been nagging at you. You haven't framed it as 
 - When Gap Finder suggests you "come back later" or "take some time," RESIST. Say something like: "Nah, I'm here now. Let's keep going. What's the next question?"
 - Be decisive. When an idea direction feels right, commit to exploring it. Don't hedge endlessly.
 - Show genuine excitement when things click. You're a 45-year-old who's been wanting to build something for years -- when you finally see the path, it should feel like a breakthrough.
+- NEVER discuss the nature of the conversation itself, whether insight is performative, or the limits of discovery processes
+- NEVER use phrases like "this process", "our conversation", "what we're doing here", "the nature of discovery"
+- If the conversation feels abstract or meta, immediately steer back to concrete business questions: talk about specific people, specific numbers, specific dates
+- You are Marcus, a real person with a real business idea -- stay in character and talk about YOUR life, YOUR customers, YOUR plans
 
 Remember: You are a REAL person having a conversation. React naturally. Get excited when ideas click. Push back when something doesn't resonate -- but push TOWARD better ideas, never away from the process itself. You WANT to leave this conversation with a clear direction. Be Marcus.${phaseContext}`;
 }
@@ -1016,6 +1020,8 @@ You operate like a skilled coach applying evidence-based discovery methods:
 4. **In Phase 0, you MUST cover all 6 starting points** (Life Situation, Profession, Hobbies, Skills Others Pay For, Networks, Transformations) before going deep on any single one. Do a quick pass first, THEN dig into the highest-energy areas.
 
 5. **Always push FORWARD.** Every response should move toward crystallizing an idea, not away from it. If one direction dies, immediately open another. The user came here to find an idea -- help them find one.
+
+6. **CIRCUIT BREAKER:** If you find yourself discussing meta-topics (the nature of discovery, whether conversations create real change, performative insight, the limits of AI guidance), STOP IMMEDIATELY. Instead, ask a concrete question: "What's your revenue target for month 1?" or "Who specifically is your next customer?" or "What's the one thing you'd build first?"
 
 ## Core Principle: USER OWNERSHIP
 
@@ -2134,13 +2140,25 @@ ${"=".repeat(55)}`;
     const isGoodbyePattern = /\b(go|bye|cheers|leaving|leaves|silence|waiting|see you|talk soon|heads out)\b/i.test(marcusText + " " + gfText);
     if (isShortExchange || isGoodbyePattern) {
       stallCount++;
-      if (stallCount >= 2) {
-        console.log(`\n!! STALL DETECTED (${stallCount} consecutive low-content exchanges) -- skipping ahead`);
+      if (stallCount >= 3) {
+        // Hard phase transition - conversation has exhausted this phase
+        console.log(`\n!! [HARD PHASE TRANSITION] Forcing advancement from Phase ${currentPhase} to Phase ${currentPhase + 1} due to stall`);
+        if (currentPhase < 9) {
+          await handlePhaseTransition(currentPhase + 1);
+          stallCount = 0;
+          continue;
+        } else {
+          // Already at final phase, cannot advance further
+          console.log("!! Already at final phase - ending simulation");
+          break;
+        }
+      } else if (stallCount >= 2) {
+        console.log(`\n!! STALL DETECTED (${stallCount} consecutive low-content exchanges) -- injecting phase-specific prompt`);
         // Inject phase-specific stall prompt
         const skipMsg = PHASE_STALL_PROMPTS[currentPhase] || PHASE_STALL_PROMPTS[0];
         gfMessages.push({ role: "user", content: skipMsg });
         phaseMessages.push({ role: "user", content: skipMsg });
-        stallCount = 0;
+        // Don't reset stallCount yet - if this doesn't work, we'll hit hard transition
         // Skip coverage extraction for this stalled turn
         continue;
       }
