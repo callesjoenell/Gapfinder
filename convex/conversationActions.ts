@@ -106,7 +106,7 @@ export const extractCoverage = action({
       };
 
       const response = await anthropic.messages.create({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-6",
         max_tokens: 1024,
         system: `${systemPrompt}\n\nIMPORTANT: Return your analysis as valid JSON matching this schema:\n${JSON.stringify(schemaJson, null, 2)}`,
         messages: args.recentMessages.map(m => ({
@@ -239,7 +239,7 @@ export const detectTriggers = action({
 
       // Call Claude with trigger detection prompt
       const response = await anthropic.messages.create({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-6",
         max_tokens: 1024,
         system: `${systemPrompt}\n\nIMPORTANT: Return your analysis as valid JSON matching this schema:\n${JSON.stringify(schemaJson, null, 2)}`,
         messages: [{ role: "user", content: args.userMessage }],

@@ -22,7 +22,7 @@ export const chat = action({
   },
   handler: async (_ctx, args): Promise<string> => {
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 4096,
       system: args.systemPrompt,
       messages: args.messages,
@@ -56,7 +56,7 @@ export const streamChat = action({
     let textContent = "";
 
     const stream = await anthropic.messages.stream({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 16000,
       system: args.systemPrompt,
       thinking: {
@@ -98,7 +98,7 @@ export const summarizePhase = action({
   handler: async (ctx, args) => {
     // Call Claude to extract summary
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 2000,
       messages: [
         {
@@ -173,7 +173,7 @@ export const assessCompletion = action({
   },
   handler: async (_ctx, args) => {
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 1000,
       messages: [
         {
@@ -233,7 +233,7 @@ Return your assessment as a JSON object with these exact fields:
 - missingElements (array of strings): What still needs to be covered to complete phase`;
 
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 1024,
       messages: [{ role: "user", content: prompt }],
     });

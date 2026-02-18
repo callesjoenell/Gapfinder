@@ -60,7 +60,7 @@ export const chatWithResearch = action({
     }));
 
     let response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 4096,
       tools: researchTools,
       system: args.systemPrompt,
@@ -131,7 +131,7 @@ export const chatWithResearch = action({
 
       // Get next response
       response = await anthropic.messages.create({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-6",
         max_tokens: 4096,
         tools: researchTools,
         system: args.systemPrompt,
