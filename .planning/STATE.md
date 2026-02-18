@@ -10,7 +10,7 @@
 
 **Core Value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
 
-**Current Focus:** Phase 9 (E2E Conversation Simulation) COMPLETE. All 3 plans executed. v1 milestone complete. Phase 6 deferred to v2.
+**Current Focus:** Phase 10 (Conversation Guardrails) IN PROGRESS. Plan 1/2 complete.
 
 **Tech Stack:** Convex (database), Claude API (conversations), React (frontend), Vite (build), Tailwind (styling), Motion (animations), d3-cloud (word layouts)
 
@@ -19,12 +19,12 @@
 ## Current Position
 
 **Milestone:** v1 COMPLETE
-**Phase:** 9 - E2E Conversation Simulation (Complete, Plan 3/3)
-**Status:** Milestone complete
-**Last Activity:** 2026-02-17
+**Phase:** 10 - Conversation Guardrails (In Progress, Plan 1/2)
+**Status:** Active development
+**Last Activity:** 2026-02-18
 
 **Progress:**
-[██████████] 100% (32/32 plans complete for v1)
+[██████████] 97%
 
 **Phase Breakdown:**
 | Phase | Plans | Status |
@@ -38,13 +38,14 @@
 | 7 - Research Tools | 6 | Complete (07-01 through 07-06) |
 | 8 - Conversation Design | 4 | Complete (08-01 through 08-04) |
 | 9 - E2E Conversation Simulation | 3 | Complete (09-01 through 09-03) |
+| 10 - Conversation Guardrails | 2 | In Progress (10-01 complete) |
 
 ---
 
 ## Performance Metrics
 
-**Plans Completed:** 34
-**Plans Total:** 35 (Phases 1-5, 7-9)
+**Plans Completed:** 35
+**Plans Total:** 37 (Phases 1-5, 7-10)
 **Success Rate:** 100%
 **Blockers Resolved:** 13 (Convex auth, auth config format, @auth/core version, Resend SDK deps, TypeScript build, Anthropic model name, pre-existing TS errors, framer-motion dependency, auth import pattern, TypeScript strict mode types, internal API functions, Convex tsconfig includes, Zod enum type)
 
@@ -154,6 +155,9 @@
 | Phase 0-2 gating for suggestions | Research phases are exploration (0-2); evaluation phases (3-9) have different needs | 2026-02-17 |
 | Queue status tracking (pending/completed/dismissed) | Enables filtering and badge count calculation for lifecycle management | 2026-02-17 |
 | Trigger via message sending | Leverages existing Claude flow; auto-research sends prompts, checklists trigger via messages | 2026-02-17 |
+| 6-guardrail framework prevents premature exit, therapy drift, and phase abandonment | Addresses three failure modes seen in testing: users wanting to "come back later", self-doubt spirals, therapy territory | 2026-02-18 |
+| Phase counter shows remaining phases to reinforce journey commitment | Makes explicit there's work remaining even when early validation feels complete | 2026-02-18 |
+| Remove therapist framing to clarify tool role vs coaching role | Consistency - can't say "not a therapist" while describing role as therapist-like | 2026-02-18 |
 | Phase 08 P02 | 251 | 2 tasks | 2 files |
 | Phase 08 P03 | 5m 29s | 2 tasks | 2 files |
 | Phase 08 P04 | 7m 12s | 2 tasks | 10 files |
@@ -161,6 +165,7 @@
 | Phase 09 P01 | 5m 37s | 2 tasks | 1 files |
 | Phase 09 P02 | 3m 54s | 2 tasks | 1 files |
 | Phase 09 P03 | 5m 3s | 2 tasks | 2 files |
+| Phase 10 P01 | 65 | 1 tasks | 1 files |
 
 ### Technical Findings
 
@@ -271,9 +276,9 @@ Create account and purchase credits ($10 for 100K keywords)
 
 ## Session Continuity
 
-**Last Session:** 2026-02-17T20:42:21Z
-**Last Action:** Completed 09-03-PLAN.md (Evaluation Scoring and Output Generation)
-**Next Action:** v1 milestone complete. Consider verification or v2 planning.
+**Last Session:** 2026-02-18T07:56:38.911Z
+**Last Action:** Completed 10-01-PLAN.md (System Prompt Guardrails)
+**Next Action:** Execute 10-02-PLAN.md to complete Phase 10.
 
 **Phase 8 Complete:**
 - [x] 08-01-PLAN.md - Coverage Tracking Infrastructure (coverageState table, CRUD operations, Zod schemas for extraction/triggers/rescoring)
