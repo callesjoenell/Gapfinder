@@ -254,6 +254,15 @@ IDEA STATEMENT FORMAT (choose the one that fits):
 
 Don't force problem framing on experience/identity ideas.
 
+PRODUCT OPINION TEST:
+After the idea statement, push the user to give their product a STANCE:
+- "What's this product's OPINION about the world? What does it believe?"
+- "Who would LOVE this framing — and who would roll their eyes?"
+- A generic product serves everyone blandly. A product with an opinion creates a tribe.
+- Example: A shared todo list is generic. "Happy Hubby" — where the wife assigns location-based tasks for the husband — takes a stance on modern family dynamics. Same features, but now people identify WITH it, talk about it, argue about it. The opinion IS the marketing.
+- Test: "If someone saw this product, would they immediately know if it's FOR THEM or NOT? If the answer is 'maybe' — the opinion isn't sharp enough."
+- Don't force it if it doesn't fit, but MOST ideas benefit from a point of view. Even B2B products can have opinions ("We believe spreadsheets are where ideas go to die").
+
 OWNERSHIP SIGNALS:
 - User uses first person ("I noticed", "I realized", "I want to")
 - User defends choices when challenged
@@ -426,7 +435,15 @@ TESTS:
 - Could user ship v1 in 2-4 weeks?
 - Is there a clear "magic moment" when someone gets value?
 - What would make someone choose this over the status quo or doing nothing?
-- For experience ideas: What's the minimum that creates the emotional payoff?`,
+- For experience ideas: What's the minimum that creates the emotional payoff?
+
+COMMUNITY AS ARCHITECTURE (not afterthought):
+Ask: "How does user #1 bring user #2? Is community baked into the product or bolted on after?"
+- Baked in: the product gets BETTER with more people (shared lists, group challenges, local networks, team features). User naturally invites others because the product works better together.
+- Bolted on: you add a "share" button and hope. This rarely works.
+- Even solo products can have community layers: leaderboards, shared templates, "made with X" watermarks, public profiles.
+- Key question: "What would users DO TOGETHER that they can't do alone? Is there a ritual, a shared moment, a reason to bring someone in?"
+- If the answer is "nothing" — that's fine, not every product needs community. But flag it as a distribution weakness in Phase 7 scoring.`,
   },
   {
     number: 7,
@@ -510,7 +527,30 @@ APPROACH:
 POSITIONING REFINEMENT:
 - Does your one-sentence pitch still hold?
 - What would you change knowing what you know now?
-- What's the "only" claim? "We're the only X that Y for Z."`,
+- What's the "only" claim? "We're the only X that Y for Z."
+
+SHARPEN THE PRODUCT OPINION:
+If the idea has an opinion from Phase 3, now stress-test and sharpen it:
+- "Is the opinion strong enough? Would someone share this BECAUSE of the stance, not despite it?"
+- "Name the tribe. What do your users call themselves? What's the insider language?"
+- "Does the opinion show up in the product itself — naming, copy, features, defaults — or is it just marketing veneer?"
+- If the opinion has softened since Phase 3, challenge that: "You started with a sharp take. What made you water it down? Was it fear of excluding people — or real evidence it doesn't work?"
+- The best products are loved by some BECAUSE others hate them. "Not for everyone" is a feature.
+
+If the idea doesn't have an opinion yet, this is the last chance:
+- "Right now this could be anyone's product. What would make it YOURS? What's the worldview?"
+- "If your product could wear a t-shirt with a slogan, what would it say?"
+
+STRENGTHEN COMMUNITY EFFECTS:
+If community was identified in Phase 6, now deepen it:
+- "What's the community ritual? The thing members do together regularly that reinforces belonging?"
+- "How does the community grow itself? Word of mouth is passive — what's the ACTIVE mechanism?"
+- "What happens when 10 people use this vs 1000? Does the experience fundamentally change?"
+- Network effects compound: each new user makes it better for existing users. If that's not happening, community is decoration, not architecture.
+
+If community wasn't part of Phase 6, probe whether it should be:
+- "Your distribution scored [X] in Phase 7. Could community be the missing growth engine?"
+- "Are your users already finding each other outside your product? If yes, you're leaving value on the table."`,
   },
   {
     number: 9,
