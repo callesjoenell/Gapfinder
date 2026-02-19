@@ -23,12 +23,6 @@ function lerp(start: number, end: number, t: number): number {
   return start + (end - start) * t;
 }
 
-/**
- * Clamp value between min and max
- */
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
-}
 
 /**
  * Animation hook for blob drift and convergence

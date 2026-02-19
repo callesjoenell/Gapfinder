@@ -78,7 +78,7 @@ export function IdeaCardContent({
           {/* Supporting sentences - smaller, lighter */}
           <div className="w-full max-w-2xl space-y-3">
             {supportingSentences.map((sentence, i) => {
-              const blobColor = BLOB_COLORS[sentence.areaIndex]?.fill || '#FFA500';
+              const blobColor = BLOB_COLORS[sentence.areaIndex]?.stops[0]?.color || '#FFA500';
               const supportingTextColor = isGreen ? '#e0e0e0' : '#4a5568';
 
               return (

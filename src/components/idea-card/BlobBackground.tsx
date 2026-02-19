@@ -10,7 +10,6 @@ import {
   BLOB_SEEDS,
   BLOB_COLORS,
   BLOB_ZONES,
-  CARD_CENTER,
 } from './utils/blobShapes';
 
 interface BlobBackgroundProps {

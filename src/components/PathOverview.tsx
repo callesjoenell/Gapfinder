@@ -17,8 +17,6 @@ export function PathOverview({ sessionPath, onStart }: PathOverviewProps) {
     ? "You'll work through these stages to discover your unfair advantages and find gaps worth filling."
     : "You'll work through these stages to stress-test your idea until you're confident it's worth building.";
 
-  const accentColor = isExploration ? "primary" : "amber";
-
   return (
     <div className="flex flex-col items-center justify-center min-h-full p-8 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-2 text-center">

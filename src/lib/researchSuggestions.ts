@@ -43,8 +43,6 @@ export function analyzeForSuggestions(
 
   // Only analyze last 5 messages for context
   const recentMessages = messages.slice(-5);
-  const userMessages = recentMessages.filter(m => m.role === "user");
-  const lastUserMessage = userMessages[userMessages.length - 1]?.content.toLowerCase() || "";
   const allRecentText = recentMessages.map(m => m.content.toLowerCase()).join(" ");
 
   // Pattern 1: Pain validation signals

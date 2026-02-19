@@ -14,7 +14,6 @@ import { v } from "convex/values";
 import { action } from "./_generated/server";
 import { internal } from "./_generated/api";
 import Anthropic from "@anthropic-ai/sdk";
-import { z } from "zod";
 import { createCoverageSchema, buildCoverageExtractionPrompt } from "../src/lib/schemas/coverageExtraction";
 import { TriggerDetectionSchema, buildTriggerDetectionPrompt } from "../src/lib/schemas/researchTriggers";
 

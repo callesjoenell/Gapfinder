@@ -6,7 +6,6 @@ import {
   analyzeForSuggestions,
   type ResearchSuggestion,
   type SuggestionType,
-  isImmediateSuggestion,
   getChecklistType,
 } from "../lib/researchSuggestions";
 

@@ -99,7 +99,7 @@ export function BlobWords({ keywords, blobBounds, phase }: BlobWordsProps) {
             key={area}
             words={words}
             bounds={bounds}
-            color={BLOB_COLORS[area]?.fill || '#FFA500'}
+            color={BLOB_COLORS[area]?.stops[0]?.color || '#FFA500'}
             phase={phase}
           />
         );
