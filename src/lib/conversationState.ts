@@ -1,5 +1,5 @@
 import { getPhaseConfig, getPhaseByPath } from "./phaseConfig";
-import { Summary } from "./systemPrompts";
+import type { Summary } from "./systemPrompts";
 
 export interface ConversationContext {
   currentPhase: number;
