@@ -11,14 +11,66 @@ export function PathOverview({ sessionPath, onStart }: PathOverviewProps) {
 
   const title = isExploration
     ? "Your Exploration Journey"
-    : "Your Evaluation Journey";
+    : "Your Idea Evaluation Journey";
 
   const subtitle = isExploration
     ? "You'll work through these stages to discover your unfair advantages and find gaps worth filling."
     : "You'll work through these stages to stress-test your idea until you're confident it's worth building.";
 
+  // Two columns for evaluation (7 phases), single column for exploration (3 phases)
+  const useColumns = !isExploration;
+  const midpoint = Math.ceil(phases.length / 2);
+  const leftColumn = useColumns ? phases.slice(0, midpoint) : phases;
+  const rightColumn = useColumns ? phases.slice(midpoint) : [];
+
+  function renderPhaseCard(phase: (typeof phases)[number], i: number) {
+    return (
+      <div
+        key={phase.number}
+        className="bg-white rounded-lg border border-gray-200 p-4"
+      >
+        <div className="flex items-start gap-3">
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold ${
+              isExploration
+                ? "bg-primary-100 text-primary-600"
+                : "bg-amber-100 text-amber-600"
+            }`}
+          >
+            {i + 1}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-semibold text-gray-900 text-sm">
+                {phase.name}
+              </h3>
+              <span className="text-xs text-gray-400">
+                {phase.timeEstimate}
+              </span>
+            </div>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              {phase.description}
+            </p>
+            {phase.coverageTopics.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {phase.coverageTopics.map((topic) => (
+                  <span
+                    key={topic.key}
+                    className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500"
+                  >
+                    {topic.label}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-full p-8 max-w-2xl mx-auto">
+    <div className="flex flex-col items-center min-h-full p-8 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-2 text-center">
         {title}
       </h1>
@@ -26,51 +78,20 @@ export function PathOverview({ sessionPath, onStart }: PathOverviewProps) {
         {subtitle}
       </p>
 
-      <div className="w-full space-y-3">
-        {phases.map((phase, i) => (
-          <div
-            key={phase.number}
-            className="bg-white rounded-lg border border-gray-200 p-4"
-          >
-            <div className="flex items-start gap-3">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold ${
-                  isExploration
-                    ? "bg-primary-100 text-primary-600"
-                    : "bg-amber-100 text-amber-600"
-                }`}
-              >
-                {i + 1}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-gray-900 text-sm">
-                    {phase.name}
-                  </h3>
-                  <span className="text-xs text-gray-400">
-                    {phase.timeEstimate}
-                  </span>
-                </div>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {phase.description}
-                </p>
-                {phase.coverageTopics.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {phase.coverageTopics.map((topic) => (
-                      <span
-                        key={topic.key}
-                        className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500"
-                      >
-                        {topic.label}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
+      {useColumns ? (
+        <div className="w-full grid grid-cols-2 gap-4">
+          <div className="space-y-3">
+            {leftColumn.map((phase, i) => renderPhaseCard(phase, i))}
           </div>
-        ))}
-      </div>
+          <div className="space-y-3">
+            {rightColumn.map((phase, i) => renderPhaseCard(phase, midpoint + i))}
+          </div>
+        </div>
+      ) : (
+        <div className="w-full max-w-2xl space-y-3">
+          {leftColumn.map((phase, i) => renderPhaseCard(phase, i))}
+        </div>
+      )}
 
       <button
         onClick={onStart}
@@ -83,7 +104,7 @@ export function PathOverview({ sessionPath, onStart }: PathOverviewProps) {
         Start from the beginning
       </button>
 
-      <p className="text-xs text-gray-400 mt-3 text-center">
+      <p className="text-xs text-gray-400 mt-3 mb-4 text-center">
         Each stage builds on the last. Take your time.
       </p>
     </div>
