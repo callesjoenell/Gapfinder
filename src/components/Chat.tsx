@@ -40,6 +40,7 @@ export function Chat({
   const [isQueueOpen, setIsQueueOpen] = useState(false);
   const scrollToPhaseRef = useRef<((phase: number) => void) | null>(null);
   const lastMessageCountRef = useRef(0);
+  const hasAutoGreeted = useRef(false);
 
   // Coverage state tracking (includes progress, topics, research intensity)
   const { coverageProgress, topicDepths, researchIntensity } = useCoverageState(sessionId, currentPhase);
@@ -72,6 +73,24 @@ export function Chat({
     detectedChecklistType,
     clearChecklistType,
   } = useStreamingChat(sessionId, currentPhase, sessionPath);
+
+  // Auto-send greeting for new sessions (0 messages) to kick off the conversation
+  useEffect(() => {
+    if (
+      messages !== undefined &&
+      messages.length === 0 &&
+      !isStreaming &&
+      !hasAutoGreeted.current
+    ) {
+      hasAutoGreeted.current = true;
+      sendMessage("Let's get started!");
+    }
+  }, [messages, isStreaming, sendMessage]);
+
+  // Reset auto-greet flag when session changes
+  useEffect(() => {
+    hasAutoGreeted.current = false;
+  }, [sessionId]);
 
   // Research suggestions based on conversation context
   const {
