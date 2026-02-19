@@ -9,6 +9,7 @@ import { Layout } from "./components/layout/Layout";
 import { Chat } from "./components/Chat";
 import { NewSessionModal } from "./components/NewSessionModal";
 import { OnboardingView } from "./components/OnboardingView";
+import { PathOverview } from "./components/PathOverview";
 import { useSessionState } from "./hooks/useSessionState";
 
 function App() {
@@ -57,6 +58,7 @@ function AuthenticatedApp() {
 function MainApp() {
   const [currentSessionId, setCurrentSessionId] = useState<Id<"sessions"> | null>(null);
   const [modalPath, setModalPath] = useState<"exploration" | "evaluation" | null>(null);
+  const [showOverview, setShowOverview] = useState(false);
 
   const session = useQuery(
     api.sessions.getSession,
@@ -102,6 +104,7 @@ function MainApp() {
           onClose={() => setModalPath(null)}
           onCreated={(sessionId) => {
             setCurrentSessionId(sessionId);
+            setShowOverview(true);
             setModalPath(null);
           }}
         />
@@ -113,10 +116,18 @@ function MainApp() {
     <>
       <Layout
         currentSessionId={currentSessionId}
-        onSelectSession={setCurrentSessionId}
+        onSelectSession={(id) => {
+          setCurrentSessionId(id);
+          setShowOverview(false);
+        }}
         onNewSession={(path) => setModalPath(path)}
       >
-        {session ? (
+        {session && showOverview ? (
+          <PathOverview
+            sessionPath={session.path}
+            onStart={() => setShowOverview(false)}
+          />
+        ) : session ? (
           <Chat
             sessionId={session._id}
             currentPhase={session.currentPhase}
@@ -148,6 +159,7 @@ function MainApp() {
         onClose={() => setModalPath(null)}
         onCreated={(sessionId) => {
           setCurrentSessionId(sessionId);
+          setShowOverview(true);
           setModalPath(null);
         }}
       />
