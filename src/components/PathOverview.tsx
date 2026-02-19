@@ -17,11 +17,7 @@ export function PathOverview({ sessionPath, onStart }: PathOverviewProps) {
     ? "You'll work through these stages to discover your unfair advantages and find gaps worth filling."
     : "You'll work through these stages to stress-test your idea until you're confident it's worth building.";
 
-  // Two columns for evaluation (7 phases), single column for exploration (3 phases)
   const useColumns = !isExploration;
-  const midpoint = Math.ceil(phases.length / 2);
-  const leftColumn = useColumns ? phases.slice(0, midpoint) : phases;
-  const rightColumn = useColumns ? phases.slice(midpoint) : [];
 
   function renderPhaseCard(phase: (typeof phases)[number], i: number) {
     return (
@@ -78,20 +74,13 @@ export function PathOverview({ sessionPath, onStart }: PathOverviewProps) {
         {subtitle}
       </p>
 
-      {useColumns ? (
-        <div className="w-full grid grid-cols-2 gap-4">
-          <div className="space-y-3">
-            {leftColumn.map((phase, i) => renderPhaseCard(phase, i))}
+      <div className={`w-full ${useColumns ? "columns-2 gap-4" : "max-w-2xl"}`}>
+        {phases.map((phase, i) => (
+          <div key={phase.number} className="mb-3 break-inside-avoid">
+            {renderPhaseCard(phase, i)}
           </div>
-          <div className="space-y-3">
-            {rightColumn.map((phase, i) => renderPhaseCard(phase, midpoint + i))}
-          </div>
-        </div>
-      ) : (
-        <div className="w-full max-w-2xl space-y-3">
-          {leftColumn.map((phase, i) => renderPhaseCard(phase, i))}
-        </div>
-      )}
+        ))}
+      </div>
 
       <button
         onClick={onStart}
