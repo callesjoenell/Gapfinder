@@ -219,7 +219,7 @@ ANTI-PATTERN: Don't let user rely on "everyone says..." without specifics. But a
     number: 3,
     name: "Your Idea",
     shortName: "Idea",
-    path: "exploration",
+    path: "evaluation",
     description: "Crystallize the idea into a clear statement",
     completionCriteria: [
       "User has a one-sentence idea statement naming a SPECIFIC person with an URGENT need",

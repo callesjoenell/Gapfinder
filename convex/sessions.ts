@@ -72,7 +72,7 @@ export const createSession = mutation({
     const sessionId = await ctx.db.insert("sessions", {
       userId,
       name: args.name,
-      currentPhase: args.path === "exploration" ? 0 : 4, // Start at phase 0 or 4
+      currentPhase: args.path === "exploration" ? 0 : 3, // Start at phase 0 or 3 (Your Idea)
       path: args.path,
       isPaid: args.path === "evaluation" ? false : true, // Exploration is "paid" (free), Evaluation needs payment
       isDeleted: false,
