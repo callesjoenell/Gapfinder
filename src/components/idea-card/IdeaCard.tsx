@@ -3,7 +3,7 @@
  * Renders BlobBackground with measured dimensions and collapse functionality
  */
 
-import { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import { useState, useRef, useLayoutEffect, useEffect, useCallback } from 'react';
 import { useLocalStorage } from 'react-use';
 import type { Id } from '../../../convex/_generated/dataModel';
 import { useQuery, useAction } from 'convex/react';
@@ -17,13 +17,24 @@ import { MOCK_PHASE_STATES } from '../../fixtures/phaseStates';
 interface IdeaCardProps {
   sessionId: Id<'sessions'>;
   currentPhase: number;
+  splitRatio?: number;
+  onCollapseChange?: (collapsed: boolean) => void;
 }
 
-export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
+export function IdeaCard({ sessionId, currentPhase, splitRatio, onCollapseChange }: IdeaCardProps) {
   // Persistent collapse state via localStorage
   const [isCollapsed, setIsCollapsed] = useLocalStorage('ideaCard-collapsed', false);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Notify parent of collapse state changes
+  useEffect(() => {
+    onCollapseChange?.(!!isCollapsed);
+  }, [isCollapsed, onCollapseChange]);
+
+  const handleToggleCollapse = useCallback(() => {
+    setIsCollapsed(!isCollapsed);
+  }, [isCollapsed, setIsCollapsed]);
 
   // Test mode detection and state
   const [isTestMode] = useState(() => {
@@ -110,19 +121,19 @@ export function IdeaCard({ sessionId, currentPhase }: IdeaCardProps) {
     // Update on window resize
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
+  }, [splitRatio]);
 
   return (
     <div
       ref={containerRef}
-      className={`
-        relative w-full bg-white/50 overflow-hidden transition-all duration-300
-        ${isCollapsed ? 'h-16' : 'h-[50vh]'}
-      `}
+      className="relative w-full bg-white/50 overflow-hidden transition-all duration-300"
+      style={{
+        height: isCollapsed ? '4rem' : `${(splitRatio ?? 0.5) * 100}%`,
+      }}
     >
       {/* Collapse/expand toggle button */}
       <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={handleToggleCollapse}
         className="absolute top-2 right-2 z-30 p-2 rounded-md bg-white/80 hover:bg-white transition-colors"
         aria-label={isCollapsed ? 'Expand card' : 'Collapse card'}
       >

@@ -4,8 +4,10 @@ import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { PhaseProgressBar } from "./PhaseProgressBar";
 import { IdeaCard } from "./idea-card";
+import { ResizeDivider } from "./ResizeDivider";
 import { useStreamingChat } from "../hooks/useStreamingChat";
 import { useScrollRestoration } from "../hooks/useScrollRestoration";
+import { useResizableSplit } from "../hooks/useResizableSplit";
 import { usePhaseProgress } from "../hooks/usePhaseProgress";
 import { usePhaseCompletion } from "../hooks/usePhaseCompletion";
 import { ResearchPanel } from "./research/ResearchPanel";
@@ -38,9 +40,14 @@ export function Chat({
   const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
   const [showKeywordLookup, setShowKeywordLookup] = useState(false);
   const [isQueueOpen, setIsQueueOpen] = useState(false);
+  const [ideaCollapsed, setIdeaCollapsed] = useState(false);
   const scrollToPhaseRef = useRef<((phase: number) => void) | null>(null);
   const lastMessageCountRef = useRef(0);
   const hasAutoGreeted = useRef(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Resizable split between IdeaCard and chat
+  const { splitRatio, isDragging, dividerProps } = useResizableSplit(chatContainerRef);
 
   // Coverage state tracking (includes progress, topics, research intensity)
   const { coverageProgress, topicDepths, researchIntensity } = useCoverageState(sessionId, currentPhase);
@@ -205,7 +212,7 @@ export function Chat({
   }, [clearChecklistType]);
 
   return (
-    <div className="flex flex-col h-full bg-gray-50 relative">
+    <div ref={chatContainerRef} className="flex flex-col h-full bg-gray-50 relative">
       {/* Research queue badge - shown when items are saved */}
       <div className="absolute top-2 right-2 z-10">
         <ResearchQueueBadge
@@ -214,7 +221,15 @@ export function Chat({
         />
       </div>
 
-      <IdeaCard sessionId={sessionId} currentPhase={currentPhase} />
+      <IdeaCard
+        sessionId={sessionId}
+        currentPhase={currentPhase}
+        splitRatio={splitRatio}
+        onCollapseChange={setIdeaCollapsed}
+      />
+      {!ideaCollapsed && (
+        <ResizeDivider isDragging={isDragging} onPointerDown={dividerProps.onPointerDown} />
+      )}
       <PhaseProgressBar
         sessionId={sessionId}
         currentPhase={currentPhase}
