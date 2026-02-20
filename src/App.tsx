@@ -44,7 +44,7 @@ function AuthenticatedApp() {
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
-            Sign in to Gap Finder
+            Sign in to Start Building Now
           </h2>
           <SignIn routing="hash" />
         </div>

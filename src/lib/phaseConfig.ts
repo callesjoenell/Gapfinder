@@ -563,7 +563,7 @@ If community wasn't part of Phase 6, probe whether it should be:
       "Timeline established for MVP",
       "Pre-launch validation plan defined",
       "User knows their 'one metric that matters'",
-      "User has completed the Gap Finder journey with clarity",
+      "User has completed the Start Building Now journey with clarity",
     ],
     coverageTopics: [
       { key: "next_actions", label: "Next Actions", description: "Concrete next 3 steps" },
