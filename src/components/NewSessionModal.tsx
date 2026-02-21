@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
+import { getPhaseConfig } from "../lib/phaseConfig";
 
 interface NewSessionModalProps {
   isOpen: boolean;
@@ -40,10 +41,13 @@ export function NewSessionModal({ isOpen, path, onClose, onCreated }: NewSession
     setError(null);
 
     try {
+      const startPhase = path === "exploration" ? 0 : 3;
+      const phaseConfig = getPhaseConfig(startPhase);
       const sessionId = await createSession({
         name: name.trim(),
         path,
         description: description.trim() || undefined,
+        greeting: phaseConfig?.greeting,
       });
       onCreated(sessionId);
       setName("");

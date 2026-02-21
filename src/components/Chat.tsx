@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { Id } from "../../convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { PhaseProgressBar } from "./PhaseProgressBar";
@@ -17,7 +15,7 @@ import type { ChecklistType } from "./research/checklistConfig";
 import { useCoverageState } from "../hooks/useCoverageState";
 import { useResearchSuggestions } from "../hooks/useResearchSuggestions";
 import { SuggestionChips, ResearchQueue, ResearchQueueBadge } from "./research";
-import { getPhaseConfig } from "../lib/phaseConfig";
+
 
 interface ChatProps {
   sessionId: Id<"sessions">;
@@ -46,12 +44,7 @@ export function Chat({
   const [ideaCollapsed, setIdeaCollapsed] = useState(false);
   const scrollToPhaseRef = useRef<((phase: number) => void) | null>(null);
   const lastMessageCountRef = useRef(0);
-  const hasAutoGreeted = useRef(false);
-  const greetingInFlight = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  // Direct mutation for saving hardcoded greetings (no Claude API call)
-  const saveGreeting = useMutation(api.messages.saveMessage);
 
   // Resizable split between IdeaCard and chat
   const { splitRatio, isDragging, dividerProps } = useResizableSplit(chatContainerRef);
@@ -88,39 +81,7 @@ export function Chat({
     clearChecklistType,
   } = useStreamingChat(sessionId, currentPhase, sessionPath);
 
-  // Auto-save hardcoded greeting for new sessions (no Claude API call)
-  // Uses both a ref flag AND an in-flight guard to prevent duplicate greetings
-  useEffect(() => {
-    if (
-      messages !== undefined &&
-      messages.length === 0 &&
-      !isStreaming &&
-      !hasAutoGreeted.current &&
-      !greetingInFlight.current
-    ) {
-      hasAutoGreeted.current = true;
-      greetingInFlight.current = true;
-      const phaseConfig = getPhaseConfig(currentPhase);
-      if (phaseConfig) {
-        saveGreeting({
-          sessionId,
-          phase: currentPhase,
-          role: "assistant",
-          content: phaseConfig.greeting,
-        }).finally(() => {
-          greetingInFlight.current = false;
-        });
-      } else {
-        greetingInFlight.current = false;
-      }
-    }
-  }, [messages, isStreaming, saveGreeting, sessionId, currentPhase]);
-
-  // Reset auto-greet flags when session changes
-  useEffect(() => {
-    hasAutoGreeted.current = false;
-    greetingInFlight.current = false;
-  }, [sessionId]);
+  // Greeting is now saved server-side in createSession mutation
 
   // Research suggestions based on conversation context
   const {

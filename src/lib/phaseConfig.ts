@@ -21,7 +21,7 @@ export const PHASES: PhaseConfig[] = [
     description:
       "Discover your unfair advantages through excavating 6 starting points",
     greeting:
-      "Welcome to Start Building Now! I'm here to help you discover your unfair advantages. Let's start by exploring your background -- your experiences, skills, and networks -- to find where your real edge lies.",
+      "Welcome to Start Building Now! In this phase, we'll discover your unfair advantages by exploring six areas: your life situation, profession, hobbies, skills others pay you for, networks, and transformations you've made.\n\nLet's start simple -- **tell me about your current life situation.** What's your day-to-day like? What do you spend most of your time on?",
     completionCriteria: [
       "User has answered excavation questions for all 6 starting points (Life Situation, Profession, Hobbies, Skills Others Pay For, Networks, Transformations Made)",
       "User has scored each area on Depth (1-5), Access (1-5), Energy (1-5)",
@@ -74,7 +74,7 @@ ENERGY SIGNALS TO WATCH:
     path: "exploration",
     description: "Research your domain to find gaps worth filling — problems to solve OR experiences to create",
     greeting:
-      "Now that you know your strengths, let's put them to work. In this phase, we'll research your domain to find gaps worth filling -- problems to solve or experiences to create that connect to your unfair advantage.",
+      "Now that you know your strengths, let's find gaps worth filling. We'll research your domain for problems to solve or experiences to create that connect to your unfair advantage.\n\n**Which area from Phase 0 excited you most?** Tell me the topic or skill you felt the strongest pull toward, and we'll start digging for gaps there.",
     completionCriteria: [
       "Specific gaps identified with rising energy signals",
       "Segment depth achieved: user has found the person for whom this is ESSENTIAL, not just convenient — can name specific individuals, not demographics",
@@ -145,7 +145,7 @@ IMPORTANT: A "gap" isn't always a "problem." It can be:
     path: "exploration",
     description: "Validate gaps and opportunities through evidence gathering",
     greeting:
-      "Time to validate with evidence. We'll look for real data points -- market signals, competitor gaps, and customer behavior -- to confirm your gap is worth pursuing.",
+      "Time to validate with evidence. We'll look for real data points -- market signals, competitor gaps, and customer behavior -- to confirm your gap is worth pursuing.\n\n**Describe the gap you identified in Phase 1.** What's the problem or opportunity you want to validate? I'll help you find supporting evidence.",
     completionCriteria: [
       "User has found 3+ external data points supporting the gap",
       "User has identified 2+ competitor/alternative approaches",
@@ -229,7 +229,7 @@ ANTI-PATTERN: Don't let user rely on "everyone says..." without specifics. But a
     path: "evaluation",
     description: "Crystallize the idea into a clear statement",
     greeting:
-      "Welcome! Let's crystallize your idea into something clear and compelling. We'll work together to define exactly who this is for, what it solves or makes possible, and why you're the right person to build it.",
+      "Welcome! In this phase, we'll crystallize your idea into a clear one-sentence statement: who it's for, what it solves or makes possible, and why you're the right person to build it.\n\n**Start by telling me your idea in your own words.** Don't worry about making it perfect -- just describe what you want to build and who it's for.",
     completionCriteria: [
       "User has a one-sentence idea statement naming a SPECIFIC person with an URGENT need",
       "Idea connects unfair advantage (Phase 0) to validated gap (Phase 1-2)",
@@ -287,7 +287,7 @@ OWNERSHIP SIGNALS:
     path: "evaluation",
     description: "Define and validate target customers",
     greeting:
-      "Let's get specific about who your customers are. We'll move from broad descriptions to real individuals you can actually reach and talk to.",
+      "Let's get specific about who your customers are. We'll move from broad descriptions to real individuals you can actually reach and talk to.\n\n**Describe your ideal customer as a real person.** Not a persona -- an actual type of person. What's their job? Where do they hang out online? What's frustrating them right now?",
     completionCriteria: [
       "User has specific customer profile (not generic persona)",
       "User knows WHERE these customers already gather",
@@ -340,7 +340,7 @@ This is the CRITICAL moment in the process. Everything before was thinking. This
     path: "evaluation",
     description: "Validate the problem or opportunity is worth pursuing",
     greeting:
-      "Time to validate with real conversations. Let's debrief what you learned from talking to potential customers and confirm the need is strong enough to build for.",
+      "Time to validate with real conversations. In this phase, we'll debrief what you learned from talking to potential customers.\n\n**Have you talked to any potential customers yet?** If yes, tell me about your first conversation -- who was it, what did you ask, and what surprised you? If not, let's plan who to talk to first.",
     completionCriteria: [
       "User has talked to at least 3 potential customers",
       "Need confirmed through BEHAVIOR evidence (not just opinions) — what people DO or actively seek",
@@ -419,7 +419,7 @@ RED FLAGS:
     path: "evaluation",
     description: "Design solution or experience that uniquely fits the validated need",
     greeting:
-      "Now let's design the solution. We'll figure out the smallest thing you can build that delivers the core value -- your MVP.",
+      "Now let's design the smallest thing you can build that delivers the core value -- your MVP.\n\n**Based on what customers told you, what's the single most important thing your product must do?** Not a feature list -- the one thing that, if it works, makes everything else optional.",
     completionCriteria: [
       "Solution directly addresses validated need from Phase 5 (problem solved OR experience created)",
       "User can explain why THIS solution (not alternatives)",
@@ -467,7 +467,7 @@ Ask: "How does user #1 bring user #2? Is community baked into the product or bol
     path: "evaluation",
     description: "Score the idea on key viability dimensions",
     greeting:
-      "Let's honestly assess your idea across key dimensions. We'll score each area and identify your biggest strengths and weaknesses.",
+      "Let's honestly assess your idea across key dimensions. We'll score each area and identify your biggest strengths and weaknesses.\n\n**How confident are you in your idea right now, on a scale of 1-10?** Tell me what feels strongest and what still worries you. We'll use that as our starting point.",
     completionCriteria: [
       "All scoring dimensions rated with specific evidence",
       "User understands which dimensions are strengths vs weaknesses",
@@ -517,7 +517,7 @@ TOTAL: 25+ with no 1s = Strong. 20-24 = Workable. <20 = Reconsider.`,
     path: "evaluation",
     description: "Address weaknesses and sharpen positioning",
     greeting:
-      "Let's sharpen your idea. We'll focus on your lowest scores and turn weaknesses into action plans.",
+      "Let's sharpen your idea by tackling your weakest areas head-on. We'll turn low scores into concrete action plans.\n\n**Look at your scores from Phase 7 -- which area scored lowest?** Tell me what it was and why you think it's weak. We'll build a plan to fix it.",
     completionCriteria: [
       "Lowest scoring dimensions have improvement plans",
       "Positioning statement refined based on learnings",
@@ -578,7 +578,7 @@ If community wasn't part of Phase 6, probe whether it should be:
     path: "evaluation",
     description: "Create actionable launch plan",
     greeting:
-      "This is it -- let's create your launch plan. We'll define your next concrete actions, timeline, and the one metric that matters.",
+      "This is it -- let's create your launch plan. We'll define your next concrete actions, timeline, and the one metric that matters.\n\n**What's the very first thing you need to do to start building?** Not \"build the app\" -- the smallest concrete step you could do today or tomorrow.",
     completionCriteria: [
       "User has concrete next 3 actions (not vague goals)",
       "Timeline established for MVP",

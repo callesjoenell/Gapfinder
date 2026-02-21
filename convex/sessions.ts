@@ -41,6 +41,7 @@ export const createSession = mutation({
     path: v.union(v.literal("exploration"), v.literal("evaluation")),
     description: v.optional(v.string()),
     linkedExplorationId: v.optional(v.id("sessions")),
+    greeting: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -68,13 +69,14 @@ export const createSession = mutation({
     }
 
     const now = Date.now();
+    const startPhase = args.path === "exploration" ? 0 : 3;
 
     const sessionId = await ctx.db.insert("sessions", {
       userId,
       name: args.name,
-      currentPhase: args.path === "exploration" ? 0 : 3, // Start at phase 0 or 3 (Your Idea)
+      currentPhase: startPhase,
       path: args.path,
-      isPaid: args.path === "evaluation" ? false : true, // Exploration is "paid" (free), Evaluation needs payment
+      isPaid: args.path === "evaluation" ? false : true,
       isDeleted: false,
       isArchived: false,
       description: args.description,
@@ -82,6 +84,17 @@ export const createSession = mutation({
       createdAt: now,
       lastActiveAt: now,
     });
+
+    // Save greeting message atomically with session creation
+    if (args.greeting) {
+      await ctx.db.insert("messages", {
+        sessionId,
+        phase: startPhase,
+        role: "assistant",
+        content: args.greeting,
+        timestamp: now,
+      });
+    }
 
     return sessionId;
   },
@@ -248,6 +261,7 @@ export const advancePhase = mutation({
   args: {
     sessionId: v.id("sessions"),
     toPhase: v.number(),
+    greeting: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -271,10 +285,22 @@ export const advancePhase = mutation({
       throw new Error(`Phase ${args.toPhase} is beyond ${session.path} path`);
     }
 
+    const now = Date.now();
     await ctx.db.patch(args.sessionId, {
       currentPhase: args.toPhase,
-      lastActiveAt: Date.now(),
+      lastActiveAt: now,
     });
+
+    // Save greeting for the new phase atomically
+    if (args.greeting) {
+      await ctx.db.insert("messages", {
+        sessionId: args.sessionId,
+        phase: args.toPhase,
+        role: "assistant",
+        content: args.greeting,
+        timestamp: now,
+      });
+    }
 
     return { newPhase: args.toPhase };
   },

@@ -86,12 +86,13 @@ export function usePhaseCompletion(
     }
 
     try {
+      const nextConfig = getPhaseConfig(nextPhase);
       await advanceMutation({
         sessionId,
         toPhase: nextPhase,
+        greeting: nextConfig?.greeting,
       });
 
-      const nextConfig = getPhaseConfig(nextPhase);
       toast.success(`Phase ${nextPhase} unlocked!`, {
         id: `phase-${nextPhase}-unlock`,
         description: nextConfig
