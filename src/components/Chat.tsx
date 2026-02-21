@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { Id } from "../../convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { PhaseProgressBar } from "./PhaseProgressBar";
@@ -15,6 +17,7 @@ import type { ChecklistType } from "./research/checklistConfig";
 import { useCoverageState } from "../hooks/useCoverageState";
 import { useResearchSuggestions } from "../hooks/useResearchSuggestions";
 import { SuggestionChips, ResearchQueue, ResearchQueueBadge } from "./research";
+import { getPhaseConfig } from "../lib/phaseConfig";
 
 interface ChatProps {
   sessionId: Id<"sessions">;
@@ -45,6 +48,9 @@ export function Chat({
   const lastMessageCountRef = useRef(0);
   const hasAutoGreeted = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Direct mutation for saving hardcoded greetings (no Claude API call)
+  const saveGreeting = useMutation(api.messages.saveMessage);
 
   // Resizable split between IdeaCard and chat
   const { splitRatio, isDragging, dividerProps } = useResizableSplit(chatContainerRef);
@@ -81,7 +87,7 @@ export function Chat({
     clearChecklistType,
   } = useStreamingChat(sessionId, currentPhase, sessionPath);
 
-  // Auto-send greeting for new sessions (0 messages) to kick off the conversation
+  // Auto-save hardcoded greeting for new sessions (no Claude API call)
   useEffect(() => {
     if (
       messages !== undefined &&
@@ -90,9 +96,17 @@ export function Chat({
       !hasAutoGreeted.current
     ) {
       hasAutoGreeted.current = true;
-      sendMessage("Let's get started!");
+      const phaseConfig = getPhaseConfig(currentPhase);
+      if (phaseConfig) {
+        saveGreeting({
+          sessionId,
+          phase: currentPhase,
+          role: "assistant",
+          content: phaseConfig.greeting,
+        });
+      }
     }
-  }, [messages, isStreaming, sendMessage]);
+  }, [messages, isStreaming, saveGreeting, sessionId, currentPhase]);
 
   // Reset auto-greet flag when session changes
   useEffect(() => {
