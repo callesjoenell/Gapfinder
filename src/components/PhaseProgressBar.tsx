@@ -17,8 +17,8 @@ interface PhaseProgressBarProps {
 
 /**
  * Segmented progress bar showing all phases for the current session path.
- * - Exploration sessions show phases 0-3
- * - Evaluation sessions show phases 4-9
+ * - Exploration sessions show phases 0-2
+ * - Evaluation sessions show phases 3-9
  */
 export function PhaseProgressBar({
   sessionId,

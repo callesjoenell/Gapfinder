@@ -12,7 +12,7 @@ export interface PhaseConfig {
 }
 
 export const PHASES: PhaseConfig[] = [
-  // EXPLORATION PATH (Phases 0-3)
+  // EXPLORATION PATH (Phases 0-2)
   {
     number: 0,
     name: "Know Yourself",
@@ -279,7 +279,7 @@ OWNERSHIP SIGNALS:
 - User asks "how do I..." questions (ready to act)`,
   },
 
-  // EVALUATION PATH (Phases 4-9) - Requires payment
+  // EVALUATION PATH (Phases 3-9) - Requires payment
   {
     number: 4,
     name: "Customers",
