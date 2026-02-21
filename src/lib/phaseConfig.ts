@@ -6,6 +6,7 @@ export interface PhaseConfig {
   description: string;
   completionCriteria: string[];
   instructions: string;
+  greeting: string;
   coverageTopics: Array<{ key: string; label: string; description: string }>;
   timeEstimate: string;
 }
@@ -19,6 +20,8 @@ export const PHASES: PhaseConfig[] = [
     path: "exploration",
     description:
       "Discover your unfair advantages through excavating 6 starting points",
+    greeting:
+      "Welcome to Start Building Now! I'm here to help you discover your unfair advantages. Let's start by exploring your background -- your experiences, skills, and networks -- to find where your real edge lies.",
     completionCriteria: [
       "User has answered excavation questions for all 6 starting points (Life Situation, Profession, Hobbies, Skills Others Pay For, Networks, Transformations Made)",
       "User has scored each area on Depth (1-5), Access (1-5), Energy (1-5)",
@@ -70,6 +73,8 @@ ENERGY SIGNALS TO WATCH:
     shortName: "Gaps",
     path: "exploration",
     description: "Research your domain to find gaps worth filling — problems to solve OR experiences to create",
+    greeting:
+      "Now that you know your strengths, let's put them to work. In this phase, we'll research your domain to find gaps worth filling -- problems to solve or experiences to create that connect to your unfair advantage.",
     completionCriteria: [
       "Specific gaps identified with rising energy signals",
       "Segment depth achieved: user has found the person for whom this is ESSENTIAL, not just convenient — can name specific individuals, not demographics",
@@ -139,6 +144,8 @@ IMPORTANT: A "gap" isn't always a "problem." It can be:
     shortName: "Research",
     path: "exploration",
     description: "Validate gaps and opportunities through evidence gathering",
+    greeting:
+      "Time to validate with evidence. We'll look for real data points -- market signals, competitor gaps, and customer behavior -- to confirm your gap is worth pursuing.",
     completionCriteria: [
       "User has found 3+ external data points supporting the gap",
       "User has identified 2+ competitor/alternative approaches",
@@ -221,6 +228,8 @@ ANTI-PATTERN: Don't let user rely on "everyone says..." without specifics. But a
     shortName: "Idea",
     path: "evaluation",
     description: "Crystallize the idea into a clear statement",
+    greeting:
+      "Welcome! Let's crystallize your idea into something clear and compelling. We'll work together to define exactly who this is for, what it solves or makes possible, and why you're the right person to build it.",
     completionCriteria: [
       "User has a one-sentence idea statement naming a SPECIFIC person with an URGENT need",
       "Idea connects unfair advantage (Phase 0) to validated gap (Phase 1-2)",
@@ -277,6 +286,8 @@ OWNERSHIP SIGNALS:
     shortName: "Cust",
     path: "evaluation",
     description: "Define and validate target customers",
+    greeting:
+      "Let's get specific about who your customers are. We'll move from broad descriptions to real individuals you can actually reach and talk to.",
     completionCriteria: [
       "User has specific customer profile (not generic persona)",
       "User knows WHERE these customers already gather",
@@ -328,6 +339,8 @@ This is the CRITICAL moment in the process. Everything before was thinking. This
     shortName: "Prob",
     path: "evaluation",
     description: "Validate the problem or opportunity is worth pursuing",
+    greeting:
+      "Time to validate with real conversations. Let's debrief what you learned from talking to potential customers and confirm the need is strong enough to build for.",
     completionCriteria: [
       "User has talked to at least 3 potential customers",
       "Need confirmed through BEHAVIOR evidence (not just opinions) — what people DO or actively seek",
@@ -405,6 +418,8 @@ RED FLAGS:
     shortName: "Sol",
     path: "evaluation",
     description: "Design solution or experience that uniquely fits the validated need",
+    greeting:
+      "Now let's design the solution. We'll figure out the smallest thing you can build that delivers the core value -- your MVP.",
     completionCriteria: [
       "Solution directly addresses validated need from Phase 5 (problem solved OR experience created)",
       "User can explain why THIS solution (not alternatives)",
@@ -451,6 +466,8 @@ Ask: "How does user #1 bring user #2? Is community baked into the product or bol
     shortName: "Score",
     path: "evaluation",
     description: "Score the idea on key viability dimensions",
+    greeting:
+      "Let's honestly assess your idea across key dimensions. We'll score each area and identify your biggest strengths and weaknesses.",
     completionCriteria: [
       "All scoring dimensions rated with specific evidence",
       "User understands which dimensions are strengths vs weaknesses",
@@ -499,6 +516,8 @@ TOTAL: 25+ with no 1s = Strong. 20-24 = Workable. <20 = Reconsider.`,
     shortName: "Refine",
     path: "evaluation",
     description: "Address weaknesses and sharpen positioning",
+    greeting:
+      "Let's sharpen your idea. We'll focus on your lowest scores and turn weaknesses into action plans.",
     completionCriteria: [
       "Lowest scoring dimensions have improvement plans",
       "Positioning statement refined based on learnings",
@@ -558,6 +577,8 @@ If community wasn't part of Phase 6, probe whether it should be:
     shortName: "Launch",
     path: "evaluation",
     description: "Create actionable launch plan",
+    greeting:
+      "This is it -- let's create your launch plan. We'll define your next concrete actions, timeline, and the one metric that matters.",
     completionCriteria: [
       "User has concrete next 3 actions (not vague goals)",
       "Timeline established for MVP",
