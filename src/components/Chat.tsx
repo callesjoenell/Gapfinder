@@ -47,6 +47,7 @@ export function Chat({
   const scrollToPhaseRef = useRef<((phase: number) => void) | null>(null);
   const lastMessageCountRef = useRef(0);
   const hasAutoGreeted = useRef(false);
+  const greetingInFlight = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Direct mutation for saving hardcoded greetings (no Claude API call)
@@ -88,14 +89,17 @@ export function Chat({
   } = useStreamingChat(sessionId, currentPhase, sessionPath);
 
   // Auto-save hardcoded greeting for new sessions (no Claude API call)
+  // Uses both a ref flag AND an in-flight guard to prevent duplicate greetings
   useEffect(() => {
     if (
       messages !== undefined &&
       messages.length === 0 &&
       !isStreaming &&
-      !hasAutoGreeted.current
+      !hasAutoGreeted.current &&
+      !greetingInFlight.current
     ) {
       hasAutoGreeted.current = true;
+      greetingInFlight.current = true;
       const phaseConfig = getPhaseConfig(currentPhase);
       if (phaseConfig) {
         saveGreeting({
@@ -103,14 +107,19 @@ export function Chat({
           phase: currentPhase,
           role: "assistant",
           content: phaseConfig.greeting,
+        }).finally(() => {
+          greetingInFlight.current = false;
         });
+      } else {
+        greetingInFlight.current = false;
       }
     }
   }, [messages, isStreaming, saveGreeting, sessionId, currentPhase]);
 
-  // Reset auto-greet flag when session changes
+  // Reset auto-greet flags when session changes
   useEffect(() => {
     hasAutoGreeted.current = false;
+    greetingInFlight.current = false;
   }, [sessionId]);
 
   // Research suggestions based on conversation context
