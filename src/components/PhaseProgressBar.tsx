@@ -1,6 +1,4 @@
-import { toast } from "sonner";
 import { PHASES, PHASE_NAMES } from "../lib/phaseConfig";
-import { PhaseSegment } from "./PhaseSegment";
 import { ResearchIntensityControl } from "./ResearchIntensityControl";
 import type { Id } from "../../convex/_generated/dataModel";
 import type { TopicDepth } from "../hooks/useCoverageState";
@@ -16,9 +14,12 @@ interface PhaseProgressBarProps {
 }
 
 /**
- * Segmented progress bar showing all phases for the current session path.
- * - Exploration sessions show phases 0-2
- * - Evaluation sessions show phases 3-9
+ * Phase progress header showing:
+ * 1. Current phase name + step indicator (e.g. "Step 2 of 7")
+ * 2. Progress bar for current phase
+ * 3. Next phase preview
+ * 4. Research intensity with brief explanation
+ * 5. Coverage topic dots
  */
 export function PhaseProgressBar({
   sessionId,
@@ -29,94 +30,119 @@ export function PhaseProgressBar({
   coverageTopics = [],
   researchIntensity = "medium",
 }: PhaseProgressBarProps) {
-  // Filter phases by session path
   const visiblePhases = PHASES.filter((p) => p.path === sessionPath);
-
-  const handleLockedClick = (phase: number) => {
-    const phaseName = PHASE_NAMES[phase] || `Phase ${phase}`;
-    const currentPhaseName = PHASE_NAMES[currentPhase] || `Phase ${currentPhase}`;
-
-    toast.info(`Complete Phase ${currentPhase} (${currentPhaseName}) first`, {
-      id: `locked-phase-${phase}`,
-      description: `${phaseName} will unlock after you complete the current phase.`,
-      duration: 4000,
-    });
-  };
-
-  const handlePhaseClick = (phase: number) => {
-    // For completed phases, trigger the click handler (will scroll in Plan 02)
-    // For now, just console.log as placeholder
-    console.log(`Phase ${phase} clicked - scroll to phase boundary (placeholder)`);
-    onPhaseClick(phase);
-  };
-
-  // Determine state for each phase
-  const getPhaseState = (phaseNumber: number): "locked" | "current" | "complete" => {
-    if (phaseNumber < currentPhase) return "complete";
-    if (phaseNumber === currentPhase) return "current";
-    return "locked";
-  };
-
-  // Get current phase name for display
+  const currentIndex = visiblePhases.findIndex((p) => p.number === currentPhase);
+  const nextPhase = currentIndex < visiblePhases.length - 1 ? visiblePhases[currentIndex + 1] : null;
   const currentPhaseName = PHASE_NAMES[currentPhase] || `Phase ${currentPhase}`;
 
-  // Depth symbol mapping
-  const depthSymbols = {
-    not_mentioned: "○",
-    surface: "◔",
-    moderate: "◑",
-    deep: "●",
+  // Depth colors for topic dots
+  const depthColors = {
+    not_mentioned: "border border-gray-300 bg-white",
+    surface: "bg-gray-300",
+    moderate: "bg-blue-400",
+    deep: "bg-blue-700",
   };
 
-  // Depth colors for dots
-  const depthColors = {
-    not_mentioned: "border-2 border-gray-300 bg-white",
-    surface: "bg-gray-300",
-    moderate: "bg-gray-500",
-    deep: "bg-gray-800",
+  const depthLabels = {
+    not_mentioned: "Not covered yet",
+    surface: "Briefly mentioned",
+    moderate: "Discussed",
+    deep: "Explored in depth",
+  };
+
+  const INTENSITY_HINTS: Record<string, string> = {
+    low: "Only flags major unsupported claims",
+    medium: "Flags claims, competitors & pain points",
+    high: "Flags everything including assumptions",
   };
 
   return (
     <div className="px-4 py-3 bg-white border-b shadow-sm">
-      {/* Header row with phase name and research intensity control */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="text-sm font-medium text-gray-700">
-          Phase {currentPhase}: {currentPhaseName}
+      {/* Row 1: Phase name + step count */}
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-gray-900">
+            {currentPhaseName}
+          </span>
+          <span className="text-xs text-gray-400">
+            Step {currentIndex + 1} of {visiblePhases.length}
+          </span>
         </div>
-        <ResearchIntensityControl
-          sessionId={sessionId}
-          currentIntensity={researchIntensity}
-        />
+        <span className="text-xs font-medium text-blue-600">
+          {Math.round(currentProgress)}%
+        </span>
       </div>
 
-      {/* Segmented progress bar */}
-      <div className="flex gap-1">
-        {visiblePhases.map((phase) => (
-          <PhaseSegment
-            key={phase.number}
-            phase={phase.number}
-            state={getPhaseState(phase.number)}
-            progress={phase.number === currentPhase ? currentProgress : 0}
-            onClick={() => handlePhaseClick(phase.number)}
-            onLockedClick={() => handleLockedClick(phase.number)}
+      {/* Row 2: Segmented progress — all phases as mini segments */}
+      <div className="flex gap-0.5 mb-1.5">
+        {visiblePhases.map((phase) => {
+          const isComplete = phase.number < currentPhase;
+          const isCurrent = phase.number === currentPhase;
+          const isLocked = phase.number > currentPhase;
+
+          return (
+            <button
+              key={phase.number}
+              onClick={() => !isLocked && onPhaseClick(phase.number)}
+              className={`relative h-1.5 flex-1 rounded-full transition-all duration-300 ${
+                isComplete
+                  ? "bg-green-500 hover:bg-green-600 cursor-pointer"
+                  : isCurrent
+                    ? "bg-blue-200 cursor-default"
+                    : "bg-gray-200 cursor-default opacity-50"
+              }`}
+              title={`${PHASE_NAMES[phase.number]}${isComplete ? " (complete)" : isCurrent ? " (current)" : " (locked)"}`}
+              aria-label={`${PHASE_NAMES[phase.number]} - ${isComplete ? "complete" : isCurrent ? "current" : "locked"}`}
+            >
+              {isCurrent && currentProgress > 0 && (
+                <div
+                  className="absolute inset-0 bg-blue-500 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(100, Math.max(0, currentProgress))}%` }}
+                />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Row 3: Next phase preview + research control */}
+      <div className="flex items-center justify-between">
+        <div className="text-xs text-gray-400">
+          {nextPhase ? (
+            <>Next: <span className="text-gray-500">{nextPhase.name}</span></>
+          ) : (
+            <span className="text-green-600">Final step</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <ResearchIntensityControl
+            sessionId={sessionId}
+            currentIntensity={researchIntensity}
           />
-        ))}
+        </div>
       </div>
 
-      {/* Sub-topic coverage dots (for current phase only) */}
+      {/* Row 4: Research hint */}
+      <div className="mt-1 text-[11px] text-gray-400 text-right">
+        {INTENSITY_HINTS[researchIntensity]}
+      </div>
+
+      {/* Row 5: Coverage topic dots (current phase) */}
       {coverageTopics.length > 0 && (
-        <div className="mt-2 flex items-center gap-1 justify-center">
+        <div className="mt-2 flex items-center gap-2 justify-center flex-wrap">
           {coverageTopics.map((topic) => {
-            const symbol = depthSymbols[topic.depth as keyof typeof depthSymbols] || "○";
             const colorClass = depthColors[topic.depth as keyof typeof depthColors] || depthColors.not_mentioned;
+            const depthLabel = depthLabels[topic.depth as keyof typeof depthLabels] || "Not covered";
 
             return (
               <div
                 key={topic.key}
-                className={`w-2 h-2 rounded-full ${colorClass}`}
-                title={`${topic.label}: ${symbol} ${topic.depth.replace('_', ' ')}`}
-                aria-label={`${topic.label}: ${topic.depth.replace('_', ' ')}`}
-              />
+                className="flex items-center gap-1"
+                title={`${topic.label}: ${depthLabel}`}
+              >
+                <div className={`w-2 h-2 rounded-full ${colorClass}`} />
+                <span className="text-[10px] text-gray-400">{topic.label}</span>
+              </div>
             );
           })}
         </div>
