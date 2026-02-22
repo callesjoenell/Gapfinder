@@ -19,25 +19,23 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+// Human-readable labels for tool names
+const TOOL_LABELS: Record<string, string> = {
+  search_reddit: "Searching Reddit",
+  search_hackernews: "Searching Hacker News",
+  search_tavily: "Searching the web",
+  search_producthunt: "Searching ProductHunt",
+  search_stackoverflow: "Searching Stack Overflow",
+  get_keyword_volume: "Looking up keyword data",
+};
+
 /**
  * Chat action with research tool execution loop.
- *
- * This action:
- * 1. Sends messages to Claude with tool definitions
- * 2. When Claude responds with tool_use, executes the tools
- * 3. Feeds tool results back to Claude for summarization
- * 4. Repeats until Claude provides a text response
- * 5. Saves research findings to session for persistence
- *
- * @param sessionId - Current session
- * @param systemPrompt - System instructions for Claude
- * @param messages - Conversation history
- * @returns Claude's final text response with research incorporated
  */
 export const chatWithResearch = action({
   args: {
     sessionId: v.id("sessions"),
-    phase: v.number(), // Added for source tracking per phase
+    phase: v.number(),
     systemPrompt: v.string(),
     messages: v.array(v.object({
       role: v.union(v.literal("user"), v.literal("assistant")),
@@ -45,7 +43,6 @@ export const chatWithResearch = action({
     })),
   },
   handler: async (ctx, args) => {
-    // Track research findings for persistence
     const findings: Array<{
       source: string;
       query: string;
@@ -53,7 +50,12 @@ export const chatWithResearch = action({
       timestamp: number;
     }> = [];
 
-    // Convert to Anthropic message format
+    // Report initial status
+    await ctx.runMutation(internal.activityStatus.set, {
+      sessionId: args.sessionId,
+      status: "Thinking...",
+    });
+
     let conversationMessages: Anthropic.MessageParam[] = args.messages.map(m => ({
       role: m.role,
       content: m.content,
@@ -74,15 +76,22 @@ export const chatWithResearch = action({
     while (response.stop_reason === "tool_use" && iterations < MAX_ITERATIONS) {
       iterations++;
 
-      // Find all tool use blocks
       const toolUseBlocks = response.content.filter(
         (c): c is Anthropic.ToolUseBlock => c.type === "tool_use"
       );
 
-      // Execute each tool (sequentially to respect rate limits)
       const toolResults: Anthropic.ToolResultBlockParam[] = [];
 
       for (const toolUse of toolUseBlocks) {
+        // Report which tool is being used
+        const toolLabel = TOOL_LABELS[toolUse.name] || `Using ${toolUse.name}`;
+        const query = (toolUse.input as Record<string, unknown>).query as string || "";
+        const statusText = query ? `${toolLabel} for "${query}"` : toolLabel;
+        await ctx.runMutation(internal.activityStatus.set, {
+          sessionId: args.sessionId,
+          status: statusText,
+        });
+
         const result = await executeResearchTool(
           toolUse.name,
           toolUse.input as Record<string, unknown>
@@ -104,7 +113,6 @@ export const chatWithResearch = action({
               timestamp: Date.now(),
             });
 
-            // Track searched source to prevent re-suggestion
             await ctx.runMutation(internal.conversationState.addSearchedSourceInternal, {
               sessionId: args.sessionId,
               phase: args.phase,
@@ -122,14 +130,18 @@ export const chatWithResearch = action({
         });
       }
 
-      // Add assistant response and tool results to conversation
+      // Report analyzing status before next Claude call
+      await ctx.runMutation(internal.activityStatus.set, {
+        sessionId: args.sessionId,
+        status: "Analyzing research results...",
+      });
+
       conversationMessages = [
         ...conversationMessages,
         { role: "assistant" as const, content: response.content },
         { role: "user" as const, content: toolResults },
       ];
 
-      // Get next response
       response = await anthropic.messages.create({
         model: "claude-sonnet-4-6",
         max_tokens: 4096,
@@ -147,13 +159,16 @@ export const chatWithResearch = action({
       });
     }
 
-    // Extract final text response (matching streamChat format)
+    // Clear activity status
+    await ctx.runMutation(internal.activityStatus.clear, {
+      sessionId: args.sessionId,
+    });
+
     const textContent = response.content.find(c => c.type === "text");
     if (!textContent || textContent.type !== "text") {
       throw new Error("No text in final response");
     }
 
-    // Research actions don't use extended thinking, so return empty string
     return { thinking: "", text: textContent.text };
   },
 });

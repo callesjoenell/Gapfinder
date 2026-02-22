@@ -122,6 +122,13 @@ export default defineSchema({
     lastUpdated: v.number(),
   }).index("by_session_phase", ["sessionId", "phase"]),
 
+  // Transient activity status for real-time UI updates
+  activityStatus: defineTable({
+    sessionId: v.id("sessions"),
+    status: v.string(), // e.g. "Thinking...", "Searching Reddit...", "Analyzing results..."
+    updatedAt: v.number(),
+  }).index("by_session", ["sessionId"]),
+
   // Research queue for saved suggestions (07-06)
   researchQueue: defineTable({
     sessionId: v.id("sessions"),

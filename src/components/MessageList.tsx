@@ -1,4 +1,6 @@
 import { useEffect, useCallback, useRef, Fragment } from "react";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
 import { MessageBubble } from "./MessageBubble";
 import { PhaseBoundary } from "./PhaseBoundary";
@@ -17,6 +19,7 @@ interface MessageListProps {
   streamingContent: string;
   streamingThinking?: string;
   isStreaming: boolean;
+  sessionId: Id<"sessions"> | null;
   containerRef: React.RefObject<HTMLDivElement | null>;
   // Pagination props
   onLoadMore: (numItems: number) => void;
@@ -31,6 +34,7 @@ export function MessageList({
   streamingContent,
   streamingThinking,
   isStreaming,
+  sessionId,
   containerRef,
   onLoadMore,
   isLoadingMore,
@@ -39,6 +43,12 @@ export function MessageList({
 }: MessageListProps) {
   // Track refs to phase boundary elements for scroll navigation
   const phaseRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+
+  // Subscribe to real-time activity status from the server
+  const activityStatus = useQuery(
+    api.activityStatus.get,
+    sessionId ? { sessionId } : "skip"
+  );
 
   // Scroll to phase function
   const scrollToPhase = useCallback((targetPhase: number) => {
@@ -83,6 +93,9 @@ export function MessageList({
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, [containerRef, handleScroll]);
+
+  // Determine the status text to show
+  const statusText = activityStatus || "Thinking...";
 
   return (
     <div
@@ -161,7 +174,7 @@ export function MessageList({
         />
       )}
 
-      {/* Loading indicator (before any content arrives) */}
+      {/* Loading indicator with real-time activity status */}
       {isStreaming && !streamingContent && !streamingThinking && (
         <div className="flex items-center gap-2 text-gray-400 px-4">
           <div className="flex gap-1">
@@ -178,7 +191,7 @@ export function MessageList({
               style={{ animationDelay: "300ms" }}
             />
           </div>
-          <span className="text-sm">Thinking...</span>
+          <span className="text-sm">{statusText}</span>
         </div>
       )}
     </div>

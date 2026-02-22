@@ -128,6 +128,21 @@ export function Chat({
     return () => container.removeEventListener("scroll", handleScroll);
   }, [containerRef]);
 
+  // When streaming starts, reset scroll-up state so user sees the response
+  useEffect(() => {
+    if (isStreaming) {
+      setIsUserScrolledUp(false);
+    }
+  }, [isStreaming]);
+
+  // Auto-scroll to bottom when new messages arrive or during streaming
+  useEffect(() => {
+    if (isUserScrolledUp) return;
+    const container = containerRef.current;
+    if (!container) return;
+    container.scrollTop = container.scrollHeight;
+  }, [messages, streamingContent, streamingThinking, isStreaming, isUserScrolledUp, containerRef]);
+
   // Trigger phase assessment every 5 messages
   useEffect(() => {
     if (!messages || messages.length === 0 || isAssessing) return;
@@ -235,6 +250,7 @@ export function Chat({
         streamingContent={streamingContent}
         streamingThinking={streamingThinking}
         isStreaming={isStreaming}
+        sessionId={sessionId}
         containerRef={containerRef}
         onLoadMore={loadMore}
         isLoadingMore={isLoadingMore}
