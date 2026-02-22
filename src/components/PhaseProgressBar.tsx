@@ -1,4 +1,4 @@
-import { PHASES } from "../lib/phaseConfig";
+import { PHASE_NAMES } from "../lib/phaseConfig";
 import { ResearchIntensityControl } from "./ResearchIntensityControl";
 import type { Id } from "../../convex/_generated/dataModel";
 import type { TopicDepth } from "../hooks/useCoverageState";
@@ -13,52 +13,59 @@ interface PhaseProgressBarProps {
   researchIntensity?: "low" | "medium" | "high";
 }
 
+// 5 levels from gray to teal
+const DEPTH_STYLES: Record<string, string> = {
+  not_mentioned: "bg-gray-100 text-gray-400",
+  surface:       "bg-primary-50 text-primary-400",
+  moderate:      "bg-primary-100 text-primary-600",
+  deep:          "bg-primary-200 text-primary-700 font-medium",
+};
+
+const DEPTH_LABELS: Record<string, string> = {
+  not_mentioned: "Not yet covered",
+  surface:       "Briefly touched",
+  moderate:      "Discussed",
+  deep:          "Explored in depth",
+};
+
 /**
- * Phase progress header:
- * Row 1: Phase names as text (blue = done/current, gray = upcoming) + research trigger sensitivity
+ * Shows topics within the current phase as non-linear pills.
+ * Color intensity = depth of coverage (gray → teal gradient).
  */
 export function PhaseProgressBar({
   sessionId,
   currentPhase,
-  sessionPath,
-  onPhaseClick,
+  coverageTopics = [],
   researchIntensity = "medium",
 }: PhaseProgressBarProps) {
-  const visiblePhases = PHASES.filter((p) => p.path === sessionPath);
-  const currentIndex = visiblePhases.findIndex((p) => p.number === currentPhase);
+  const currentPhaseName = PHASE_NAMES[currentPhase] || `Phase ${currentPhase}`;
 
   return (
-    <div className="px-4 py-2.5 bg-white border-b shadow-sm">
+    <div className="px-4 py-2 bg-white border-b shadow-sm">
       <div className="flex items-center justify-between gap-4">
-        {/* Left: phase names as text breadcrumbs */}
-        <div className="flex items-center gap-1 min-w-0 flex-wrap">
-          {visiblePhases.map((phase, i) => {
-            const isComplete = phase.number < currentPhase;
-            const isCurrent = phase.number === currentPhase;
+        {/* Left: topic pills with depth-based coloring */}
+        <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+          {coverageTopics.length > 0 ? (
+            <>
+              {coverageTopics.map((topic) => {
+                const style = DEPTH_STYLES[topic.depth] || DEPTH_STYLES.not_mentioned;
+                const label = DEPTH_LABELS[topic.depth] || DEPTH_LABELS.not_mentioned;
 
-            return (
-              <div key={phase.number} className="flex items-center">
-                <button
-                  onClick={() => (isComplete || isCurrent) ? onPhaseClick(phase.number) : undefined}
-                  className={`text-xs whitespace-nowrap transition-colors ${
-                    isCurrent
-                      ? "font-semibold text-blue-600"
-                      : isComplete
-                        ? "font-medium text-blue-500 hover:text-blue-700 cursor-pointer"
-                        : "font-normal text-gray-300"
-                  }`}
-                  disabled={!isComplete && !isCurrent}
-                >
-                  {phase.name}
-                </button>
-                {i < visiblePhases.length - 1 && (
-                  <span className={`mx-1 text-[10px] ${i < currentIndex ? "text-blue-300" : "text-gray-200"}`}>
-                    &rsaquo;
+                return (
+                  <span
+                    key={topic.key}
+                    className={`inline-block px-2 py-0.5 rounded-full text-[11px] whitespace-nowrap transition-colors ${style}`}
+                    title={`${topic.label}: ${label}`}
+                  >
+                    {topic.label}
                   </span>
-                )}
-              </div>
-            );
-          })}
+                );
+              })}
+              <span className="text-[10px] text-gray-300 ml-1">color = depth</span>
+            </>
+          ) : (
+            <span className="text-xs text-gray-400">{currentPhaseName}</span>
+          )}
         </div>
 
         {/* Right: research trigger sensitivity */}
