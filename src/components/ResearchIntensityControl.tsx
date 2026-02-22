@@ -5,6 +5,7 @@ import type { Id } from "../../convex/_generated/dataModel";
 interface ResearchIntensityControlProps {
   sessionId: Id<"sessions">;
   currentIntensity: "low" | "medium" | "high";
+  label?: string;
 }
 
 const INTENSITY_CONFIG = {
@@ -36,6 +37,7 @@ const INTENSITY_CONFIG = {
 export function ResearchIntensityControl({
   sessionId,
   currentIntensity,
+  label = "Research",
 }: ResearchIntensityControlProps) {
   const setIntensity = useMutation(api.conversationState.setResearchIntensity);
 
@@ -50,7 +52,7 @@ export function ResearchIntensityControl({
 
   return (
     <div className="flex items-center gap-1">
-      <span className="text-xs text-gray-500 mr-1">Research:</span>
+      <span className="text-xs text-gray-500 mr-1">{label}:</span>
       {(Object.keys(INTENSITY_CONFIG) as Array<"low" | "medium" | "high">).map((intensity) => {
         const config = INTENSITY_CONFIG[intensity];
         const isActive = intensity === currentIntensity;
