@@ -97,10 +97,29 @@ The chat input textarea does not dynamically expand when user types text that wr
 - **Root cause:** The grid mirror technique requires mirror and textarea to have IDENTICAL font-size, width, and padding so text wraps at identical positions. Also requires textarea to have no intrinsic height (`rows` attribute) that fights the grid cell stretching it.
 - **Result:** Awaiting user verification
 
+### Attempt 12 — Debug instrumentation + explicit grid-template-columns + explicit grid-area properties
+- **File:** `src/components/MessageInput.tsx`
+- **Changes:**
+  - Added `DEBUG = true` flag that enables visible CSS outlines on every element in the chain:
+    - Blue outline: `<form>` — confirms shrink-0 is working
+    - Green outline: flex row `<div>` — confirms items-end alignment
+    - Red outline: grid container `<div>` — confirms grid display and flex-1 growth
+    - Dashed orange outline: mirror div — confirms it exists and overlaps textarea
+    - Purple outline: textarea — confirms it overlaps mirror
+  - Added inline debug text under the input showing content.length, line count, render count
+  - Added `console.log` on every render with content length and value
+  - Added `useEffect` after every render logging `window.getComputedStyle()` of grid, mirror, and textarea — shows actual display, gridTemplateRows, gridTemplateColumns, width, height, fontSize, padding for both elements
+  - Added `console.log` in `onChange` showing new value length and line count
+  - Added `gridTemplateColumns: "1fr"` inline style to grid container — this is the critical missing piece. Without this, CSS grid auto-places items in separate columns instead of the same cell. The `grid` Tailwind class only sets `display: grid`, NOT `grid-template-columns`.
+  - Changed `gridArea: "1 / 1"` shorthand to explicit `gridRowStart: 1, gridColumnStart: 1, gridRowEnd: 2, gridColumnEnd: 2` properties for both mirror and textarea — eliminates any React style prop parsing ambiguity
+  - Added refs to grid container, mirror div, and textarea for getComputedStyle inspection
+- **Result:** Awaiting user verification
+- **Hypothesis:** The root cause is `gridTemplateColumns` was never set. Without it, the CSS Grid treats the mirror div and textarea as separate auto-sized columns (side by side, not overlapping). The `grid-area: 1/1` placement ONLY stacks elements in the same cell when there's actually one column. Without `grid-template-columns: 1fr`, the auto-placement algorithm gives each child its own column, and they never overlap.
+
 ## Current State (2026-03-01)
-- **Approach:** CSS Grid Mirror technique — fixed to have matching font/width between mirror and textarea, no rows attribute
-- **Status:** Fix applied, pending user verification
-- **Latest change:** Attempt 11 above
+- **Approach:** CSS Grid Mirror technique — with debug instrumentation, explicit grid-template-columns, and explicit grid-area properties
+- **Status:** Debug instrumentation deployed, pending user verification
+- **Latest change:** Attempt 12 above
 
 ## Root Causes Identified
 1. **CSS Grid Mirror mismatched sizing:** Mirror div had `text-base` + `w-full` (via flex-1), textarea had neither. Different widths → different text wrapping → mirror grows to wrong height. Also `rows={1}` on textarea set UA-stylesheet height competing with grid cell stretching.

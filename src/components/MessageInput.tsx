@@ -12,6 +12,9 @@ interface MessageInputProps {
 // Maximum height before the textarea scrolls (in rows of text, approximately)
 const MAX_HEIGHT_PX = 200;
 
+// DEBUG: Set to true to show visual debug outlines and console logs
+const DEBUG = true;
+
 export function MessageInput({
   onSend,
   disabled,
@@ -23,6 +26,38 @@ export function MessageInput({
   const [content, setContent] = useState(draftMessage || "");
   // Track whether content change was from user typing (internal) vs external prop change
   const isInternalChange = useRef(false);
+  const gridContainerRef = useRef<HTMLDivElement>(null);
+  const mirrorRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const renderCountRef = useRef(0);
+
+  renderCountRef.current += 1;
+
+  if (DEBUG) {
+    console.log(`[MessageInput] render #${renderCountRef.current}, content.length=${content.length}, content=${JSON.stringify(content.slice(0, 50))}`);
+  }
+
+  // After each render, log computed styles of grid container, mirror, and textarea
+  useEffect(() => {
+    if (!DEBUG) return;
+    const grid = gridContainerRef.current;
+    const mirror = mirrorRef.current;
+    const textarea = textareaRef.current;
+
+    if (grid) {
+      const computed = window.getComputedStyle(grid);
+      console.log(`[DEBUG grid] display=${computed.display}, gridTemplateRows=${computed.gridTemplateRows}, gridTemplateColumns=${computed.gridTemplateColumns}, width=${computed.width}, height=${computed.height}`);
+    }
+    if (mirror) {
+      const computed = window.getComputedStyle(mirror);
+      console.log(`[DEBUG mirror] gridArea=${computed.gridArea}, gridRowStart=${computed.gridRowStart}, gridColumnStart=${computed.gridColumnStart}, width=${computed.width}, height=${computed.height}, visibility=${computed.visibility}, fontSize=${computed.fontSize}, lineHeight=${computed.lineHeight}, padding=${computed.padding}`);
+    }
+    if (textarea) {
+      const computed = window.getComputedStyle(textarea);
+      console.log(`[DEBUG textarea] gridArea=${computed.gridArea}, gridRowStart=${computed.gridRowStart}, gridColumnStart=${computed.gridColumnStart}, width=${computed.width}, height=${computed.height}, fontSize=${computed.fontSize}, lineHeight=${computed.lineHeight}, padding=${computed.padding}, overflow=${computed.overflow}, resize=${computed.resize}`);
+      console.log(`[DEBUG textarea] scrollHeight=${textarea.scrollHeight}, clientHeight=${textarea.clientHeight}, offsetHeight=${textarea.offsetHeight}`);
+    }
+  });
 
   // Sync with external draft message changes (e.g., when switching sessions)
   // Only applies when draftMessage changes AND it wasn't triggered by our own onChange
@@ -32,6 +67,7 @@ export function MessageInput({
       return;
     }
     if (draftMessage !== undefined) {
+      if (DEBUG) console.log(`[MessageInput] syncing external draftMessage: ${JSON.stringify(draftMessage.slice(0, 50))}`);
       setContent(draftMessage);
     }
   }, [draftMessage]);
@@ -53,24 +89,49 @@ export function MessageInput({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="shrink-0 bg-transparent px-4 pb-4 pt-2">
-      <div className="flex gap-3 items-end">
+    <form
+      onSubmit={handleSubmit}
+      className="shrink-0 bg-transparent px-4 pb-4 pt-2"
+      style={DEBUG ? { outline: "2px solid blue" } : undefined}
+    >
+      <div
+        className="flex gap-3 items-end"
+        style={DEBUG ? { outline: "2px solid green" } : undefined}
+      >
         {/*
           CSS Grid Mirror Technique for auto-sizing textarea:
           - A grid container where a hidden mirror div and textarea overlap in the same cell
           - The mirror div contains the same text and auto-sizes based on content
           - The textarea follows because they share the same grid cell (grid-area: 1/1)
           - ZERO JavaScript needed for sizing — immune to React re-renders and flex recalculations
+
+          CRITICAL requirements for this to work:
+          1. Grid container must have display:grid (Tailwind 'grid' class)
+          2. Grid container must have grid-template-columns:1fr so it has exactly one column
+          3. Mirror and textarea must have identical font-size, line-height, padding, width
+          4. Mirror and textarea must be in the same grid cell: grid-row-start:1, grid-column-start:1
+          5. Textarea must NOT have a rows attribute (fights grid height)
+          6. Textarea must NOT have a fixed height
         */}
         <div
+          ref={gridContainerRef}
           className="flex-1 grid rounded-xl border border-gray-200 shadow-sm bg-white focus-within:ring-2 focus-within:ring-primary-500 focus-within:border-primary-500"
+          style={{
+            gridTemplateColumns: "1fr",
+            ...(DEBUG ? { outline: "3px solid red" } : {}),
+          }}
         >
           {/* Hidden mirror div — sizes the grid row, capped at max height */}
           <div
+            ref={mirrorRef}
             className="invisible pointer-events-none whitespace-pre-wrap break-words px-4 py-3 text-base overflow-hidden"
             style={{
-              gridArea: "1 / 1",
+              gridRowStart: 1,
+              gridColumnStart: 1,
+              gridRowEnd: 2,
+              gridColumnEnd: 2,
               maxHeight: `${MAX_HEIGHT_PX}px`,
+              ...(DEBUG ? { outline: "3px dashed orange" } : {}),
             }}
             aria-hidden="true"
           >
@@ -80,20 +141,27 @@ export function MessageInput({
 
           {/* Actual textarea — overlaps the mirror in the same grid cell */}
           <textarea
+            ref={textareaRef}
             value={content}
             onChange={(e) => {
               isInternalChange.current = true;
-              setContent(e.target.value);
-              onDraftChange?.(e.target.value);
+              const newValue = e.target.value;
+              if (DEBUG) console.log(`[MessageInput] onChange: newValue.length=${newValue.length}, lines=${newValue.split("\n").length}`);
+              setContent(newValue);
+              onDraftChange?.(newValue);
             }}
             onKeyDown={handleKeyDown}
             disabled={disabled}
             placeholder={placeholder}
             className="resize-none bg-transparent px-4 py-3 text-base w-full focus:outline-none disabled:bg-gray-50 disabled:text-gray-400"
             style={{
-              gridArea: "1 / 1",
+              gridRowStart: 1,
+              gridColumnStart: 1,
+              gridRowEnd: 2,
+              gridColumnEnd: 2,
               maxHeight: `${MAX_HEIGHT_PX}px`,
               overflowY: "auto",
+              ...(DEBUG ? { outline: "3px solid purple" } : {}),
             }}
           />
         </div>
@@ -105,6 +173,11 @@ export function MessageInput({
           Send
         </button>
       </div>
+      {DEBUG && (
+        <div className="text-xs text-red-500 mt-1 font-mono">
+          [DEBUG] content.length={content.length} | lines={content.split("\n").length} | render#{renderCountRef.current}
+        </div>
+      )}
       <p className="text-xs text-gray-400 mt-2">
         Press Enter to send, Shift+Enter for new line
       </p>
