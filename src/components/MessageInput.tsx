@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 interface MessageInputProps {
   onSend: (content: string) => void;
@@ -27,16 +27,18 @@ export function MessageInput({
     }
   }, [draftMessage]);
 
-  // Auto-resize textarea — useLayoutEffect runs before browser paint,
-  // preventing the visible flash when height resets to 'auto' for measurement.
-  useLayoutEffect(() => {
+  // Resize textarea to fit content — called directly on input, not via effect
+  const resizeTextarea = useCallback(() => {
     const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.overflow = "hidden";
-      textarea.style.height = "0";
-      textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
-    }
-  }, [content]);
+    if (!textarea) return;
+    // Reset to single row to get accurate scrollHeight
+    textarea.style.height = "auto";
+    // Cap at 200px max
+    const newHeight = Math.min(textarea.scrollHeight, 200);
+    textarea.style.height = `${newHeight}px`;
+    // Allow scrolling only when at max height
+    textarea.style.overflowY = textarea.scrollHeight > 200 ? "auto" : "hidden";
+  }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,6 +47,14 @@ export function MessageInput({
     onSend(content.trim());
     setContent("");
     onSendSuccess?.(); // Clear persisted draft
+    // Reset textarea height after clearing
+    requestAnimationFrame(() => {
+      const textarea = textareaRef.current;
+      if (textarea) {
+        textarea.style.height = "auto";
+        textarea.style.overflowY = "hidden";
+      }
+    });
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -63,12 +73,15 @@ export function MessageInput({
           onChange={(e) => {
             setContent(e.target.value);
             onDraftChange?.(e.target.value);
+            resizeTextarea();
           }}
+          onInput={resizeTextarea}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           placeholder={placeholder}
           rows={1}
-          className="flex-1 resize-none overflow-hidden border border-gray-200 rounded-xl px-4 py-3 shadow-sm bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
+          style={{ overflow: "hidden" }}
+          className="flex-1 resize-none border border-gray-200 rounded-xl px-4 py-3 shadow-sm bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
         />
         <button
           type="submit"
