@@ -55,7 +55,7 @@ export function MessageInput({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="shrink-0 border-t border-gray-200 bg-white p-4">
+    <form onSubmit={handleSubmit} className="shrink-0 bg-transparent px-4 pb-4 pt-2">
       <div className="flex gap-3 items-end">
         <textarea
           ref={textareaRef}
@@ -68,7 +68,7 @@ export function MessageInput({
           disabled={disabled}
           placeholder={placeholder}
           rows={1}
-          className="flex-1 resize-none overflow-hidden border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
+          className="flex-1 resize-none overflow-hidden border border-gray-200 rounded-xl px-4 py-3 shadow-sm bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
         />
         <button
           type="submit"
