@@ -31,7 +31,7 @@ export function MessageBubble({
   if (isUser) {
     // User messages: compact, right-aligned
     return (
-      <div className="flex justify-end">
+      <div className="flex justify-end w-full">
         <div className="min-w-0 max-w-[85%] bg-primary-500 text-white rounded-2xl px-4 py-3">
           <div className="whitespace-pre-wrap break-words">{message.content}</div>
         </div>
