@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface MessageInputProps {
   onSend: (content: string) => void;
@@ -9,6 +9,9 @@ interface MessageInputProps {
   onSendSuccess?: () => void;
 }
 
+// Maximum height before the textarea scrolls (in rows of text, approximately)
+const MAX_HEIGHT_PX = 200;
+
 export function MessageInput({
   onSend,
   disabled,
@@ -18,7 +21,6 @@ export function MessageInput({
   onSendSuccess,
 }: MessageInputProps) {
   const [content, setContent] = useState(draftMessage || "");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   // Track whether content change was from user typing (internal) vs external prop change
   const isInternalChange = useRef(false);
 
@@ -33,27 +35,6 @@ export function MessageInput({
       setContent(draftMessage);
     }
   }, [draftMessage]);
-
-  // Resize textarea to fit content.
-  // Resets to auto to measure scrollHeight, then sets explicit pixel height.
-  const resizeTextarea = useCallback(() => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-    // Reset to auto so scrollHeight reflects content, not current height
-    textarea.style.height = "auto";
-    const scrollH = textarea.scrollHeight;
-    const newHeight = Math.min(scrollH, 200);
-    textarea.style.height = `${newHeight}px`;
-    textarea.style.overflowY = scrollH > 200 ? "auto" : "hidden";
-  }, []);
-
-  // Re-apply correct height after every React render.
-  // React re-applies style={{ overflow: "hidden" }} on render which can interact
-  // with the textarea's intrinsic sizing. useLayoutEffect fires synchronously
-  // after DOM commit but before browser paint, so users never see a snap-back.
-  useLayoutEffect(() => {
-    resizeTextarea();
-  }, [content, resizeTextarea]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -74,21 +55,49 @@ export function MessageInput({
   return (
     <form onSubmit={handleSubmit} className="shrink-0 bg-transparent px-4 pb-4 pt-2">
       <div className="flex gap-3 items-end">
-        <textarea
-          ref={textareaRef}
-          value={content}
-          onChange={(e) => {
-            isInternalChange.current = true;
-            setContent(e.target.value);
-            onDraftChange?.(e.target.value);
-          }}
-          onKeyDown={handleKeyDown}
-          disabled={disabled}
-          placeholder={placeholder}
-          rows={1}
-          className="flex-1 resize-none border border-gray-200 rounded-xl px-4 py-3 shadow-sm bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
-          style={{ overflow: "hidden" }}
-        />
+        {/*
+          CSS Grid Mirror Technique for auto-sizing textarea:
+          - A grid container where a hidden mirror div and textarea overlap in the same cell
+          - The mirror div contains the same text and auto-sizes based on content
+          - The textarea follows because they share the same grid cell (grid-area: 1/1)
+          - ZERO JavaScript needed for sizing — immune to React re-renders and flex recalculations
+        */}
+        <div
+          className="flex-1 grid rounded-xl border border-gray-200 shadow-sm bg-white focus-within:ring-2 focus-within:ring-primary-500 focus-within:border-primary-500"
+        >
+          {/* Hidden mirror div — sizes the grid row, capped at max height */}
+          <div
+            className="invisible whitespace-pre-wrap break-words px-4 py-3 text-base overflow-hidden"
+            style={{
+              gridArea: "1 / 1",
+              maxHeight: `${MAX_HEIGHT_PX}px`,
+            }}
+            aria-hidden="true"
+          >
+            {/* Trailing space after newline ensures the last empty line has height */}
+            {content + "\n "}
+          </div>
+
+          {/* Actual textarea — overlaps the mirror in the same grid cell */}
+          <textarea
+            value={content}
+            onChange={(e) => {
+              isInternalChange.current = true;
+              setContent(e.target.value);
+              onDraftChange?.(e.target.value);
+            }}
+            onKeyDown={handleKeyDown}
+            disabled={disabled}
+            placeholder={placeholder}
+            rows={1}
+            className="resize-none bg-transparent px-4 py-3 focus:outline-none disabled:bg-gray-50 disabled:text-gray-400"
+            style={{
+              gridArea: "1 / 1",
+              maxHeight: `${MAX_HEIGHT_PX}px`,
+              overflowY: "auto",
+            }}
+          />
+        </div>
         <button
           type="submit"
           disabled={disabled || !content.trim()}

@@ -126,9 +126,10 @@ export function IdeaCard({ sessionId, currentPhase, splitRatio, onCollapseChange
   return (
     <div
       ref={containerRef}
-      className="relative w-full bg-white/50 overflow-hidden transition-all duration-300"
+      className="relative w-full bg-white/50 overflow-hidden duration-300 shrink-0"
       style={{
         height: isCollapsed ? '4rem' : `${(splitRatio ?? 0.5) * 100}%`,
+        transitionProperty: 'height',
       }}
     >
       {/* Collapse/expand toggle button */}
