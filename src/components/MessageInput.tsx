@@ -31,6 +31,10 @@ export function MessageInput({
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
+      // Must set overflow:hidden before reading scrollHeight.
+      // Without this, the browser may show a scrollbar instead of expanding,
+      // and scrollHeight won't accurately reflect actual content height.
+      textarea.style.overflow = "hidden";
       textarea.style.height = "auto";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
     }
@@ -66,7 +70,7 @@ export function MessageInput({
           disabled={disabled}
           placeholder={placeholder}
           rows={1}
-          className="flex-1 resize-none border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
+          className="flex-1 resize-none overflow-hidden border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
         />
         <button
           type="submit"
