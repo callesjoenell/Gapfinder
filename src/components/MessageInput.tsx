@@ -89,8 +89,7 @@ export function MessageInput({
             onKeyDown={handleKeyDown}
             disabled={disabled}
             placeholder={placeholder}
-            rows={1}
-            className="resize-none bg-transparent px-4 py-3 focus:outline-none disabled:bg-gray-50 disabled:text-gray-400"
+            className="resize-none bg-transparent px-4 py-3 text-base w-full focus:outline-none disabled:bg-gray-50 disabled:text-gray-400"
             style={{
               gridArea: "1 / 1",
               maxHeight: `${MAX_HEIGHT_PX}px`,
