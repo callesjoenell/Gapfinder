@@ -67,7 +67,7 @@ export function MessageInput({
         >
           {/* Hidden mirror div — sizes the grid row, capped at max height */}
           <div
-            className="invisible whitespace-pre-wrap break-words px-4 py-3 text-base overflow-hidden"
+            className="invisible pointer-events-none whitespace-pre-wrap break-words px-4 py-3 text-base overflow-hidden"
             style={{
               gridArea: "1 / 1",
               maxHeight: `${MAX_HEIGHT_PX}px`,
