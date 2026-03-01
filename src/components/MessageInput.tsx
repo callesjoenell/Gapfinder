@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 
 interface MessageInputProps {
   onSend: (content: string) => void;
@@ -27,15 +27,13 @@ export function MessageInput({
     }
   }, [draftMessage]);
 
-  // Auto-resize textarea
-  useEffect(() => {
+  // Auto-resize textarea — useLayoutEffect runs before browser paint,
+  // preventing the visible flash when height resets to 'auto' for measurement.
+  useLayoutEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
-      // Must set overflow:hidden before reading scrollHeight.
-      // Without this, the browser may show a scrollbar instead of expanding,
-      // and scrollHeight won't accurately reflect actual content height.
       textarea.style.overflow = "hidden";
-      textarea.style.height = "auto";
+      textarea.style.height = "0";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
     }
   }, [content]);
@@ -57,7 +55,7 @@ export function MessageInput({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="border-t border-gray-200 bg-white p-4">
+    <form onSubmit={handleSubmit} className="shrink-0 border-t border-gray-200 bg-white p-4">
       <div className="flex gap-3 items-end">
         <textarea
           ref={textareaRef}
