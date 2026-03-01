@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "convex/react";
+import { SignOutButton } from "@clerk/clerk-react";
 import { api } from "../../../convex/_generated/api";
 import type { Id, Doc } from "../../../convex/_generated/dataModel";
 import { SessionGroup } from "../SessionGroup";
@@ -135,10 +136,15 @@ export function Sidebar({
       </div>
 
       {/* Account section at bottom */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-gray-200 space-y-1">
         <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-600 text-sm">
           Settings
         </button>
+        <SignOutButton>
+          <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-600 text-sm">
+            Sign out
+          </button>
+        </SignOutButton>
       </div>
 
       {/* Context menu */}

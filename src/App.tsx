@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
-import { useAuth, SignIn, SignOutButton } from "@clerk/clerk-react";
+import { useAuth, SignIn } from "@clerk/clerk-react";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
@@ -183,13 +183,6 @@ function MainApp() {
         }}
       />
 
-      <div className="fixed bottom-4 right-4">
-        <SignOutButton>
-          <button className="text-gray-500 hover:text-gray-700 text-sm px-3 py-1.5 bg-white rounded-lg shadow-sm border border-gray-200">
-            Sign out
-          </button>
-        </SignOutButton>
-      </div>
     </>
   );
 }
