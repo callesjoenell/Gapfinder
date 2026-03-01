@@ -22,7 +22,7 @@ export function NewSessionModal({ isOpen, path, onClose, onCreated }: NewSession
 
   if (!isOpen) return null;
 
-  const title = path === "exploration" ? "New Area Exploration" : "New Idea Evaluation";
+  const title = path === "exploration" ? "New Exploration" : "New Evaluation";
   const placeholder = path === "exploration"
     ? "e.g., Healthcare tech gaps"
     : "e.g., AI-powered scheduling app";

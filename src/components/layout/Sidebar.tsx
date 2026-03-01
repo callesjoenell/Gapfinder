@@ -98,7 +98,7 @@ export function Sidebar({
           <div className="p-4 text-center text-gray-400">Loading...</div>
         ) : (
           <>
-            {/* Area Exploration group */}
+            {/* Explore group */}
             <SessionGroup
               type="exploration"
               sessions={explorationSessions || []}
@@ -110,7 +110,7 @@ export function Sidebar({
               onEditEnd={() => setEditingSessionId(null)}
             />
 
-            {/* Idea Evaluation group */}
+            {/* Evaluate group */}
             <SessionGroup
               type="evaluation"
               sessions={evaluationSessions || []}

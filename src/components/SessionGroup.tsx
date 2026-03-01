@@ -28,7 +28,7 @@ export function SessionGroup({
     true
   );
 
-  const title = type === "exploration" ? "Area Exploration" : "Idea Evaluation";
+  const title = type === "exploration" ? "Explore" : "Evaluate";
   const buttonText = type === "exploration" ? "New Exploration" : "New Evaluation";
   const sessionCount = sessions.length;
 

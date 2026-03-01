@@ -11,7 +11,7 @@ export function PathOverview({ sessionPath, onStart }: PathOverviewProps) {
 
   const title = isExploration
     ? "Your Exploration Journey"
-    : "Your Idea Evaluation Journey";
+    : "Your Evaluation Journey";
 
   const subtitle = isExploration
     ? "You'll work through these stages to discover your unfair advantages and find gaps worth filling."

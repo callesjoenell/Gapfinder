@@ -43,7 +43,7 @@ export function OnboardingView({
             </div>
             <div className="flex-1">
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Area Exploration
+                Explore
               </h2>
               <p className="text-gray-600 mb-4">
                 Map your unfair advantages, find gaps in the market, and discover areas where you can make a real impact.
@@ -96,7 +96,7 @@ export function OnboardingView({
             </div>
             <div className="flex-1">
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Idea Evaluation
+                Evaluate
               </h2>
               <p className="text-gray-600 mb-4">
                 Have an idea already? Stress-test it through structured analysis until you're confident it's worth building.
@@ -141,7 +141,7 @@ export function OnboardingView({
       </div>
 
       <p className="text-sm text-gray-500 mt-8 text-center">
-        Not sure where to start? Most people begin with Area Exploration to discover what makes them unique.
+        Not sure where to start? Most people begin with Explore to discover what makes them unique.
       </p>
     </div>
   );
