@@ -1,4 +1,7 @@
 import { useEffect, useCallback, useRef, Fragment } from "react";
+
+// DEBUG: Full layout hierarchy debug mode
+const MSG_LIST_DEBUG = true;
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
@@ -101,7 +104,26 @@ export function MessageList({
     <div
       ref={containerRef}
       className="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-6"
+      style={MSG_LIST_DEBUG ? { outline: "4px solid pink", position: "relative" } : undefined}
     >
+      {MSG_LIST_DEBUG && containerRef.current && (
+        <span
+          style={{
+            position: "sticky",
+            top: 0,
+            display: "block",
+            background: "pink",
+            color: "black",
+            fontSize: 10,
+            fontFamily: "monospace",
+            padding: "1px 4px",
+            zIndex: 9999,
+            pointerEvents: "none",
+          }}
+        >
+          MSG-LIST (scrollH={containerRef.current?.scrollHeight ?? "?"} clientH={containerRef.current?.clientHeight ?? "?"})
+        </span>
+      )}
       {/* Loading more indicator at top */}
       {isLoadingMore && (
         <div className="flex justify-center py-4">

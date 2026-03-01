@@ -7,6 +7,8 @@ interface MessageInputProps {
   draftMessage?: string;
   onDraftChange?: (draft: string) => void;
   onSendSuccess?: () => void;
+  // Debug: ref to allow parent to measure this form element
+  debugWrapRef?: React.MutableRefObject<HTMLElement | null>;
 }
 
 // Maximum height before the textarea scrolls (in rows of text, approximately)
@@ -22,6 +24,7 @@ export function MessageInput({
   draftMessage,
   onDraftChange,
   onSendSuccess,
+  debugWrapRef,
 }: MessageInputProps) {
   const [content, setContent] = useState(draftMessage || "");
   // Track whether content change was from user typing (internal) vs external prop change
@@ -29,6 +32,7 @@ export function MessageInput({
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const mirrorRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const renderCountRef = useRef(0);
 
   renderCountRef.current += 1;
@@ -37,13 +41,23 @@ export function MessageInput({
     console.log(`[MessageInput] render #${renderCountRef.current}, content.length=${content.length}, content=${JSON.stringify(content.slice(0, 50))}`);
   }
 
-  // After each render, log computed styles of grid container, mirror, and textarea
+  // After each render, log computed styles of form, grid container, mirror, and textarea
   useEffect(() => {
     if (!DEBUG) return;
+    const form = formRef.current;
     const grid = gridContainerRef.current;
     const mirror = mirrorRef.current;
     const textarea = textareaRef.current;
 
+    if (form) {
+      const computed = window.getComputedStyle(form);
+      console.log(`[DEBUG MSG-INPUT-FORM] offsetH=${form.offsetHeight} clientH=${form.clientHeight}`,
+        `| display=${computed.display} flex=${computed.flex}`,
+        `| flexShrink=${computed.flexShrink} flexGrow=${computed.flexGrow}`,
+        `| height=${computed.height} minH=${computed.minHeight} maxH=${computed.maxHeight}`,
+        `| overflow=${computed.overflow}`
+      );
+    }
     if (grid) {
       const computed = window.getComputedStyle(grid);
       console.log(`[DEBUG grid] display=${computed.display}, gridTemplateRows=${computed.gridTemplateRows}, gridTemplateColumns=${computed.gridTemplateColumns}, width=${computed.width}, height=${computed.height}`);
@@ -56,6 +70,13 @@ export function MessageInput({
       const computed = window.getComputedStyle(textarea);
       console.log(`[DEBUG textarea] gridArea=${computed.gridArea}, gridRowStart=${computed.gridRowStart}, gridColumnStart=${computed.gridColumnStart}, width=${computed.width}, height=${computed.height}, fontSize=${computed.fontSize}, lineHeight=${computed.lineHeight}, padding=${computed.padding}, overflow=${computed.overflow}, resize=${computed.resize}`);
       console.log(`[DEBUG textarea] scrollHeight=${textarea.scrollHeight}, clientHeight=${textarea.clientHeight}, offsetHeight=${textarea.offsetHeight}`);
+    }
+  });
+
+  // Expose form element to parent debug ref
+  useEffect(() => {
+    if (debugWrapRef && formRef.current) {
+      debugWrapRef.current = formRef.current;
     }
   });
 
@@ -90,10 +111,29 @@ export function MessageInput({
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
       className="shrink-0 bg-transparent px-4 pb-4 pt-2"
-      style={DEBUG ? { outline: "2px solid blue" } : undefined}
+      style={DEBUG ? { outline: "3px solid blue", position: "relative" } : undefined}
     >
+      {DEBUG && (
+        <span
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            background: "blue",
+            color: "white",
+            fontSize: 10,
+            fontFamily: "monospace",
+            padding: "1px 4px",
+            zIndex: 9999,
+            pointerEvents: "none",
+          }}
+        >
+          MSG-INPUT
+        </span>
+      )}
       <div
         className="flex gap-3 items-end"
         style={DEBUG ? { outline: "2px solid green" } : undefined}

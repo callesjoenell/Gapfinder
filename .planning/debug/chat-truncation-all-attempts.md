@@ -116,10 +116,33 @@ The chat input textarea does not dynamically expand when user types text that wr
 - **Result:** Awaiting user verification
 - **Hypothesis:** The root cause is `gridTemplateColumns` was never set. Without it, the CSS Grid treats the mirror div and textarea as separate auto-sized columns (side by side, not overlapping). The `grid-area: 1/1` placement ONLY stacks elements in the same cell when there's actually one column. Without `grid-template-columns: 1fr`, the auto-placement algorithm gives each child its own column, and they never overlap.
 
+### Attempt 13 — Full layout hierarchy visual debug instrumentation
+- **Files:** `src/components/layout/Layout.tsx`, `src/components/Chat.tsx`, `src/components/MessageList.tsx`, `src/components/idea-card/IdeaCard.tsx`, `src/components/MessageInput.tsx`
+- **Changes:**
+  - **Layout.tsx:** Added `useDebugLog` hook logging offsetH/clientH/scrollH + overflow/flex/height for LAYOUT-OUTER, LAYOUT-INNER, LAYOUT-MAIN on every render. Added colored outlines (cyan, teal, magenta) and corner labels.
+  - **Chat.tsx:** Added `CHAT_DEBUG` flag. `useEffect` logging Chat outer container computed styles every render. Added `DebugPanel` floating component (fixed top-right, z=99999, dark background) polling every 500ms showing real-time H/flex/shrink/grow/overflow/minH/maxH for CHAT-OUTER, MSG-LIST-WRAP, MSG-INPUT. Wrapped MessageList in `flex-1 min-h-0 flex flex-col` div (orange outline) for measurement. Added lime outline + "CHAT-OUTER" label to the main chat div.
+  - **MessageList.tsx:** Added MSG_LIST_DEBUG flag. Pink outline + sticky label showing scrollH and clientH.
+  - **IdeaCard.tsx:** Added IDEA_DEBUG flag. `useEffect` logging offsetH/clientH/height/flex/overflow/splitRatio every render. Yellow outline + label showing current height value.
+  - **MessageInput.tsx:** Added `debugWrapRef` prop exposing the `<form>` element to Chat's DebugPanel. Added `useEffect` logging form's offsetH/flex/flexShrink/flexGrow/height/overflow every render. Blue outline + "MSG-INPUT" label on form.
+- **Color legend:**
+  - cyan = LAYOUT-OUTER (h-screen flex)
+  - teal = LAYOUT-INNER (flex-1 flex-col overflow-hidden)
+  - magenta = LAYOUT-MAIN (flex-1 overflow-hidden)
+  - lime = CHAT-OUTER (flex-col h-full)
+  - yellow = IDEA-CARD (shrink-0 height:X%)
+  - orange = MSG-LIST-WRAP (flex-1 min-h-0 flex-col wrapper)
+  - pink = MSG-LIST (flex-1 min-h-0 overflow-y-auto)
+  - blue = MSG-INPUT form (shrink-0)
+  - red = GRID container
+  - dashed orange = mirror div
+  - purple = textarea
+- **Goal:** User deploys to Vercel, sees the colored boxes + floating panel, and can identify which container is constraining the input from growing.
+- **Result:** Awaiting user verification
+
 ## Current State (2026-03-01)
-- **Approach:** CSS Grid Mirror technique — with debug instrumentation, explicit grid-template-columns, and explicit grid-area properties
-- **Status:** Debug instrumentation deployed, pending user verification
-- **Latest change:** Attempt 12 above
+- **Approach:** Full layout hierarchy visual debug — colored outlines on every layer + floating real-time debug panel
+- **Status:** Debug instrumentation deployed, pending user verification on Vercel
+- **Latest change:** Attempt 13 above
 
 ## Root Causes Identified
 1. **CSS Grid Mirror mismatched sizing:** Mirror div had `text-base` + `w-full` (via flex-1), textarea had neither. Different widths → different text wrapping → mirror grows to wrong height. Also `rows={1}` on textarea set UA-stylesheet height competing with grid cell stretching.

@@ -4,6 +4,9 @@
  */
 
 import { useState, useRef, useLayoutEffect, useEffect, useCallback } from 'react';
+
+// DEBUG: Full layout hierarchy debug mode
+const IDEA_DEBUG = true;
 import { useLocalStorage } from 'react-use';
 import type { Id } from '../../../convex/_generated/dataModel';
 import { useQuery, useAction } from 'convex/react';
@@ -104,6 +107,21 @@ export function IdeaCard({ sessionId, currentPhase, splitRatio, onCollapseChange
   const passesThreshold = effectiveScore !== null && effectiveScore >= 20;
   const colorScheme: 'orange' | 'green' = passesThreshold ? 'green' : 'orange';
 
+  // Debug: log IdeaCard computed styles on every render
+  useEffect(() => {
+    if (!IDEA_DEBUG || !containerRef.current) return;
+    const el = containerRef.current;
+    const c = window.getComputedStyle(el);
+    console.log(
+      `[DEBUG IDEA-CARD] offsetH=${el.offsetHeight} clientH=${el.clientHeight}`,
+      `| height=${c.height} style.height=${el.style.height}`,
+      `| flex=${c.flex} flexShrink=${c.flexShrink} flexGrow=${c.flexGrow}`,
+      `| overflow=${c.overflow} overflowY=${c.overflowY}`,
+      `| position=${c.position}`,
+      `| splitRatio=${splitRatio}`,
+    );
+  });
+
   // Measure container dimensions for BlobBackground
   useLayoutEffect(() => {
     if (!containerRef.current) return;
@@ -130,8 +148,27 @@ export function IdeaCard({ sessionId, currentPhase, splitRatio, onCollapseChange
       style={{
         height: isCollapsed ? '4rem' : `${(splitRatio ?? 0.5) * 100}%`,
         transitionProperty: 'height',
+        ...(IDEA_DEBUG ? { outline: "4px solid yellow" } : {}),
       }}
     >
+      {IDEA_DEBUG && (
+        <span
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 120,
+            background: "yellow",
+            color: "black",
+            fontSize: 10,
+            fontFamily: "monospace",
+            padding: "1px 4px",
+            zIndex: 9999,
+            pointerEvents: "none",
+          }}
+        >
+          IDEA-CARD (h={isCollapsed ? '4rem' : `${Math.round((splitRatio ?? 0.5) * 100)}%`})
+        </span>
+      )}
       {/* Collapse/expand toggle button */}
       <button
         onClick={handleToggleCollapse}
