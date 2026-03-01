@@ -80,17 +80,46 @@ The chat input textarea does not dynamically expand when user types text that wr
 ### Attempt 10 — pointer-events-none on mirror div
 - **File:** `src/components/MessageInput.tsx`
 - **Change:** Added `pointer-events-none` to the invisible mirror div
-- **Result:** TESTING
-- **Commit:** pending
+- **Result:** PARTIAL — textarea expanded ONCE then stopped working. Paste only works for half a sentence.
+- **Commit:** 8088028
+- **Diagnosis:** The CSS Grid Mirror technique is close but unstable. The mirror div sizing or the textarea interaction within the grid cell is inconsistent. Possible issues:
+  - The mirror div and textarea may have mismatched font/padding causing size disagreement
+  - `invisible` class uses `visibility: hidden` which still takes up space but the element may interact oddly in grid context
+  - The textarea `rows={1}` attribute may fight with the grid cell height
+  - Paste events may not trigger React's onChange properly, so mirror content doesn't update
+
+## Current State (2026-03-01)
+- **Approach:** CSS Grid Mirror technique (attempt 9-10)
+- **Status:** Unstable — works sometimes, fails on paste, inconsistent expansion
+- **Latest commit:** 8088028
+- **Deployed:** https://start-building-now.vercel.app
 
 ## Root Causes Identified
 1. **Parent re-render race (primary):** onChange → setContent + onDraftChange → parent re-renders → second React render re-applies rows=1 but doesn't re-trigger effects
-2. **IdeaCard transition-all (secondary):** Animated ALL property changes, causing continuous flex recalculation during 300ms transition
+2. **IdeaCard transition-all (secondary, FIXED):** Changed to `transitionProperty: 'height'` only in attempt 9
 3. **Container constraints:** overflow-hidden on Layout main, h-full on Chat, percentage height on IdeaCard — rigid flex layout
 
+## What Has Been Fixed (keep these)
+- IdeaCard: `transition-all` → `transitionProperty: 'height'` + `shrink-0` (commit d166158)
+- MessageList: added `min-h-0` to allow flex shrinking (commit 3fdc6ef)
+- MessageInput form: `shrink-0` to prevent flex compression
+- MessageInput form: removed border-t divider for cleaner look
+- isInternalChange ref guard to prevent draftMessage sync loop
+
+## What Still Needs Fixing
+- The textarea auto-resize: CSS Grid Mirror is close but unstable
+- Paste support: paste events may not trigger state update → mirror doesn't sync
+- Consider alternatives:
+  - `contentEditable` div instead of textarea (native auto-sizing)
+  - `field-sizing: content` CSS (Chrome 123+, Firefox 131+, no Safari)
+  - Fix the grid mirror: ensure font/padding match exactly, remove `rows={1}`, add onPaste handler
+
 ## Key Files
-- `src/components/MessageInput.tsx` — the textarea
+- `src/components/MessageInput.tsx` — the textarea (CSS grid mirror approach)
 - `src/components/Chat.tsx` — flex column layout parent
-- `src/components/MessageList.tsx` — flex-1 sibling
-- `src/components/idea-card/IdeaCard.tsx` — percentage height sibling
+- `src/components/MessageList.tsx` — flex-1 sibling (has min-h-0)
+- `src/components/idea-card/IdeaCard.tsx` — percentage height sibling (transition fixed)
 - `src/components/layout/Layout.tsx` — overflow-hidden grandparent
+
+## To Resume
+Run `/gsd:debug the chat truncation` — read this file first for full context of all 10 attempts.
