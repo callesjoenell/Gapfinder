@@ -6,7 +6,7 @@
 import { useState, useRef, useLayoutEffect, useEffect, useCallback } from 'react';
 
 // DEBUG: Full layout hierarchy debug mode
-const IDEA_DEBUG = true;
+const IDEA_DEBUG = false;
 import { useLocalStorage } from 'react-use';
 import type { Id } from '../../../convex/_generated/dataModel';
 import { useQuery, useAction } from 'convex/react';

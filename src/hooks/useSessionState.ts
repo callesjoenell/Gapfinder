@@ -1,85 +1,83 @@
 import { useCallback } from 'react';
 import { useLocalStorage } from 'react-use';
 
-interface SessionState {
-  scrollPosition: number;
-  draftMessage: string;
-}
+// Scroll positions stored separately from draft messages to prevent stale-closure
+// race condition in react-use's useLocalStorage set() function.
+//
+// The bug: react-use's set() memoizes with [key, setState] deps but captures
+// `state` at creation time (not in deps). When saveDraftMessage and
+// saveScrollPosition both call setStates(prev => ...) within the same render
+// cycle, `prev` is the same stale snapshot. The second call (scroll) overwrites
+// the first (draft), restoring draftMessage to its old value ("").
+//
+// Fix: Use two separate localStorage keys so each set() only owns its own slice.
 
-type SessionStates = Record<string, SessionState>;
-
-const DEFAULT_STATE: SessionState = {
-  scrollPosition: 0,
-  draftMessage: '',
-};
+type ScrollStates = Record<string, number>;
+type DraftStates = Record<string, string>;
 
 export function useSessionState(sessionId: string | null) {
-  const [states, setStates] = useLocalStorage<SessionStates>(
-    'gapfinder-session-states',
+  const [scrollStates, setScrollStates] = useLocalStorage<ScrollStates>(
+    'gapfinder-scroll-positions',
     {}
   );
 
-  const currentState = sessionId && states ? states[sessionId] : null;
+  const [draftStates, setDraftStates] = useLocalStorage<DraftStates>(
+    'gapfinder-draft-messages',
+    {}
+  );
 
   const saveScrollPosition = useCallback(
     (position: number) => {
       if (!sessionId) return;
-      setStates((prev) => ({
+      setScrollStates((prev) => ({
         ...prev,
-        [sessionId]: {
-          ...DEFAULT_STATE,
-          ...prev?.[sessionId],
-          scrollPosition: position,
-        },
+        [sessionId]: position,
       }));
     },
-    [sessionId, setStates]
+    [sessionId, setScrollStates]
   );
 
   const saveDraftMessage = useCallback(
     (draft: string) => {
       if (!sessionId) return;
-      setStates((prev) => ({
+      setDraftStates((prev) => ({
         ...prev,
-        [sessionId]: {
-          ...DEFAULT_STATE,
-          ...prev?.[sessionId],
-          draftMessage: draft,
-        },
+        [sessionId]: draft,
       }));
     },
-    [sessionId, setStates]
+    [sessionId, setDraftStates]
   );
 
   const clearDraftMessage = useCallback(() => {
     if (!sessionId) return;
-    setStates((prev) => ({
+    setDraftStates((prev) => ({
       ...prev,
-      [sessionId]: {
-        ...DEFAULT_STATE,
-        ...prev?.[sessionId],
-        draftMessage: '',
-      },
+      [sessionId]: '',
     }));
-  }, [sessionId, setStates]);
+  }, [sessionId, setDraftStates]);
 
   // Cleanup: remove state for sessions that no longer exist
-  // This is called externally when sessions are deleted
   const removeSessionState = useCallback(
     (removedSessionId: string) => {
-      setStates((prev) => {
+      setScrollStates((prev) => {
+        if (!prev) return prev;
+        const next = { ...prev };
+        delete next[removedSessionId];
+        return next;
+      });
+      setDraftStates((prev) => {
         if (!prev) return prev;
         const next = { ...prev };
         delete next[removedSessionId];
         return next;
       });
     },
-    [setStates]
+    [setScrollStates, setDraftStates]
   );
 
   return {
-    scrollPosition: currentState?.scrollPosition ?? 0,
-    draftMessage: currentState?.draftMessage ?? '',
+    scrollPosition: (sessionId && scrollStates ? scrollStates[sessionId] : null) ?? 0,
+    draftMessage: (sessionId && draftStates ? draftStates[sessionId] : null) ?? '',
     saveScrollPosition,
     saveDraftMessage,
     clearDraftMessage,

@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useRef, Fragment } from "react";
 
 // DEBUG: Full layout hierarchy debug mode
-const MSG_LIST_DEBUG = true;
+const MSG_LIST_DEBUG = false;
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";

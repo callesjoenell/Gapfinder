@@ -1,8 +1,9 @@
 ---
-status: awaiting_human_verify
+status: resolved
 trigger: "Chat textarea does not expand when typing multi-line text"
 created: 2026-02-26
-updated: 2026-03-01T12:00:00Z
+updated: 2026-03-01T21:20:00Z
+resolved: 2026-03-01T21:20:00Z
 ---
 
 # Chat Truncation Debug — All Attempts
@@ -203,5 +204,66 @@ After Chat remounts, `MessageInput` `useState(draftMessage || "")` initializes f
 - `src/components/idea-card/IdeaCard.tsx` — percentage height sibling (transition fixed)
 - `src/components/layout/Layout.tsx` — overflow-hidden grandparent
 
-## To Resume
-Run `/gsd:debug the chat truncation` — read this file first for full context of all 10 attempts.
+### Attempt 16 — Replace CSS Grid Mirror with useLayoutEffect JS resize
+
+**Root cause analysis:**
+After exhaustive static analysis of attempts 14-15, the conclusion is:
+1. The content-clearing bug was caused by the old `useEffect([draftMessage])` sync (fixed in attempt 15).
+2. The REMAINING symptom is that the textarea doesn't grow — the CSS grid mirror technique has been unreliable across 8 attempts with subtle sizing mismatches between mirror div and textarea.
+3. `IDEA_DEBUG = true` was left enabled in IdeaCard.tsx, causing yellow outlines and console spam in production.
+
+**Why CSS grid mirror kept failing:**
+- The technique requires pixel-perfect match between mirror div and textarea: same font-size, line-height, padding, width, word-wrap behavior
+- React controls the textarea value (controlled component), which means the textarea must receive `height: auto` at just the right time to allow scrollHeight measurement
+- The complexity created too many failure modes (pointer-events, invisible vs hidden, grid placement, overflow clipping on the mirror div)
+
+**Why useLayoutEffect JS resize will work now:**
+- Attempt 15 removed the `useEffect([draftMessage])` sync that caused parent re-renders to reset textarea height
+- `useLayoutEffect([content])` fires ONLY when `content` state changes (user types or submit clears), not on parent re-renders
+- Runs synchronously before paint — no visible flash
+- Pattern: reset to `height: auto` → measure `scrollHeight` → set explicit height. Shrinks AND grows correctly.
+
+**Files changed:**
+- `src/components/MessageInput.tsx` — replaced entire CSS grid mirror approach with `useLayoutEffect` + direct DOM height
+  - Removed mirror div, gridContainerRef, mirrorRef, gridContainerRef
+  - Added `useLayoutEffect([content])` that sets `textarea.style.height`
+  - Added `rows={1}` for initial single-line appearance
+  - Moved border/shadow CSS directly onto textarea (was on grid container)
+  - Removed all DEBUG code (was already disabled)
+- `src/components/idea-card/IdeaCard.tsx` — `IDEA_DEBUG = false` (was accidentally left true)
+
+**Result:** CONFIRMED FIXED by user on 2026-03-01
+
+## Final Resolution
+
+**Status:** RESOLVED after 16 attempts across 4 sessions.
+
+**The actual root causes (3 independent bugs):**
+
+1. **Chat component unmounting on Convex transient `undefined` (attempt 15):** `useQuery` briefly returns `undefined` during WebSocket reconnects. The conditional render in App.tsx unmounted the entire Chat tree. On remount, MessageInput re-initialized from `draftMessage` which was `""`. Fixed with a `stableSessionRef` pattern that keeps Chat mounted through transient query gaps.
+
+2. **Fragile `useEffect([draftMessage])` sync creating feedback loops (attempt 15):** The `isInternalChange` ref guard was timing-sensitive. When `saveDraftMessage` updated parent state, the new `draftMessage` prop triggered the sync effect. If `isInternalChange` had already been consumed by a prior render, it would call `setContent(draftMessage)` with a stale/empty value. Fixed by removing the effect entirely and resetting content only on `sessionId` change.
+
+3. **CSS Grid Mirror technique unreliable for textarea auto-resize (attempt 16):** After fixing the state-clearing bugs, the textarea still didn't grow. The CSS grid mirror required pixel-perfect matching between a hidden div and the textarea (font-size, line-height, padding, width, word-wrap). Any mismatch caused sizing failures. Replaced with simple `useLayoutEffect([content])` that imperatively sets `textarea.style.height`.
+
+**Secondary fixes that were also necessary:**
+- `useSessionState`: Split shared localStorage key into separate keys for scroll and draft (attempt 14) — prevents react-use stale closure from letting scroll saves overwrite draft saves
+- `IdeaCard`: Changed `transition-all` to `transitionProperty: 'height'` (attempt 9)
+- `MessageList`: Added `min-h-0` for flex shrinking
+- `MessageInput form`: Added `shrink-0` to prevent flex compression
+
+## Key Learnings
+
+1. **Debug the RIGHT symptom first.** Attempts 1-3 fixed MessageBubble (display), not MessageInput (input). Attempts 4-13 focused on CSS height, but the real bug was React state being cleared (`content.length` going to 0). Always instrument to distinguish "content gone" vs "content hidden."
+
+2. **`useLocalStorage` from react-use has stale closure issues.** The `set` function captures `state` at memoization time, not call time. Two callbacks sharing the same key can overwrite each other. Solution: separate keys, or use a different state management approach.
+
+3. **CSS Grid Mirror is fragile in production.** Requires exact match of font-size, line-height, padding, width, word-wrap, and no `rows` attribute. A simpler `useLayoutEffect` with `scrollHeight` measurement is more robust.
+
+4. **`useEffect([draftMessage])` for external sync is dangerous with controlled inputs.** The effect creates a circular dependency: typing → onDraftChange → parent state → new draftMessage prop → effect fires → setContent. Guard refs are timing-sensitive and fail across remounts. Better pattern: use `key` prop to reset on session switch, ignore external prop changes during typing entirely.
+
+5. **Convex `useQuery` returns `undefined` during reconnects.** Conditional rendering based on query results can unmount component trees unexpectedly. Use a stable ref pattern to bridge transient gaps.
+
+6. **Debug instrumentation can CAUSE the bug.** DebugPanel with `setInterval` + `setState` inside a parent component causes re-renders every 500ms that propagate to children. Always consider whether your debugging tools are altering behavior.
+
+7. **Low render count = component remounted.** If render count drops between observations, the component was unmounted and remounted. This resets all refs and re-runs `useState` initializers — a completely different failure mode than state being cleared within a mounted component.
