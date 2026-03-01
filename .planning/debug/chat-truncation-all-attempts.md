@@ -2,7 +2,7 @@
 status: in_progress
 trigger: "Chat textarea does not expand when typing multi-line text"
 created: 2026-02-26
-updated: 2026-03-01
+updated: 2026-03-01T11:00:00Z
 ---
 
 # Chat Truncation Debug — All Attempts
@@ -88,14 +88,22 @@ The chat input textarea does not dynamically expand when user types text that wr
   - The textarea `rows={1}` attribute may fight with the grid cell height
   - Paste events may not trigger React's onChange properly, so mirror content doesn't update
 
+### Attempt 11 — Fix CSS Grid Mirror: remove rows={1}, add w-full + text-base to textarea
+- **File:** `src/components/MessageInput.tsx`
+- **Changes:**
+  - Removed `rows={1}` from textarea — the `rows` attribute sets intrinsic UA-stylesheet height that competes with grid cell stretching
+  - Added `w-full` to textarea — without this, textarea width defaults to UA-stylesheet cols=20 chars, causing different text wrapping than the mirror div (which fills the full flex-1 width). Different wrapping = different heights = grid mirrors nothing useful
+  - Added `text-base` to textarea — font-size must match mirror div exactly for identical line height calculations
+- **Root cause:** The grid mirror technique requires mirror and textarea to have IDENTICAL font-size, width, and padding so text wraps at identical positions. Also requires textarea to have no intrinsic height (`rows` attribute) that fights the grid cell stretching it.
+- **Result:** Awaiting user verification
+
 ## Current State (2026-03-01)
-- **Approach:** CSS Grid Mirror technique (attempt 9-10)
-- **Status:** Unstable — works sometimes, fails on paste, inconsistent expansion
-- **Latest commit:** 8088028
-- **Deployed:** https://start-building-now.vercel.app
+- **Approach:** CSS Grid Mirror technique — fixed to have matching font/width between mirror and textarea, no rows attribute
+- **Status:** Fix applied, pending user verification
+- **Latest change:** Attempt 11 above
 
 ## Root Causes Identified
-1. **Parent re-render race (primary):** onChange → setContent + onDraftChange → parent re-renders → second React render re-applies rows=1 but doesn't re-trigger effects
+1. **CSS Grid Mirror mismatched sizing:** Mirror div had `text-base` + `w-full` (via flex-1), textarea had neither. Different widths → different text wrapping → mirror grows to wrong height. Also `rows={1}` on textarea set UA-stylesheet height competing with grid cell stretching.
 2. **IdeaCard transition-all (secondary, FIXED):** Changed to `transitionProperty: 'height'` only in attempt 9
 3. **Container constraints:** overflow-hidden on Layout main, h-full on Chat, percentage height on IdeaCard — rigid flex layout
 
@@ -105,14 +113,7 @@ The chat input textarea does not dynamically expand when user types text that wr
 - MessageInput form: `shrink-0` to prevent flex compression
 - MessageInput form: removed border-t divider for cleaner look
 - isInternalChange ref guard to prevent draftMessage sync loop
-
-## What Still Needs Fixing
-- The textarea auto-resize: CSS Grid Mirror is close but unstable
-- Paste support: paste events may not trigger state update → mirror doesn't sync
-- Consider alternatives:
-  - `contentEditable` div instead of textarea (native auto-sizing)
-  - `field-sizing: content` CSS (Chrome 123+, Firefox 131+, no Safari)
-  - Fix the grid mirror: ensure font/padding match exactly, remove `rows={1}`, add onPaste handler
+- Mirror div: `pointer-events-none` so textarea receives pointer events (commit 8088028)
 
 ## Key Files
 - `src/components/MessageInput.tsx` — the textarea (CSS grid mirror approach)
