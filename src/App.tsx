@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import { useAuth, SignIn, SignOutButton } from "@clerk/clerk-react";
@@ -65,6 +65,24 @@ function MainApp() {
     currentSessionId ? { sessionId: currentSessionId } : "skip"
   );
 
+  // Stable session: remember the last valid session data so Chat stays mounted
+  // during transient Convex WebSocket reconnects (when useQuery briefly returns undefined).
+  // Only clear stableSession when currentSessionId explicitly changes.
+  const stableSessionRef = useRef(session);
+  if (session !== undefined) {
+    // session is defined (either a valid session object or null for "not found")
+    // update our stable reference so we always use the latest valid data
+    stableSessionRef.current = session;
+  }
+  // When currentSessionId changes, reset to undefined so we get a clean loading state
+  // (this prevents showing stale session data from the wrong session)
+  const prevSessionIdRef = useRef(currentSessionId);
+  if (prevSessionIdRef.current !== currentSessionId) {
+    prevSessionIdRef.current = currentSessionId;
+    stableSessionRef.current = undefined;
+  }
+  const stableSession = stableSessionRef.current;
+
   // Query both session types for onboarding check
   const explorationSessions = useQuery(api.sessions.listSessionsByPath, { path: "exploration" });
   const evaluationSessions = useQuery(api.sessions.listSessionsByPath, { path: "evaluation" });
@@ -122,16 +140,17 @@ function MainApp() {
         }}
         onNewSession={(path) => setModalPath(path)}
       >
-        {session && showOverview ? (
+        {stableSession && showOverview ? (
           <PathOverview
-            sessionPath={session.path}
+            sessionPath={stableSession.path}
             onStart={() => setShowOverview(false)}
           />
-        ) : session ? (
+        ) : stableSession ? (
           <Chat
-            sessionId={session._id}
-            currentPhase={session.currentPhase}
-            sessionPath={session.path}
+            key={stableSession._id.toString()}
+            sessionId={stableSession._id}
+            currentPhase={stableSession.currentPhase}
+            sessionPath={stableSession.path}
             scrollPosition={sessionState.scrollPosition}
             saveScrollPosition={sessionState.saveScrollPosition}
             draftMessage={sessionState.draftMessage}

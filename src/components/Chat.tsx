@@ -17,7 +17,7 @@ import { useResearchSuggestions } from "../hooks/useResearchSuggestions";
 import { SuggestionChips, ResearchQueue, ResearchQueueBadge } from "./research";
 
 // DEBUG: Full layout hierarchy debug mode
-const CHAT_DEBUG = true;
+const CHAT_DEBUG = false;
 
 interface ChatProps {
   sessionId: Id<"sessions">;
@@ -461,6 +461,8 @@ export function Chat({
       )}
 
       <MessageInput
+        key={sessionId.toString()}
+        sessionId={sessionId}
         onSend={sendMessage}
         disabled={isStreaming}
         placeholder={

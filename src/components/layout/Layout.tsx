@@ -12,7 +12,7 @@ interface LayoutProps {
 }
 
 // DEBUG: Full layout hierarchy debug mode
-const LAYOUT_DEBUG = true;
+const LAYOUT_DEBUG = false;
 
 function useDebugLog(label: string, ref: React.RefObject<HTMLElement | null>) {
   useEffect(() => {

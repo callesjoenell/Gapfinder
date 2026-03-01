@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import type { Id } from "../../convex/_generated/dataModel";
 
 interface MessageInputProps {
   onSend: (content: string) => void;
@@ -7,6 +8,8 @@ interface MessageInputProps {
   draftMessage?: string;
   onDraftChange?: (draft: string) => void;
   onSendSuccess?: () => void;
+  // sessionId is used to reset content when the session changes
+  sessionId?: Id<"sessions">;
   // Debug: ref to allow parent to measure this form element
   debugWrapRef?: React.MutableRefObject<HTMLElement | null>;
 }
@@ -15,7 +18,7 @@ interface MessageInputProps {
 const MAX_HEIGHT_PX = 200;
 
 // DEBUG: Set to true to show visual debug outlines and console logs
-const DEBUG = true;
+const DEBUG = false;
 
 export function MessageInput({
   onSend,
@@ -24,11 +27,12 @@ export function MessageInput({
   draftMessage,
   onDraftChange,
   onSendSuccess,
+  sessionId,
   debugWrapRef,
 }: MessageInputProps) {
   const [content, setContent] = useState(draftMessage || "");
-  // Track whether content change was from user typing (internal) vs external prop change
-  const isInternalChange = useRef(false);
+  // Track the last sessionId we rendered for, to detect actual session switches
+  const prevSessionIdRef = useRef(sessionId);
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const mirrorRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -80,18 +84,23 @@ export function MessageInput({
     }
   });
 
-  // Sync with external draft message changes (e.g., when switching sessions)
-  // Only applies when draftMessage changes AND it wasn't triggered by our own onChange
+  // Sync content when sessionId changes (actual session switch).
+  // This replaces the fragile isInternalChange + useEffect([draftMessage]) pattern.
+  // By keying on sessionId instead of draftMessage, we avoid the feedback loop where
+  // saveDraftMessage -> draftMessage prop change -> useEffect -> setContent("") was
+  // accidentally clearing typed text.
+  //
+  // Note: Chat.tsx also adds key={sessionId} to this component, which already forces
+  // a clean remount on session switch. This effect is a belt-and-suspenders guard in
+  // case the key prop is not sufficient (e.g., same sessionId but different contexts).
   useEffect(() => {
-    if (isInternalChange.current) {
-      isInternalChange.current = false;
-      return;
+    if (sessionId !== prevSessionIdRef.current) {
+      prevSessionIdRef.current = sessionId;
+      if (DEBUG) console.log(`[MessageInput] session changed to ${sessionId}, resetting content to draftMessage: ${JSON.stringify((draftMessage || "").slice(0, 50))}`);
+      setContent(draftMessage || "");
     }
-    if (draftMessage !== undefined) {
-      if (DEBUG) console.log(`[MessageInput] syncing external draftMessage: ${JSON.stringify(draftMessage.slice(0, 50))}`);
-      setContent(draftMessage);
-    }
-  }, [draftMessage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -184,7 +193,6 @@ export function MessageInput({
             ref={textareaRef}
             value={content}
             onChange={(e) => {
-              isInternalChange.current = true;
               const newValue = e.target.value;
               if (DEBUG) console.log(`[MessageInput] onChange: newValue.length=${newValue.length}, lines=${newValue.split("\n").length}`);
               setContent(newValue);

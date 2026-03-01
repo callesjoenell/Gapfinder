@@ -1,8 +1,8 @@
 ---
-status: in_progress
+status: awaiting_human_verify
 trigger: "Chat textarea does not expand when typing multi-line text"
 created: 2026-02-26
-updated: 2026-03-01T11:00:00Z
+updated: 2026-03-01T12:00:00Z
 ---
 
 # Chat Truncation Debug — All Attempts
@@ -139,23 +139,62 @@ The chat input textarea does not dynamically expand when user types text that wr
 - **Goal:** User deploys to Vercel, sees the colored boxes + floating panel, and can identify which container is constraining the input from growing.
 - **Result:** Awaiting user verification
 
-## Current State (2026-03-01)
-- **Approach:** Full layout hierarchy visual debug — colored outlines on every layer + floating real-time debug panel
-- **Status:** Debug instrumentation deployed, pending user verification on Vercel
-- **Latest change:** Attempt 13 above
+## Current State (2026-03-01 — Attempt 15)
+- **Attempt 14 confirmed FAILED.** Content still vanishes even with split localStorage keys.
+- **Render count dropped to #56** from previous screenshots of #134 and #152. This means the component REMOUNTED between sessions — the render counter reset to 1 after an unmount/remount.
+- **New root cause diagnosis:** Two independent bugs, both contributing:
+
+### Bug A: Chat unmounts when `session` query returns `undefined`
+In `App.tsx`, the conditional `session ? <Chat /> : <div>No session selected</div>` unmounts `Chat` whenever `session` is falsy. `useQuery` returns `undefined` during loading (Convex WebSocket reconnection, page load, etc.). When Convex briefly disconnects and reconnects, `session` goes to `undefined`, `Chat` unmounts, then remounts. The render counter resets (explains render#56 vs render#134/152).
+
+### Bug B: After remount, content initializes to "" because draft localStorage is empty
+After Chat remounts, `MessageInput` `useState(draftMessage || "")` initializes from `draftMessage`. If the user had JUST sent a message (which calls `clearDraftMessage` → sets `{sid: ""}` in localStorage), and THEN Convex triggered a brief disconnect/remount, the newly mounted `MessageInput` reads `""` from localStorage. Even without a deliberate submit, the `gapfinder-draft-messages` localStorage key may not have the latest typed text if the stale-closure write was slow.
+
+### Eliminated from Bug A: isInternalChange guard
+- The `isInternalChange.current` guard in the `useEffect([draftMessage])` is NOT the primary cause. The guard works correctly when the component stays mounted. The problem is that it's irrelevant after a remount because `useState` reinitializes.
+
+### Attempt 14 — Fix stale closure race condition in useSessionState (DID NOT FIX)
+
+**What was tried:** Split single `gapfinder-session-states` key into two separate keys. This DID fix the stale-closure cross-key overwrite between saveDraftMessage and saveScrollPosition. But the bug persists, proving there is ANOTHER cause.
+
+**Files changed:**
+- `src/hooks/useSessionState.ts` — two separate `useLocalStorage` calls
+
+### Attempt 15 — Prevent Chat unmount on transient session undefined + remove fragile draftMessage sync
+
+**Root cause:** `Chat` unmounts when Convex's `useQuery` transiently returns `undefined` (network hiccup, WebSocket reconnect). On remount, `MessageInput` re-initializes from `draftMessage` which may be `""`.
+
+**Fix:**
+
+1. **App.tsx**: Use a "stable session" pattern — remember the last valid session and keep `Chat` mounted even when `session` query briefly returns `undefined`. Only unmount `Chat` when `currentSessionId` explicitly changes.
+
+2. **MessageInput.tsx**: Remove the fragile `useEffect([draftMessage])` + `isInternalChange` pattern entirely. Instead, add `sessionId` as a prop and reset content ONLY when `sessionId` changes (actual session switch). This eliminates the entire class of "draftMessage change unexpectedly clears content" bugs.
+
+3. **Chat.tsx**: Add `key={sessionId.toString()}` to `MessageInput` — ensures clean remount ONLY on session switch, and pass `sessionId` as a prop.
+
+4. **Layout.tsx**: Set `LAYOUT_DEBUG = false` (still true, causing colored outlines — left from attempt 13).
+
+**Files changed:**
+- `src/App.tsx` — stable session pattern
+- `src/components/MessageInput.tsx` — remove draftMessage sync effect, add sessionId prop
+- `src/components/Chat.tsx` — pass sessionId to MessageInput, add key
+- `src/components/layout/Layout.tsx` — set LAYOUT_DEBUG = false
 
 ## Root Causes Identified
-1. **CSS Grid Mirror mismatched sizing:** Mirror div had `text-base` + `w-full` (via flex-1), textarea had neither. Different widths → different text wrapping → mirror grows to wrong height. Also `rows={1}` on textarea set UA-stylesheet height competing with grid cell stretching.
-2. **IdeaCard transition-all (secondary, FIXED):** Changed to `transitionProperty: 'height'` only in attempt 9
-3. **Container constraints:** overflow-hidden on Layout main, h-full on Chat, percentage height on IdeaCard — rigid flex layout
+1. **Chat unmounts on Convex transient undefined (PRIMARY, FIXED attempt 15):** `session` from `useQuery` briefly returns `undefined` during WebSocket reconnect. `App.tsx` conditional unmounts `Chat`. Remount resets render count and reinitializes content from localStorage.
+2. **Fragile draftMessage sync effect (SECONDARY, FIXED attempt 15):** `useEffect([draftMessage])` with `isInternalChange` ref was a timing-sensitive guard that could fire at wrong times. Replaced with `sessionId`-based reset.
+3. **Stale closure race in useLocalStorage (FIXED attempt 14):** react-use's `set` captures stale `state`. With split keys, scroll saves no longer overwrite drafts.
+4. **CSS Grid Mirror mismatched sizing:** Mirror div had `text-base` + `w-full` (via flex-1), textarea had neither. Different widths → different text wrapping → mirror grows to wrong height. Also `rows={1}` on textarea set UA-stylesheet height competing with grid cell stretching.
+5. **IdeaCard transition-all (FIXED attempt 9):** Changed to `transitionProperty: 'height'` only.
+6. **Container constraints:** overflow-hidden on Layout main, h-full on Chat, percentage height on IdeaCard — rigid flex layout.
 
 ## What Has Been Fixed (keep these)
 - IdeaCard: `transition-all` → `transitionProperty: 'height'` + `shrink-0` (commit d166158)
 - MessageList: added `min-h-0` to allow flex shrinking (commit 3fdc6ef)
 - MessageInput form: `shrink-0` to prevent flex compression
 - MessageInput form: removed border-t divider for cleaner look
-- isInternalChange ref guard to prevent draftMessage sync loop
 - Mirror div: `pointer-events-none` so textarea receives pointer events (commit 8088028)
+- useSessionState: split into two localStorage keys (attempt 14)
 
 ## Key Files
 - `src/components/MessageInput.tsx` — the textarea (CSS grid mirror approach)
