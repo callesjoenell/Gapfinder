@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Payments
 status: completed
-last_updated: "2026-03-02T09:37:37.619Z"
+last_updated: "2026-03-02T10:01:36.075Z"
 last_activity: 2026-03-02
 progress:
   total_phases: 2
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
-  percent: 100
+  total_plans: 4
+  completed_plans: 3
+  percent: 75
 ---
 
 # Project State: Gap Finder Web App
@@ -24,7 +24,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
-**Current focus:** v1.1 Payments — Phase 11: Pricing Engine
+**Current focus:** v1.1 Payments — Phase 12: Stripe Checkout
 
 **Tech Stack:** Next.js, Convex (database + auth), Clerk (auth), Claude API (conversations), Tailwind CSS, Motion (animations), d3-cloud (word layouts)
 
@@ -33,14 +33,14 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 ## Current Position
 
 **Milestone:** v1.1 Payments
-**Phase:** 11 — Pricing Engine (COMPLETE)
-**Status:** Milestone complete
+**Phase:** 12 — Stripe Checkout (In Progress — 1/2 plans done)
+**Status:** In Progress
 **Last Activity:** 2026-03-02
 
 **Progress:**
-[██████████] 100%
+[████████░░] 75%
 Phase 11 [██████████] 100%   Pricing Engine (2/2 plans done) — COMPLETE
-Phase 12 [          ]   0%   Stripe Checkout
+Phase 12 [█████░░░░░]  50%   Stripe Checkout (1/2 plans done)
 
 ---
 
@@ -70,6 +70,8 @@ Notable architectural decisions:
 | vitest added as first unit test framework | Isolated to pure functions; Convex functions tested via deploy |
 | setPricingConfig and createPayment are internalMutation | Not callable from client, only from trusted server actions |
 | isPaid: true for free sessions | Free means no money owed; Phase 12 will update isPaid after Stripe payment webhook |
+| Stripe runtime split: stripe.ts (use node) + stripeHelpers.ts (default runtime) | Convex "use node" files can't call mutations; bridge via internalAction |
+| Webhook-first session creation via createPaidSession | Session only exists after Stripe confirms payment — no orphan sessions |
 
 ### Technical Findings
 
@@ -97,9 +99,9 @@ None active.
 
 ## Session Continuity
 
-**Last Session:** 2026-03-02T09:37:37.618Z
-**Last Action:** Completed plan 11-02 — Free tier enforcement wired into createSession (1 task, 1 file)
-**Next Action:** `/gsd:plan-phase 12` — Stripe Checkout
+**Last Session:** 2026-03-02T10:01:36.073Z
+**Last Action:** Completed plan 12-01 — Stripe Checkout backend (stripe SDK, createPaidSession, httpActions, routes)
+**Next Action:** Execute plan 12-02 — Stripe Checkout frontend flow
 
 ---
 

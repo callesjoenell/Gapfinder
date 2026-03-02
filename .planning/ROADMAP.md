@@ -61,7 +61,7 @@ Plans:
   2. The paywall screen shows the current price, "price doubles in X days", and how many free sessions remain
   3. After successful payment, the new session is created automatically and the user lands in it without manual steps
   4. Cancelling or failing the Stripe payment returns the user to the app with no session created and no charge
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
 - [ ] 12-01-PLAN.md — Stripe backend: SDK, checkout session creation, webhook handler, paid session mutation
 - [ ] 12-02-PLAN.md — Paywall UX in modal, Stripe redirect, payment return handling
@@ -81,7 +81,7 @@ Plans:
 | 9. E2E Simulation | v1.0 | 3/3 | Complete | 2026-02 |
 | 10. Guardrails | v1.0 | 2/2 | Complete | 2026-02 |
 | 11. Pricing Engine | v1.1 | 2/2 | Complete | 2026-03-02 |
-| 12. Stripe Checkout | v1.1 | 0/2 | Not started | — |
+| 12. Stripe Checkout | 1/2 | In Progress|  | — |
 
 ---
 

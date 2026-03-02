@@ -10,11 +10,11 @@ Requirements for Stripe payments milestone.
 ### Payments
 
 - [x] **PAY-01**: User gets 1 free Explore session and 1 free Evaluate session
-- [ ] **PAY-02**: After free tier, creating a session triggers Stripe Checkout with current price
+- [x] **PAY-02**: After free tier, creating a session triggers Stripe Checkout with current price
 - [x] **PAY-03**: Base price is $2, doubling globally every week from launch date
 - [x] **PAY-04**: Price caps at $64 maximum
-- [ ] **PAY-05**: Successful Stripe payment creates the session automatically
-- [ ] **PAY-06**: Failed/cancelled payment returns user to app without creating session
+- [x] **PAY-05**: Successful Stripe payment creates the session automatically
+- [x] **PAY-06**: Failed/cancelled payment returns user to app without creating session
 - [x] **PAY-07**: Payment records stored per user with session linkage
 - [x] **PAY-08**: Launch date configurable (controls when doubling starts)
 
@@ -42,9 +42,9 @@ Requirements for Stripe payments milestone.
 | PAY-04 | Phase 11 | Complete |
 | PAY-07 | Phase 11 | Complete |
 | PAY-08 | Phase 11 | Complete |
-| PAY-02 | Phase 12 | Pending |
-| PAY-05 | Phase 12 | Pending |
-| PAY-06 | Phase 12 | Pending |
+| PAY-02 | Phase 12 | Complete |
+| PAY-05 | Phase 12 | Complete |
+| PAY-06 | Phase 12 | Complete |
 | PRICE-01 | Phase 12 | Pending |
 | PRICE-02 | Phase 12 | Pending |
 
