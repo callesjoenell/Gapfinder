@@ -106,7 +106,7 @@ export function NewSessionModal({ isOpen, path, onClose, onCreated }: NewSession
       }
 
       const response = await fetch(
-        "https://glad-bloodhound-996.convex.site/api/stripe/create-checkout",
+        import.meta.env.VITE_CONVEX_URL.replace(".cloud", ".site") + "/api/stripe/create-checkout",
         {
           method: "POST",
           headers: {
