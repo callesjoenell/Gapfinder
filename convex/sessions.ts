@@ -68,6 +68,28 @@ export const createSession = mutation({
       }
     }
 
+    // Read pricing config (required for all session creation)
+    const config = await ctx.db.query("pricingConfig").first();
+    if (!config) {
+      throw new Error("Service not yet configured. Please try again later.");
+    }
+
+    // Check free tier for current user
+    const freeTier = await ctx.db
+      .query("userFreeTier")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .first();
+
+    const pathKey = args.path === "exploration" ? "freeExploreUsed" : "freeEvaluateUsed";
+    const pathLimit = args.path === "exploration" ? config.freeExploreLimit : config.freeEvaluateLimit;
+    const used = freeTier ? freeTier[pathKey] : 0;
+    const isFree = used < pathLimit;
+
+    // Block paid sessions (Phase 12 will replace this with Stripe redirect)
+    if (!isFree) {
+      throw new Error("Payment required. Paid sessions coming soon!");
+    }
+
     const now = Date.now();
     const startPhase = args.path === "exploration" ? 0 : 3;
 
@@ -76,7 +98,7 @@ export const createSession = mutation({
       name: args.name,
       currentPhase: startPhase,
       path: args.path,
-      isPaid: args.path === "evaluation" ? false : true,
+      isPaid: true, // Free sessions are always "paid" — no money owed
       isDeleted: false,
       isArchived: false,
       description: args.description,
@@ -84,6 +106,24 @@ export const createSession = mutation({
       createdAt: now,
       lastActiveAt: now,
     });
+
+    // Increment free tier counter atomically after session insert
+    if (isFree) {
+      if (freeTier) {
+        await ctx.db.patch(freeTier._id, {
+          [pathKey]: used + 1,
+          lastUpdatedAt: now,
+        });
+      } else {
+        await ctx.db.insert("userFreeTier", {
+          userId,
+          freeExploreUsed: args.path === "exploration" ? 1 : 0,
+          freeEvaluateUsed: args.path === "evaluation" ? 1 : 0,
+          createdAt: now,
+          lastUpdatedAt: now,
+        });
+      }
+    }
 
     // Save greeting message atomically with session creation
     if (args.greeting) {
