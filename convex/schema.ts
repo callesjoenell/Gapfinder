@@ -143,4 +143,43 @@ export default defineSchema({
     completedAt: v.optional(v.number()),
   }).index("by_session", ["sessionId"])
     .index("by_session_status", ["sessionId", "status"]),
+
+  // Pricing engine tables (11-01)
+
+  // Single-row global pricing config
+  pricingConfig: defineTable({
+    launchDate: v.number(),        // Unix ms timestamp — when price doubling starts
+    freeExploreLimit: v.number(),  // Default 1
+    freeEvaluateLimit: v.number(), // Default 1
+    updatedAt: v.number(),
+  }),
+
+  // Per-user free session usage tracking
+  userFreeTier: defineTable({
+    userId: v.string(),           // Clerk user ID
+    freeExploreUsed: v.number(),  // Count consumed
+    freeEvaluateUsed: v.number(),
+    createdAt: v.number(),
+    lastUpdatedAt: v.number(),
+  }).index("by_user", ["userId"]),
+
+  // Payment records with Stripe fields pre-wired
+  payments: defineTable({
+    userId: v.string(),
+    sessionId: v.id("sessions"),
+    amountCents: v.number(), // Price snapshot in cents (200, 400, ..., 6400)
+    status: v.union(
+      v.literal("pending"),
+      v.literal("completed"),
+      v.literal("failed"),
+      v.literal("refunded")
+    ),
+    stripeSessionId: v.optional(v.string()),
+    stripePaymentIntentId: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_session", ["sessionId"])
+    .index("by_user_status", ["userId", "status"]),
 });
