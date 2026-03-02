@@ -403,6 +403,84 @@ export const clearAllSessions = mutation({
   },
 });
 
+// Internal mutation: Create a session after confirmed Stripe payment (12-01)
+// Idempotent — duplicate webhook events with same stripeSessionId are ignored.
+export const createPaidSession = internalMutation({
+  args: {
+    userId: v.string(),
+    name: v.string(),
+    path: v.union(v.literal("exploration"), v.literal("evaluation")),
+    description: v.optional(v.string()),
+    amountCents: v.number(),
+    stripeSessionId: v.string(),
+    stripePaymentIntentId: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    // Idempotency: check if payment with this stripeSessionId already exists
+    const existingPayment = await ctx.db
+      .query("payments")
+      .withIndex("by_stripe_session", (q) => q.eq("stripeSessionId", args.stripeSessionId))
+      .first();
+
+    if (existingPayment) {
+      // Already processed — return the existing sessionId
+      return existingPayment.sessionId;
+    }
+
+    // Check 5-session limit per path (same logic as createSession)
+    const allSessions = await ctx.db
+      .query("sessions")
+      .withIndex("by_user_active", (q) =>
+        q.eq("userId", args.userId)
+          .eq("isDeleted", false)
+      )
+      .collect();
+
+    const activeSessionsForPath = allSessions.filter(session =>
+      session.path === args.path && !session.isArchived
+    );
+
+    if (activeSessionsForPath.length >= 5) {
+      if (args.path === "exploration") {
+        throw new Error("You've explored 5 different areas! Consider committing to one and starting an evaluation to dive deeper.");
+      } else {
+        throw new Error("You have 5 evaluations in progress. Archive or complete some before starting new ones.");
+      }
+    }
+
+    const now = Date.now();
+    const startPhase = args.path === "exploration" ? 0 : 3;
+
+    // Insert the session (isPaid: true — payment confirmed by Stripe)
+    const sessionId = await ctx.db.insert("sessions", {
+      userId: args.userId,
+      name: args.name,
+      currentPhase: startPhase,
+      path: args.path,
+      isPaid: true,
+      isDeleted: false,
+      isArchived: false,
+      description: args.description,
+      createdAt: now,
+      lastActiveAt: now,
+    });
+
+    // Insert payment record with status "completed"
+    await ctx.db.insert("payments", {
+      userId: args.userId,
+      sessionId,
+      amountCents: args.amountCents,
+      status: "completed",
+      stripeSessionId: args.stripeSessionId,
+      stripePaymentIntentId: args.stripePaymentIntentId,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    return sessionId;
+  },
+});
+
 // Internal mutation: Append research findings to session (07-02)
 // Called by research actions to persist automated research results
 export const appendResearchFindings = internalMutation({

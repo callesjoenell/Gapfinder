@@ -181,5 +181,6 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_session", ["sessionId"])
-    .index("by_user_status", ["userId", "status"]),
+    .index("by_user_status", ["userId", "status"])
+    .index("by_stripe_session", ["stripeSessionId"]),
 });
