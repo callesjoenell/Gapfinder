@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Toaster } from "sonner";
+import { BrowserRouter, Routes, Route, useSearchParams } from "react-router-dom";
+import { Toaster, toast } from "sonner";
 import { useAuth, SignIn } from "@clerk/clerk-react";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
@@ -59,6 +59,9 @@ function MainApp() {
   const [currentSessionId, setCurrentSessionId] = useState<Id<"sessions"> | null>(null);
   const [modalPath, setModalPath] = useState<"exploration" | "evaluation" | null>(null);
   const [showOverview, setShowOverview] = useState(false);
+  const [pendingPayment, setPendingPayment] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const session = useQuery(
     api.sessions.getSession,
@@ -108,6 +111,63 @@ function MainApp() {
     }
   }, [currentSessionId, hasNoSessions, explorationSessions, evaluationSessions]);
 
+  // Track session count before payment redirect to detect new session after webhook
+  const prePaymentSessionCountRef = useRef<number | null>(null);
+  const pendingPaymentStartRef = useRef<number | null>(null);
+
+  // Handle payment return URL params
+  useEffect(() => {
+    const payment = searchParams.get("payment");
+    if (payment === "cancelled") {
+      toast.info("No charge — you can try again anytime");
+      setSearchParams({}, { replace: true });
+    }
+    if (payment === "success") {
+      const totalCount =
+        (explorationSessions?.length ?? 0) + (evaluationSessions?.length ?? 0);
+      prePaymentSessionCountRef.current = totalCount;
+      pendingPaymentStartRef.current = Date.now();
+      setPendingPayment(true);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams, explorationSessions, evaluationSessions]);
+
+  // Auto-select new session after payment webhook creates it
+  useEffect(() => {
+    if (!pendingPayment) return;
+
+    const allSessions = [
+      ...(explorationSessions ?? []),
+      ...(evaluationSessions ?? []),
+    ];
+    const currentCount = allSessions.length;
+    const preCount = prePaymentSessionCountRef.current;
+
+    if (preCount !== null && currentCount > preCount) {
+      // New session appeared — find the newest one by lastActiveAt
+      const newest = allSessions.reduce((latest, s) =>
+        s.lastActiveAt > latest.lastActiveAt ? s : latest
+      );
+      setCurrentSessionId(newest._id);
+      setShowOverview(true);
+      setPendingPayment(false);
+      prePaymentSessionCountRef.current = null;
+      pendingPaymentStartRef.current = null;
+      return;
+    }
+
+    // 30-second timeout
+    if (pendingPaymentStartRef.current !== null) {
+      const elapsed = Date.now() - pendingPaymentStartRef.current;
+      if (elapsed > 30_000) {
+        toast.error("Something went wrong setting up your session. Please contact support.");
+        setPendingPayment(false);
+        prePaymentSessionCountRef.current = null;
+        pendingPaymentStartRef.current = null;
+      }
+    }
+  }, [pendingPayment, explorationSessions, evaluationSessions]);
+
   // Show onboarding when no sessions exist
   if (hasNoSessions) {
     return (
@@ -140,7 +200,14 @@ function MainApp() {
         }}
         onNewSession={(path) => setModalPath(path)}
       >
-        {stableSession && showOverview ? (
+        {pendingPayment ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
+              <p className="text-gray-600">Setting up your session...</p>
+            </div>
+          </div>
+        ) : stableSession && showOverview ? (
           <PathOverview
             sessionPath={stableSession.path}
             onStart={() => setShowOverview(false)}
