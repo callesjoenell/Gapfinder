@@ -8,6 +8,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1-10 (shipped 2026-03-01)
+- **v1.1 Payments** — Phases 11-12 (in progress)
 
 ## Phases
 
@@ -29,6 +30,39 @@
 
 </details>
 
+### v1.1 Payments
+
+- [ ] **Phase 11: Pricing Engine** - Free tier tracking, weekly doubling price logic, payment records
+- [ ] **Phase 12: Stripe Checkout** - Paywall UX, Stripe Checkout flow, session creation on payment
+
+## Phase Details
+
+### Phase 11: Pricing Engine
+**Goal**: The app knows exactly what any user owes (or doesn't) when they try to create a session
+**Depends on**: Phase 1-10 (v1.0 complete)
+**Requirements**: PAY-01, PAY-03, PAY-04, PAY-07, PAY-08
+**Success Criteria** (what must be TRUE):
+  1. A new user's first Explore session and first Evaluate session are free — no payment prompt appears
+  2. The current session price is $2 on launch day, doubles each week, and never exceeds $64
+  3. A configurable launch date controls when doubling starts; changing it immediately affects the computed price
+  4. Payment records exist in the database linked to both user and session
+  5. A third-party developer can query "current price" and "free sessions remaining for user X" from Convex functions
+**Plans:** 2 plans
+Plans:
+- [ ] 11-01-PLAN.md — Schema additions + pricing module (tables, price logic, queries, mutations)
+- [ ] 11-02-PLAN.md — Wire free tier check into createSession
+
+### Phase 12: Stripe Checkout
+**Goal**: Users who hit the paywall can pay and land in their new session; those who don't stay safely in the app
+**Depends on**: Phase 11
+**Requirements**: PAY-02, PAY-05, PAY-06, PRICE-01, PRICE-02
+**Success Criteria** (what must be TRUE):
+  1. When a user has exhausted their free tier, creating a new session redirects to Stripe Checkout showing the current price
+  2. The paywall screen shows the current price, "price doubles in X days", and how many free sessions remain
+  3. After successful payment, the new session is created automatically and the user lands in it without manual steps
+  4. Cancelling or failing the Stripe payment returns the user to the app with no session created and no charge
+**Plans**: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans | Status | Completed |
@@ -43,8 +77,10 @@
 | 8. Conversation Design | v1.0 | 4/4 | Complete | 2026-02 |
 | 9. E2E Simulation | v1.0 | 3/3 | Complete | 2026-02 |
 | 10. Guardrails | v1.0 | 2/2 | Complete | 2026-02 |
+| 11. Pricing Engine | v1.1 | 0/2 | Planning | — |
+| 12. Stripe Checkout | v1.1 | 0/TBD | Not started | — |
 
 ---
 
 *Roadmap created: 2025-01-22*
-*Last updated: 2026-03-01 — v1.0 milestone archived*
+*Last updated: 2026-03-02 — Phase 11 planned (2 plans)*
