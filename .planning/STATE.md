@@ -104,14 +104,15 @@ None active.
 | 3 | Implement movable divider between IdeaCard and chat | 2026-02-20 |
 | 4 | Hardcode phase greetings to eliminate hallucination | 2026-02-21 |
 | 5 | Reinforce depth-first discovery in phases | 2026-02-22 |
+| 6 | Add About page legal subsections (Terms, Refund, company info) | 2026-03-02 |
 
 ---
 
 ## Session Continuity
 
-**Last Session:** 2026-03-02T13:19:02Z
-**Last Action:** Completed 13-01-PLAN.md — About, Contact & FAQ pages added
-**Next Action:** Phase 13 complete. Determine next phase or milestone.
+**Last Session:** 2026-03-02T14:00:00Z
+**Last Action:** Completed quick-6 — Terms, Refund pages and legal compliance content
+**Next Action:** Deploy and verify /terms and /refund in production.
 
 ---
 
