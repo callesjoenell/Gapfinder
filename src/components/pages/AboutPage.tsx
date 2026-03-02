@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { PublicPageLayout } from "../layout/PublicPageLayout";
 
 export function AboutPage() {
@@ -139,7 +140,7 @@ export function AboutPage() {
         </div>
 
         {/* Why We Built This */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">Why We Built This</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
             Most people who want to start something get stuck at the very
@@ -153,6 +154,27 @@ export function AboutPage() {
             helps you cut through the noise. Not an idea generator — a process that
             helps you discover the thing only you can build, then validates it
             before you invest your time.
+          </p>
+        </div>
+
+        {/* Company Information */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Company Information</h2>
+          <p className="text-gray-600 leading-relaxed">
+            Start Building Now is operated by Skip Intro AB, a company registered in Sweden.
+            For questions, visit our{" "}
+            <Link to="/contact" className="text-primary-600 hover:text-primary-700 underline">
+              Contact page
+            </Link>
+            {" "}or see our{" "}
+            <Link to="/terms" className="text-primary-600 hover:text-primary-700 underline">
+              Terms and Conditions
+            </Link>
+            {" "}and{" "}
+            <Link to="/refund" className="text-primary-600 hover:text-primary-700 underline">
+              Refund Policy
+            </Link>
+            .
           </p>
         </div>
       </div>
