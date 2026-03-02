@@ -19,6 +19,7 @@ import type * as ideas from "../ideas.js";
 import type * as ideasActions from "../ideasActions.js";
 import type * as manualResearch from "../manualResearch.js";
 import type * as messages from "../messages.js";
+import type * as pricing from "../pricing.js";
 import type * as research_executor from "../research/executor.js";
 import type * as research_hackernews from "../research/hackernews.js";
 import type * as research_keywordAction from "../research/keywordAction.js";
@@ -31,6 +32,8 @@ import type * as research_tools from "../research/tools.js";
 import type * as researchActions from "../researchActions.js";
 import type * as researchQueue from "../researchQueue.js";
 import type * as sessions from "../sessions.js";
+import type * as stripe from "../stripe.js";
+import type * as stripeHelpers from "../stripeHelpers.js";
 import type * as summaries from "../summaries.js";
 
 import type {
@@ -51,6 +54,7 @@ declare const fullApi: ApiFromModules<{
   ideasActions: typeof ideasActions;
   manualResearch: typeof manualResearch;
   messages: typeof messages;
+  pricing: typeof pricing;
   "research/executor": typeof research_executor;
   "research/hackernews": typeof research_hackernews;
   "research/keywordAction": typeof research_keywordAction;
@@ -63,6 +67,8 @@ declare const fullApi: ApiFromModules<{
   researchActions: typeof researchActions;
   researchQueue: typeof researchQueue;
   sessions: typeof sessions;
+  stripe: typeof stripe;
+  stripeHelpers: typeof stripeHelpers;
   summaries: typeof summaries;
 }>;
 

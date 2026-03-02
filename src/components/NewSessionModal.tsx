@@ -104,13 +104,6 @@ export function NewSessionModal({ isOpen, path, onClose, onCreated }: NewSession
         return;
       }
 
-      const amountCents = currentPrice?.priceCents;
-      if (!amountCents) {
-        setError("Unable to load pricing. Please try again.");
-        setIsRedirecting(false);
-        return;
-      }
-
       const response = await fetch(
         "https://glad-bloodhound-996.convex.site/api/stripe/create-checkout",
         {
@@ -123,7 +116,6 @@ export function NewSessionModal({ isOpen, path, onClose, onCreated }: NewSession
             path,
             name: name.trim(),
             description: description.trim(),
-            amountCents,
           }),
         }
       );
@@ -185,8 +177,8 @@ export function NewSessionModal({ isOpen, path, onClose, onCreated }: NewSession
                 <p className="text-3xl font-bold text-gray-900">{priceDisplay}</p>
               )}
               {daysDisplay !== null && (
-                <p className="text-xs text-gray-500 mt-1">
-                  Price increases in {daysDisplay} {daysDisplay === 1 ? "day" : "days"}
+                <p className="text-xs font-bold text-gray-500 mt-1">
+                  Price doubles in {daysDisplay} {daysDisplay === 1 ? "day" : "days"}
                 </p>
               )}
               {otherRemaining > 0 && (

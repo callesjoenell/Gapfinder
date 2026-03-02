@@ -427,6 +427,18 @@ export const createPaidSession = internalMutation({
       return existingPayment.sessionId;
     }
 
+    // Validate payment amount against server-computed price
+    const pricingConfig = await ctx.db.query("pricingConfig").first();
+    if (pricingConfig) {
+      const { computeCurrentPriceCents } = await import("./pricing");
+      const expectedCents = computeCurrentPriceCents(pricingConfig.launchDate);
+      if (args.amountCents < expectedCents) {
+        throw new Error(
+          `Payment amount too low: expected ${expectedCents} cents, got ${args.amountCents} cents`
+        );
+      }
+    }
+
     // Check 5-session limit per path (same logic as createSession)
     const allSessions = await ctx.db
       .query("sessions")

@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query, internalMutation } from "./_generated/server";
+import { query, internalMutation, internalQuery } from "./_generated/server";
 import { getAuthUserId } from "./auth";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -89,6 +89,24 @@ export const getFreeTierStatus = query({
       exploreFreeLimit: config.freeExploreLimit,
       evaluateFreeLimit: config.freeEvaluateLimit,
     };
+  },
+});
+
+// ─── Internal Queries (for server-side use by httpActions) ────────────────────
+
+/**
+ * Internal version of getCurrentPrice — callable from httpActions via ctx.runQuery.
+ * Used by the checkout handler to compute authoritative price server-side.
+ */
+export const getCurrentPriceInternal = internalQuery({
+  args: {},
+  handler: async (ctx) => {
+    const config = await ctx.db.query("pricingConfig").first();
+    if (!config) {
+      return null;
+    }
+    const priceCents = computeCurrentPriceCents(config.launchDate);
+    return { priceCents };
   },
 });
 
