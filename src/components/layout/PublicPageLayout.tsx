@@ -21,7 +21,14 @@ export function PublicPageLayout({ children }: PublicPageLayoutProps) {
         {children}
       </main>
       <footer className="text-center text-sm text-gray-400 py-8">
-        <Link to="/" className="hover:text-gray-600">Back to Start Building Now</Link>
+        <div className="mb-2">
+          <Link to="/" className="hover:text-gray-600">Back to Start Building Now</Link>
+        </div>
+        <div className="flex justify-center gap-4">
+          <Link to="/terms" className="hover:text-gray-600">Terms</Link>
+          <span aria-hidden="true">&middot;</span>
+          <Link to="/refund" className="hover:text-gray-600">Refund Policy</Link>
+        </div>
       </footer>
     </div>
   );

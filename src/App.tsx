@@ -15,6 +15,8 @@ import { WelcomePage } from "./components/WelcomePage";
 import { AboutPage } from "./components/pages/AboutPage";
 import { ContactPage } from "./components/pages/ContactPage";
 import { FAQPage } from "./components/pages/FAQPage";
+import { TermsPage } from "./components/pages/TermsPage";
+import { RefundPage } from "./components/pages/RefundPage";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/faq" element={<FAQPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/refund" element={<RefundPage />} />
           <Route path="/*" element={<AuthenticatedApp />} />
         </Routes>
       </BrowserRouter>
