@@ -73,7 +73,7 @@ export function OnboardingView({
                   3 phases
                 </span>
                 <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-medium">
-                  First session free
+                  First explore free, then $2 — doubles every week
                 </span>
               </div>
               <button
@@ -126,7 +126,7 @@ export function OnboardingView({
                   7 phases
                 </span>
                 <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-medium">
-                  From $2
+                  $2 — doubles every week
                 </span>
               </div>
               <button
