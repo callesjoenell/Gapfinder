@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Payments
 status: completed
-last_updated: "2026-03-02T12:02:26.999Z"
+last_updated: "2026-03-02T12:20:02.321Z"
 last_activity: 2026-03-02
 progress:
-  total_phases: 2
-  completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
+  total_phases: 3
+  completed_phases: 3
+  total_plans: 5
+  completed_plans: 5
   percent: 100
 ---
 
@@ -24,7 +24,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
-**Current focus:** v1.1 Payments — COMPLETE (Phase 12 verified end-to-end)
+**Current focus:** Phase 13 — About, Contact & FAQ Pages — COMPLETE (1/1 plans done)
 
 **Tech Stack:** Next.js, Convex (database + auth), Clerk (auth), Claude API (conversations), Tailwind CSS, Motion (animations), d3-cloud (word layouts)
 
@@ -33,14 +33,15 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 ## Current Position
 
 **Milestone:** v1.1 Payments — COMPLETE
-**Phase:** 12 — Stripe Checkout (COMPLETE — 2/2 plans done)
-**Status:** Milestone complete
+**Phase:** 13 — About, Contact & FAQ Pages (COMPLETE — 1/1 plans done)
+**Status:** Phase 13 complete
 **Last Activity:** 2026-03-02
 
 **Progress:**
 [██████████] 100%
 Phase 11 [██████████] 100%   Pricing Engine (2/2 plans done) — COMPLETE
 Phase 12 [██████████] 100%   Stripe Checkout (2/2 plans done) — COMPLETE
+Phase 13 [██████████] 100%   About, Contact & FAQ Pages (1/1 plans done) — COMPLETE
 
 ---
 
@@ -57,6 +58,9 @@ Notable architectural decisions:
 - Research tools as Claude tool_use not MCP (Convex serverless compatible)
 - Phase 6 (Instructor View) deferred to v2
 - Stripe Checkout (not custom forms) for payments — Checkout handles all payment method complexity
+- mailto: link for contact page (not Formspree or Convex action) — zero infrastructure, correct scope
+- Public pages have zero Clerk/Convex imports — pages must not trigger auth context errors
+- useState accordion for FAQ — no library needed for single-use expand/collapse
 
 ### v1.1 Payments Decisions
 
@@ -105,9 +109,9 @@ None active.
 
 ## Session Continuity
 
-**Last Session:** 2026-03-02T11:58:25.690Z
-**Last Action:** Completed 12-02-PLAN.md — Stripe Checkout frontend verified end-to-end
-**Next Action:** v1.1 Payments milestone complete. Determine next milestone.
+**Last Session:** 2026-03-02T13:19:02Z
+**Last Action:** Completed 13-01-PLAN.md — About, Contact & FAQ pages added
+**Next Action:** Phase 13 complete. Determine next phase or milestone.
 
 ---
 

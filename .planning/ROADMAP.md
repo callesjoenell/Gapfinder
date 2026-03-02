@@ -88,7 +88,7 @@ Plans:
 **Goal:** Public informational pages (About, Contact, FAQ) accessible without authentication, providing trust-building content for prospective users
 **Requirements**: PAGE-01, PAGE-02, PAGE-03, PAGE-04
 **Depends on:** Phase 12
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [ ] 13-01-PLAN.md — Public page layout, About/Contact/FAQ components, routing, WelcomePage footer links

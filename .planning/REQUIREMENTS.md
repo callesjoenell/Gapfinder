@@ -29,10 +29,10 @@ Requirements for public informational pages.
 
 ### Public Pages
 
-- [ ] **PAGE-01**: About page accessible at /about without authentication, explaining what the app does and why
-- [ ] **PAGE-02**: Contact page accessible at /contact without authentication, with a way to reach the team
-- [ ] **PAGE-03**: FAQ page accessible at /faq without authentication, with expandable question/answer items covering pricing, paths, and data privacy
-- [ ] **PAGE-04**: All public pages share consistent navigation (header with cross-links, footer with home link) and match WelcomePage visual style
+- [x] **PAGE-01**: About page accessible at /about without authentication, explaining what the app does and why
+- [x] **PAGE-02**: Contact page accessible at /contact without authentication, with a way to reach the team
+- [x] **PAGE-03**: FAQ page accessible at /faq without authentication, with expandable question/answer items covering pricing, paths, and data privacy
+- [x] **PAGE-04**: All public pages share consistent navigation (header with cross-links, footer with home link) and match WelcomePage visual style
 
 ## Out of Scope
 
