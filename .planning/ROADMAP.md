@@ -83,6 +83,16 @@ Plans:
 | 11. Pricing Engine | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 12. Stripe Checkout | 2/2 | Complete    | 2026-03-02 | — |
 
+### Phase 13: About, Contact & FAQ Pages
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 12
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 13 to break down)
+
 ---
 
 *Roadmap created: 2025-01-22*

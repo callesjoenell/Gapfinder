@@ -75,6 +75,10 @@ Notable architectural decisions:
 | httpAction cannot run in use-node runtime | HTTP actions in http.ts (default runtime), Stripe SDK calls in stripe.ts (Node.js) via internalAction |
 | Price countdown copy: "Price doubles in X days" (bold) | More specific and urgent than "Price increases" — matches actual pricing behavior |
 
+### Roadmap Evolution
+
+- Phase 13 added: About, Contact & FAQ Pages
+
 ### Technical Findings
 
 - Convex deployment: glad-bloodhound-996
