@@ -103,22 +103,22 @@ export function AboutPage() {
           <div className="space-y-4">
             <div className="border border-gray-100 rounded-xl p-4">
               <h3 className="font-semibold text-gray-900 mb-1">MILES Framework</h3>
-              <p className="text-sm text-gray-500 mb-2">Ash Ali & Hasan Kubba — &ldquo;The Unfair Advantage&rdquo;</p>
+              <p className="text-sm text-gray-500 mb-2">Ash Ali & Hasan Kubba — <a href="https://theunfairadvantage.co.uk/" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 underline">&ldquo;The Unfair Advantage&rdquo;</a></p>
               <p className="text-gray-600 text-sm leading-relaxed">Maps your personal advantages across five dimensions to find where you have an edge others don't. Used in Phase 0 to ensure ideas grow from your actual strengths.</p>
             </div>
             <div className="border border-gray-100 rounded-xl p-4">
               <h3 className="font-semibold text-gray-900 mb-1">Ikigai</h3>
-              <p className="text-sm text-gray-500 mb-2">Japanese concept of purpose</p>
+              <p className="text-sm text-gray-500 mb-2">Japanese concept of purpose — <a href="https://en.wikipedia.org/wiki/Ikigai" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 underline">Wikipedia</a></p>
               <p className="text-gray-600 text-sm leading-relaxed">Ikigai finds your sweet spot at the intersection of four things: what you love (passion), what you're good at (skill), what the world needs (demand), and what you can be paid for (market). Used alongside MILES in Phase 0 to ensure the opportunities you pursue aren't just profitable — they're sustainable because they align with who you are.</p>
             </div>
             <div className="border border-gray-100 rounded-xl p-4">
               <h3 className="font-semibold text-gray-900 mb-1">The Mom Test</h3>
-              <p className="text-sm text-gray-500 mb-2">Rob Fitzpatrick</p>
+              <p className="text-sm text-gray-500 mb-2"><a href="https://www.momtestbook.com/" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 underline">Rob Fitzpatrick</a></p>
               <p className="text-gray-600 text-sm leading-relaxed">Customer validation framework that prioritizes past behavior over future promises. When someone says &ldquo;I'd buy that,&rdquo; it means nothing. When they show you what they did last time they faced the problem, that's data. Used in Phases 2, 5, and 6.</p>
             </div>
             <div className="border border-gray-100 rounded-xl p-4">
               <h3 className="font-semibold text-gray-900 mb-1">Jobs to Be Done</h3>
-              <p className="text-sm text-gray-500 mb-2">Clayton Christensen</p>
+              <p className="text-sm text-gray-500 mb-2"><a href="https://hbr.org/2016/09/know-your-customers-jobs-to-be-done" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 underline">Clayton Christensen — HBR</a></p>
               <p className="text-gray-600 text-sm leading-relaxed">People don't buy products — they hire them for a job. The framework maps the switch moment: what triggered the search, the timeline from first thought to decision, and the four forces (push, pull, anxiety, habit) that determine whether someone actually changes behavior. Used in Phases 4-5.</p>
             </div>
             <div className="border border-gray-100 rounded-xl p-4">
@@ -128,7 +128,7 @@ export function AboutPage() {
             </div>
             <div className="border border-gray-100 rounded-xl p-4">
               <h3 className="font-semibold text-gray-900 mb-1">Founder-Market Fit</h3>
-              <p className="text-sm text-gray-500 mb-2">NBER research & Paul Graham (Y Combinator)</p>
+              <p className="text-sm text-gray-500 mb-2"><a href="https://www.nber.org/papers/w28163" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 underline">NBER research</a> & <a href="https://paulgraham.com/organic.html" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 underline">Paul Graham</a> (Y Combinator)</p>
               <p className="text-gray-600 text-sm leading-relaxed">NBER research shows founders with industry-specific experience have substantially higher venture survival rates. Paul Graham's Y Combinator work found the most successful startups almost always begin with ideas that grow from founders' own experiences. This is why Phase 0 starts from you, not from market trends.</p>
             </div>
             <div className="border border-gray-100 rounded-xl p-4">
