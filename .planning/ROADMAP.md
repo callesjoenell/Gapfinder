@@ -77,7 +77,7 @@ Plans:
 | 8. Conversation Design | v1.0 | 4/4 | Complete | 2026-02 |
 | 9. E2E Simulation | v1.0 | 3/3 | Complete | 2026-02 |
 | 10. Guardrails | v1.0 | 2/2 | Complete | 2026-02 |
-| 11. Pricing Engine | 2/2 | Complete   | 2026-03-02 | — |
+| 11. Pricing Engine | 2/2 | Complete    | 2026-03-02 | — |
 | 12. Stripe Checkout | v1.1 | 0/TBD | Not started | — |
 
 ---
