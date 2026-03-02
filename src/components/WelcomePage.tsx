@@ -7,6 +7,15 @@ export function WelcomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Top nav */}
+      <nav className="flex items-center justify-end px-6 py-4 bg-white border-b border-gray-100">
+        <div className="flex gap-6 text-sm text-gray-500">
+          <Link to="/about" className="hover:text-gray-900">About</Link>
+          <Link to="/faq" className="hover:text-gray-900">FAQ</Link>
+          <Link to="/contact" className="hover:text-gray-900">Contact</Link>
+        </div>
+      </nav>
+
       {/* Hero */}
       <header className="pt-16 pb-12 px-6 text-center">
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
@@ -14,6 +23,9 @@ export function WelcomePage() {
         </h1>
         <p className="mt-4 text-lg text-gray-500 max-w-xl mx-auto">
           Now that anyone can build, the first natural question is&nbsp;—
+        </p>
+        <p className="mt-6 text-sm font-medium text-primary-600 bg-primary-50 inline-block px-4 py-2 rounded-full">
+          Free this week · $2 next week · then doubles every week
         </p>
       </header>
 
@@ -84,14 +96,33 @@ export function WelcomePage() {
         <div className="space-y-6">
           <div className="bg-white rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
+              How is this different from just using an AI chat?
+            </h3>
+            <p className="text-gray-600 leading-relaxed">
+              An AI without the right context, framework, and questioning
+              methodology just tells you what you want to hear. It validates
+              instead of challenges, generates lists instead of digging deep,
+              and has no way to score whether an idea is actually worth
+              pursuing. Start Building Now uses proven frameworks — MILES,
+              Ikigai, the Mom Test, Jobs to Be Done — to ask the questions
+              you wouldn&apos;t think to ask yourself. During exploration, it
+              pulls live signals from Reddit, Hacker News, Product Hunt, and
+              more, then scores what it finds against your unfair advantages
+              using depth, access, and energy metrics. The AI is the delivery
+              mechanism. The methodology and research are what make it work.
+            </p>
+          </div>
+          <div className="bg-white rounded-xl border border-gray-100 p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">
               What should I build?
             </h3>
             <p className="text-gray-600 leading-relaxed">
-              Start Building Now helps you answer this question through an
-              AI-guided Explore phase. We dig into your unique talents, life
-              experience, and professional networks to uncover a business idea
-              space that feels like it was made for you — not a generic startup
-              idea, but something only you can deliver.
+              Start Building Now helps you answer this through the Explore path.
+              Using the MILES framework, we map your unfair advantages — talents,
+              experience, networks — then research real problems in your strongest
+              domains with live data from Reddit, Hacker News, and Product Hunt.
+              You end up with opportunity spaces grounded in who you actually are,
+              not generic startup ideas.
             </p>
           </div>
           <div className="bg-white rounded-xl border border-gray-100 p-6">
@@ -99,11 +130,12 @@ export function WelcomePage() {
               How do I know if my business idea is strong enough?
             </h3>
             <p className="text-gray-600 leading-relaxed">
-              Our Evaluate phase helps you stress-test your idea. Together with
-              AI, we develop and score your concept by looking for deep-rooted
-              human problems, challenges, and emotional opportunities. The goal
-              is to sharpen your idea into the absolute best version — one built
-              on real needs, not assumptions.
+              The Evaluate path takes your idea through seven phases of
+              stress-testing: defining customers with Jobs to Be Done analysis,
+              validating the problem through real conversations (Mom Test
+              methodology), scoring viability across six dimensions including the
+              Need Depth Ladder, and devil's advocate challenges. Each phase is
+              gated on evidence — you can't skip ahead on assumptions.
             </p>
           </div>
           <div className="bg-white rounded-xl border border-gray-100 p-6">
@@ -111,24 +143,11 @@ export function WelcomePage() {
               Who is Start Building Now for?
             </h3>
             <p className="text-gray-600 leading-relaxed">
-              Start Building Now is for anyone who wants to build something
-              meaningful — first-time founders, career changers, side-project
-              builders, or experienced professionals exploring new directions. If
-              you have the urge to build but need help finding the right thing to
-              build, this is for you.
-            </p>
-          </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">
-              How does Start Building Now work?
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              Start Building Now uses AI-guided conversations across two phases.
-              In the Explore phase, we map your talents, experiences, and
-              networks to discover opportunity spaces uniquely suited to you. In
-              the Evaluate phase, we take your idea and rigorously test it
-              against real human problems and market gaps to make it as strong as
-              possible.
+              Anyone who wants to build something meaningful — first-time
+              founders, career changers, side-project builders, or experienced
+              professionals exploring new directions. If you have the urge to
+              build but need help finding the right thing to build, or want to
+              validate your idea before investing months, this is for you.
             </p>
           </div>
         </div>
@@ -178,7 +197,9 @@ export function WelcomePage() {
 
       <footer className="py-8 text-center text-sm text-gray-400 space-x-6">
         <Link to="/about" className="hover:text-gray-600">About</Link>
+        <span>·</span>
         <Link to="/faq" className="hover:text-gray-600">FAQ</Link>
+        <span>·</span>
         <Link to="/contact" className="hover:text-gray-600">Contact</Link>
       </footer>
     </div>
