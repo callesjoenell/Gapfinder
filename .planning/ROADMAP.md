@@ -8,7 +8,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1-10 (shipped 2026-03-01)
-- **v1.1 Payments** — Phases 11-12 (in progress)
+- ✅ **v1.1 Payments** — Phases 11-12 (completed 2026-03-02)
 
 ## Phases
 
@@ -63,8 +63,8 @@ Plans:
   4. Cancelling or failing the Stripe payment returns the user to the app with no session created and no charge
 **Plans:** 2/2 plans complete
 Plans:
-- [ ] 12-01-PLAN.md — Stripe backend: SDK, checkout session creation, webhook handler, paid session mutation
-- [ ] 12-02-PLAN.md — Paywall UX in modal, Stripe redirect, payment return handling
+- [x] 12-01-PLAN.md — Stripe backend: SDK, checkout session creation, webhook handler, paid session mutation
+- [x] 12-02-PLAN.md — Paywall UX in modal, Stripe redirect, payment return handling
 
 ## Progress
 
@@ -81,19 +81,19 @@ Plans:
 | 9. E2E Simulation | v1.0 | 3/3 | Complete | 2026-02 |
 | 10. Guardrails | v1.0 | 2/2 | Complete | 2026-02 |
 | 11. Pricing Engine | v1.1 | 2/2 | Complete | 2026-03-02 |
-| 12. Stripe Checkout | 2/2 | Complete    | 2026-03-02 | — |
+| 12. Stripe Checkout | v1.1 | 2/2 | Complete | 2026-03-02 |
 
 ### Phase 13: About, Contact & FAQ Pages
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Public informational pages (About, Contact, FAQ) accessible without authentication, providing trust-building content for prospective users
+**Requirements**: PAGE-01, PAGE-02, PAGE-03, PAGE-04
 **Depends on:** Phase 12
-**Plans:** 0 plans
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 13 to break down)
+- [ ] 13-01-PLAN.md — Public page layout, About/Contact/FAQ components, routing, WelcomePage footer links
 
 ---
 
 *Roadmap created: 2025-01-22*
-*Last updated: 2026-03-02 — Phase 12 planned (2 plans)*
+*Last updated: 2026-03-02 — Phase 13 planned (1 plan)*

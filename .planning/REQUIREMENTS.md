@@ -23,6 +23,17 @@ Requirements for Stripe payments milestone.
 - [x] **PRICE-01**: User sees current price and "doubles in X days" messaging at paywall
 - [x] **PRICE-02**: Paywall shows how many free sessions remain (if any)
 
+## Phase 13 Requirements
+
+Requirements for public informational pages.
+
+### Public Pages
+
+- [ ] **PAGE-01**: About page accessible at /about without authentication, explaining what the app does and why
+- [ ] **PAGE-02**: Contact page accessible at /contact without authentication, with a way to reach the team
+- [ ] **PAGE-03**: FAQ page accessible at /faq without authentication, with expandable question/answer items covering pricing, paths, and data privacy
+- [ ] **PAGE-04**: All public pages share consistent navigation (header with cross-links, footer with home link) and match WelcomePage visual style
+
 ## Out of Scope
 
 | Feature | Reason |
@@ -32,6 +43,8 @@ Requirements for Stripe payments milestone.
 | Coupon codes | Not needed for launch |
 | Multiple payment methods | Stripe Checkout handles this natively |
 | Invoice/receipt pages | Stripe sends receipts automatically |
+| Custom contact form backend | mailto: or Formspree sufficient; no Convex/Resend needed |
+| SEO meta tags beyond document.title | SPA without SSR; advanced SEO deferred |
 
 ## Traceability
 
@@ -47,13 +60,16 @@ Requirements for Stripe payments milestone.
 | PAY-06 | Phase 12 | Complete |
 | PRICE-01 | Phase 12 | Complete |
 | PRICE-02 | Phase 12 | Complete |
+| PAGE-01 | Phase 13 | Planned |
+| PAGE-02 | Phase 13 | Planned |
+| PAGE-03 | Phase 13 | Planned |
+| PAGE-04 | Phase 13 | Planned |
 
 **Coverage:**
-- v1.1 requirements: 10 total
-- Mapped to phases: 10
-- Unmapped: 0
+- v1.1 requirements: 10 total, 10 mapped, 0 unmapped
+- Phase 13 requirements: 4 total, 4 mapped, 0 unmapped
 
 ---
 
 *Requirements defined: 2026-03-02*
-*Traceability updated: 2026-03-02 — all 10 requirements mapped to Phases 11-12*
+*Traceability updated: 2026-03-02 — Phase 13 requirements added*
