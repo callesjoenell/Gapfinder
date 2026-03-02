@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A web application that delivers the Gap Finder methodology to webinar participants via AI-guided conversations. Participants work through 12 phases between live classes, with their progress visualized through an evolving "Idea Card" that transforms from scattered fuzzy blobs into a solid, color-coded card as their idea crystallizes and validates. The instructor can see all participants' progress and read their conversations to prep for sessions.
+A web application that delivers the Gap Finder methodology via AI-guided conversations. Users work through phases of self-discovery, research, and idea validation, with their progress visualized through an evolving "Idea Card" that transforms from scattered fuzzy blobs into a solid, color-coded card as their idea crystallizes. Claude guides the conversation naturally — no questionnaires, no forms — preserving the methodology's magic while adding persistence, research tools, and visual progress.
 
 ## Core Value
 
@@ -12,49 +12,45 @@ Persistent conversations that feel identical to chatting with Claude directly - 
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Magic link auth via Clerk — v1.0
+- ✓ Auth lands user in chat interface — v1.0
+- ✓ Session persists across browser sessions — v1.0
+- ✓ Multiple idea sessions in sidebar — v1.0
+- ✓ Sessions have user-defined names — v1.0
+- ✓ Chat feels identical to Claude.ai with skill loaded — v1.0
+- ✓ Full conversation history persisted and loaded on return — v1.0
+- ✓ Claude naturally wraps up phases with closing questions — v1.0
+- ✓ Skill loaded as system prompt with conversation history — v1.0
+- ✓ Responses streamed to UI — v1.0
+- ✓ Progress bar shows all phases split by path — v1.0
+- ✓ Current phase highlighted with progress indicator — v1.0
+- ✓ Progressive unlocking (must complete N before N+1) — v1.0
+- ✓ Phases clickable but locked until unlocked — v1.0
+- ✓ Idea card with scattered fuzzy blobs (early phases) — v1.0
+- ✓ Blobs merge into complete card at Phase 6 — v1.0
+- ✓ Score-based color transitions (yellow → green) — v1.0
+- ✓ Card content updates from conversation — v1.0
+- ✓ Save every message with timestamp — v1.0
+- ✓ Track current phase per participant — v1.0
+- ✓ Track idea card state (content, color/score) — v1.0
+- ✓ Store named sessions per participant — v1.0
+- ✓ Research tools: Reddit, HN, ProductHunt, Tavily, SO — v1.0
+- ✓ Claude queries research sources during conversation — v1.0
+- ✓ Manual research checklists (Facebook Groups, LinkedIn, etc.) — v1.0
+- ✓ Research findings persist and inform later phases — v1.0
+- ✓ Keyword volume as paid add-on — v1.0
+- ✓ Journey framing per path (exploration/evaluation) — v1.0
+- ✓ Proactive research on conversation cues — v1.0
+- ✓ Implicit phase progression tracking — v1.0
+- ✓ Conversational pacing (depth over breadth) — v1.0
+- ✓ Background coverage tracking — v1.0
 
 ### Active
 
-**Auth & Sessions**
-- [ ] Participant receives magic link via email tied to their cohort
-- [ ] Magic link authenticates and lands them in the chat interface
-- [ ] Session persists - return via magic link, continue where left off
-- [ ] Multiple idea sessions accessible from sidebar (parallel exploration)
-- [ ] Sessions have user-defined names
-
-**Chat Experience**
-- [ ] Chat feels identical to Claude.ai with the skill loaded
-- [ ] Full conversation history persisted and loaded on return
-- [ ] Claude naturally wraps up phases with closing questions (skill-driven)
-- [ ] Skill loaded as system prompt, conversation history in context
-- [ ] Responses streamed to UI
-
-**Progress & Phases**
-- [ ] Progress bar shows all 12 phases
-- [ ] Current phase highlighted with progress indicator within phase
-- [ ] Progressive unlocking - must complete phase N before N+1
-- [ ] Phases are clickable but locked until unlocked
-
-**The Idea Card (Visual Centerpiece)**
-- [ ] Takes up top 25% of screen
-- [ ] Phases 1-5: Scattered fuzzy yellow blobs, slowly drifting together
-- [ ] Phase 6 (Your Idea): Blobs merge into complete card, yellow
-- [ ] Low scores: Card stays milky yellow
-- [ ] High scores: Card transitions to dark green with white text
-- [ ] Card content updates as idea gets refined through conversation
-
-**Instructor View**
-- [ ] List all participants in a cohort
-- [ ] Show current phase for each participant
-- [ ] Click into any participant to read their full conversation history
-
-**Data Persistence (Convex)**
-- [ ] Save every message with timestamp
-- [ ] Track current phase per participant
-- [ ] Track idea card state (content, color/score)
+- [ ] Instructor view: list participants in cohort
+- [ ] Instructor view: show current phase per participant
+- [ ] Instructor view: read participant conversation history
 - [ ] Link participants to cohorts
-- [ ] Store named sessions per participant
 
 ### Out of Scope
 
@@ -63,92 +59,52 @@ Persistent conversations that feel identical to chatting with Claude directly - 
 - Mobile app — web-first
 - Real-time collaboration — async only
 - Video/audio integration — separate from this tool
-- Dashboard summaries/patterns — v2, instructor reads raw conversations for now
-- Auto-generated class prep — v2
-- Research APIs and MCP integrations — v2
-- Analytics and insights — v2
-- Export/reporting features — v2
+- Voice input/output — text-only for reflection-based methodology
+- Points/badges/leaderboards — creates anxiety
+- Community/forum features — not needed at scale
 
 ## Context
+
+**Current State (v1.0 shipped 2026-03-01):**
+- 12,334 LOC TypeScript/TSX across 95 source files
+- Tech stack: Next.js, Convex, Clerk auth, Claude API, Tailwind CSS
+- Research APIs: Reddit, Hacker News, ProductHunt, Tavily, Stack Overflow, Keywords Everywhere
+- E2E simulation testing with 8-dimension evaluation rubrics
+- System prompt guardrails for conversation quality
 
 **The Gap Finder Skill**
 
 The skill is a 4000+ line methodology (SKILL.md) that guides founders from "I want to start a business" to validated market opportunities. It works beautifully in Claude.ai but lacks persistence, cohort structure, and instructor visibility.
 
-**The 12 Phases**
+**The Phases (Two Paths)**
 
-| # | Phase | Purpose |
-|---|-------|---------|
-| 1 | Know Yourself | Personal context, unfair advantages, MILES framework |
-| 2 | Find Gaps | Research, spot opportunities |
-| 3 | Connect the Dots | Synthesize findings, patterns emerge |
-| 4 | Pick Your Person | Define specific target customer |
-| 5 | Discovery Calls | Talk to real people, explore pain (before idea) |
-| 6 | Your Idea | Define the idea (informed by real conversations) |
-| 7 | Score | Four Scores Gate (Pain, Simplicity, Shareability, Timing) |
-| 8 | Sharpen | Refine based on scores |
-| 9 | Validation Calls | Confirm patterns, test price |
-| 10 | Design Your Offer | Create the actual offer |
-| 11 | Sell First | Pre-sell before building |
-| 12 | Prep to Build | Ready to execute |
+Exploration path (phases 0-5): Know Yourself → Find Gaps → Connect Dots → Pick Your Person → Discovery Calls → Your Idea
+Evaluation path (phases 0-9): Adds Score → Sharpen → Validation Calls → Design Offer
 
 **Key Insight:** Discovery Calls happen BEFORE the idea is defined. Talk to real people first, understand their pain, then articulate what you'll build.
 
-**The Four Scores Gate (Phase 7)**
-
-| Score | Range | Minimum | Measures |
-|-------|-------|---------|----------|
-| Pain | 1-10 | ≥7 | Emotional frustration, spending on failed solutions |
-| Simplicity | Pass/Fail | Pass | Can explain in 3 words |
-| Shareability | 1-10 | ≥5 | Built-in distribution, network effects |
-| Timing | 1-10 | ≥6 | Tech readiness, behavior change, catalyst |
-
-**Decision Gate:** Total ≥25 with Pass → dark green card | <18 → milky yellow card
-
-**Webinar Context**
-
-- 8-week cohort program
-- ~10 participants per cohort
-- Weekly live sessions
-- Between classes: participants work through phases with AI
-- Instructor preps by reading participant conversations
-
-**UI Layout**
-
-```
-┌─────────────────────────────────────────────────────┐
-│ ┌─ Sidebar ─┐                                       │
-│ │ Session 1 │     ○  ○    ○                        │
-│ │ Session 2 │        ○  ○   ← IDEA CARD (25%)      │
-│ │ + New     │          ○                           │
-│ ├───────────┤───────────────────────────────────────│
-│ │           │  [Phase 1 → 2 → 3 → ... → 12]        │
-│ │           │───────────────────────────────────────│
-│ │           │                                       │
-│ │           │         Chat Area                     │
-│ │           │                                       │
-│ │           │  [Type your message...]               │
-│ └───────────┴───────────────────────────────────────┘
-```
-
 ## Constraints
 
-- **Tech Stack**: Convex for database (real-time, handles auth well), Claude API for conversations
-- **Skill Dependency**: The existing SKILL.md is the engine - this app wraps it, doesn't replace it
-- **Scale**: ~10 concurrent users per cohort - simple > scalable for v1
+- **Tech Stack**: Convex (real-time DB + auth), Claude API, Next.js
+- **Skill Dependency**: SKILL.md is the engine - this app wraps it, doesn't replace it
+- **Scale**: ~10 concurrent users per cohort - simple > scalable
 - **Conversation Feel**: Must feel identical to Claude.ai - no questionnaire, no form flow
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Preserve dynamic conversation (not questionnaire) | The skill's magic comes from natural conversation flow | — Pending |
-| Progressive phase unlocking | Learning context - participants need to complete foundations first | — Pending |
-| Discovery Calls before idea definition | Talk to real people first, then define idea | — Pending |
-| Single idea card (no other cards) | Keep focus on THE thing being built | — Pending |
-| Instructor reads raw conversations (v1) | Manual prep is fine for 10 participants, automation is v2 | — Pending |
-| 12 phases (restructured from original 10) | Split Score/Sharpen, add explicit Idea phase, reorder for better flow | — Pending |
-| Phase-based context chunking (if needed) | Summarize completed phases to manage context window | — Pending |
+| Preserve dynamic conversation (not questionnaire) | The skill's magic comes from natural conversation flow | ✓ Good — feels natural |
+| Progressive phase unlocking | Learning context - participants need to complete foundations first | ✓ Good — prevents rushing |
+| Discovery Calls before idea definition | Talk to real people first, then define idea | ✓ Good — methodology preserved |
+| Single idea card (no other cards) | Keep focus on THE thing being built | ✓ Good — clear visual anchor |
+| Clerk over custom magic links | Custom magic link auth proved fragile; Clerk handles edge cases | ✓ Good — zero auth bugs since |
+| Claude structured outputs for phase detection | Semantic understanding of conversation progress | ✓ Good — reliable phase advancement |
+| Implicit coverage tracking over explicit checklists | Users hate being quizzed; track coverage in background | ✓ Good — natural conversation preserved |
+| Research tools as Claude tool_use (not MCP) | Serverless Convex incompatible with MCP | ✓ Good — works reliably |
+| Phase 6 (Instructor View) deferred to v2 | v1 is standalone user experience, no cohorts | ✓ Good — reduced scope, shipped faster |
+| useLayoutEffect + scrollHeight for textarea resize | CSS Grid mirror approach too fragile | ✓ Good — simple, reliable |
+| Separate localStorage keys per concern | react-use useLocalStorage has stale closure bug with shared keys | ✓ Good — fixed draft/scroll persistence |
 
 ---
-*Last updated: 2025-01-20 after initialization*
+*Last updated: 2026-03-01 after v1.0 milestone*
