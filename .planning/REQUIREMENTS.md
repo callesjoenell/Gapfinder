@@ -9,7 +9,7 @@ Requirements for Stripe payments milestone.
 
 ### Payments
 
-- [ ] **PAY-01**: User gets 1 free Explore session and 1 free Evaluate session
+- [x] **PAY-01**: User gets 1 free Explore session and 1 free Evaluate session
 - [ ] **PAY-02**: After free tier, creating a session triggers Stripe Checkout with current price
 - [x] **PAY-03**: Base price is $2, doubling globally every week from launch date
 - [x] **PAY-04**: Price caps at $64 maximum
@@ -37,7 +37,7 @@ Requirements for Stripe payments milestone.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PAY-01 | Phase 11 | Pending |
+| PAY-01 | Phase 11 | Complete |
 | PAY-03 | Phase 11 | Complete |
 | PAY-04 | Phase 11 | Complete |
 | PAY-07 | Phase 11 | Complete |

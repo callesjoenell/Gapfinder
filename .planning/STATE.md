@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Payments
 status: completed
-last_updated: "2026-03-02T09:22:07.764Z"
+last_updated: "2026-03-02T09:24:21.860Z"
 last_activity: "2026-03-02 — Executed plan 11-01: Pricing Engine foundation"
 progress:
   total_phases: 1
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
-  percent: 50
+  completed_plans: 2
+  percent: 100
 ---
 
 # Project State: Gap Finder Web App
@@ -33,14 +33,14 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 ## Current Position
 
 **Milestone:** v1.1 Payments
-**Phase:** 11 — Pricing Engine
-**Status:** Plan 11-01 complete, ready to execute plan 11-02 (if exists) or move to Phase 12
-**Last Activity:** 2026-03-02 — Executed plan 11-01: Pricing Engine foundation
+**Phase:** 11 — Pricing Engine (COMPLETE)
+**Status:** Phase 11 complete (2/2 plans done), ready to plan Phase 12 — Stripe Checkout
+**Last Activity:** 2026-03-02 — Executed plan 11-02: Free tier enforcement wired into createSession
 
 **Progress:**
-[█████░░░░░] 50%
-Phase 11 [█████░░░░░] 50%   Pricing Engine (1/2 plans done)
-Phase 12 [          ]  0%   Stripe Checkout
+[██████████] 100%
+Phase 11 [██████████] 100%   Pricing Engine (2/2 plans done) — COMPLETE
+Phase 12 [          ]   0%   Stripe Checkout
 
 ---
 
@@ -69,6 +69,7 @@ Notable architectural decisions:
 | computeCurrentPriceCents as plain TypeScript (not Convex query) | Enables unit testing without Convex runtime |
 | vitest added as first unit test framework | Isolated to pure functions; Convex functions tested via deploy |
 | setPricingConfig and createPayment are internalMutation | Not callable from client, only from trusted server actions |
+| isPaid: true for free sessions | Free means no money owed; Phase 12 will update isPaid after Stripe payment webhook |
 
 ### Technical Findings
 
@@ -96,9 +97,9 @@ None active.
 
 ## Session Continuity
 
-**Last Session:** 2026-03-02T09:22:07.762Z
-**Last Action:** Completed plan 11-01 — Pricing Engine foundation (schema + pricing.ts + tests)
-**Next Action:** `/gsd:execute-phase 11` for plan 11-02 (if exists), or `/gsd:plan-phase 12` — Stripe Checkout
+**Last Session:** 2026-03-02T09:23:36Z
+**Last Action:** Completed plan 11-02 — Free tier enforcement wired into createSession (1 task, 1 file)
+**Next Action:** `/gsd:plan-phase 12` — Stripe Checkout
 
 ---
 

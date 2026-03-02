@@ -32,7 +32,7 @@
 
 ### v1.1 Payments
 
-- [ ] **Phase 11: Pricing Engine** - Free tier tracking, weekly doubling price logic, payment records
+- [x] **Phase 11: Pricing Engine** - Free tier tracking, weekly doubling price logic, payment records (completed 2026-03-02)
 - [ ] **Phase 12: Stripe Checkout** - Paywall UX, Stripe Checkout flow, session creation on payment
 
 ## Phase Details
@@ -47,7 +47,7 @@
   3. A configurable launch date controls when doubling starts; changing it immediately affects the computed price
   4. Payment records exist in the database linked to both user and session
   5. A third-party developer can query "current price" and "free sessions remaining for user X" from Convex functions
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [ ] 11-01-PLAN.md — Schema additions + pricing module (tables, price logic, queries, mutations)
 - [ ] 11-02-PLAN.md — Wire free tier check into createSession
@@ -77,7 +77,7 @@ Plans:
 | 8. Conversation Design | v1.0 | 4/4 | Complete | 2026-02 |
 | 9. E2E Simulation | v1.0 | 3/3 | Complete | 2026-02 |
 | 10. Guardrails | v1.0 | 2/2 | Complete | 2026-02 |
-| 11. Pricing Engine | 1/2 | In Progress|  | — |
+| 11. Pricing Engine | 2/2 | Complete   | 2026-03-02 | — |
 | 12. Stripe Checkout | v1.1 | 0/TBD | Not started | — |
 
 ---
