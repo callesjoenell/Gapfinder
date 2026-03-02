@@ -64,7 +64,7 @@ const FAQ_ITEMS: FAQItemProps[] = [
   {
     question: "Is it free?",
     answer:
-      "Your first Explore conversation and your first Evaluate conversation are completely free. After that, additional sessions are available for a one-time fee. Pricing starts low and increases over time, so earlier adopters get the best price. Once you pay for a session, it's yours — no subscriptions or recurring charges.",
+      "Your first Explore session is completely free. Evaluate sessions start at $2 — no subscriptions or recurring charges. Pricing increases over time, so earlier adopters get the best price. Once you pay for a session, it's yours forever.",
   },
   {
     question: "Does the process use real market data?",

@@ -25,7 +25,7 @@ export function WelcomePage() {
           Now that anyone can build, the first natural question is&nbsp;—
         </p>
         <p className="mt-6 text-sm font-medium text-primary-600 bg-primary-50 inline-block px-4 py-2 rounded-full">
-          Free this week · $2 next week · then doubles every week
+          First Explore session free · Evaluate from $2 · price doubles weekly
         </p>
       </header>
 
@@ -156,7 +156,7 @@ export function WelcomePage() {
       {/* Auth section */}
       <section className="bg-white border-t border-gray-100 py-12 px-6 flex-1 flex flex-col items-center">
         <h3 className="text-2xl font-semibold text-gray-900 mb-2 text-center">
-          {mode === "sign-up" ? "Get started for free" : "Welcome back"}
+          {mode === "sign-up" ? "Get started" : "Welcome back"}
         </h3>
         <p className="text-gray-500 mb-8 text-center">
           {mode === "sign-up"
