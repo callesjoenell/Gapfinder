@@ -49,8 +49,8 @@
   5. A third-party developer can query "current price" and "free sessions remaining for user X" from Convex functions
 **Plans:** 2/2 plans complete
 Plans:
-- [ ] 11-01-PLAN.md — Schema additions + pricing module (tables, price logic, queries, mutations)
-- [ ] 11-02-PLAN.md — Wire free tier check into createSession
+- [x] 11-01-PLAN.md — Schema additions + pricing module (tables, price logic, queries, mutations)
+- [x] 11-02-PLAN.md — Wire free tier check into createSession
 
 ### Phase 12: Stripe Checkout
 **Goal**: Users who hit the paywall can pay and land in their new session; those who don't stay safely in the app
@@ -61,7 +61,10 @@ Plans:
   2. The paywall screen shows the current price, "price doubles in X days", and how many free sessions remain
   3. After successful payment, the new session is created automatically and the user lands in it without manual steps
   4. Cancelling or failing the Stripe payment returns the user to the app with no session created and no charge
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 12-01-PLAN.md — Stripe backend: SDK, checkout session creation, webhook handler, paid session mutation
+- [ ] 12-02-PLAN.md — Paywall UX in modal, Stripe redirect, payment return handling
 
 ## Progress
 
@@ -77,10 +80,10 @@ Plans:
 | 8. Conversation Design | v1.0 | 4/4 | Complete | 2026-02 |
 | 9. E2E Simulation | v1.0 | 3/3 | Complete | 2026-02 |
 | 10. Guardrails | v1.0 | 2/2 | Complete | 2026-02 |
-| 11. Pricing Engine | 2/2 | Complete    | 2026-03-02 | — |
-| 12. Stripe Checkout | v1.1 | 0/TBD | Not started | — |
+| 11. Pricing Engine | v1.1 | 2/2 | Complete | 2026-03-02 |
+| 12. Stripe Checkout | v1.1 | 0/2 | Not started | — |
 
 ---
 
 *Roadmap created: 2025-01-22*
-*Last updated: 2026-03-02 — Phase 11 planned (2 plans)*
+*Last updated: 2026-03-02 — Phase 12 planned (2 plans)*
