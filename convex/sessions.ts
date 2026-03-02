@@ -85,9 +85,9 @@ export const createSession = mutation({
     const used = freeTier ? freeTier[pathKey] : 0;
     const isFree = used < pathLimit;
 
-    // Block paid sessions (Phase 12 will replace this with Stripe redirect)
+    // Block paid sessions — these must go through Stripe checkout flow
     if (!isFree) {
-      throw new Error("Payment required. Paid sessions coming soon!");
+      throw new Error("Payment required. Please use the checkout flow to start a paid session.");
     }
 
     const now = Date.now();

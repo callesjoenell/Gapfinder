@@ -47,7 +47,8 @@ export function NewSessionModal({ isOpen, path, onClose, onCreated }: NewSession
   const pathKey = path === "exploration" ? "exploreRemaining" : "evaluateRemaining";
   const otherPathKey = path === "exploration" ? "evaluateRemaining" : "exploreRemaining";
   const otherPathLabel = path === "exploration" ? "evaluation" : "exploration";
-  const isPaywalled = freeTierStatus !== undefined && freeTierStatus !== null && freeTierStatus[pathKey] === 0;
+  const freeTierLoading = freeTierStatus === undefined;
+  const isPaywalled = !freeTierLoading && freeTierStatus !== null && freeTierStatus[pathKey] === 0;
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -279,7 +280,7 @@ export function NewSessionModal({ isOpen, path, onClose, onCreated }: NewSession
                 </button>
                 <button
                   type="submit"
-                  disabled={isCreating || isAtLimit || !name.trim()}
+                  disabled={isCreating || isAtLimit || !name.trim() || freeTierLoading}
                   className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {isCreating ? "Creating..." : "Create"}
