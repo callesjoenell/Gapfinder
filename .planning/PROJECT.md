@@ -47,15 +47,16 @@ Persistent conversations that feel identical to chatting with Claude directly - 
 
 ### Active
 
-- [ ] Instructor view: list participants in cohort
-- [ ] Instructor view: show current phase per participant
-- [ ] Instructor view: read participant conversation history
-- [ ] Link participants to cohorts
+- [ ] Stripe integration for session payments
+- [ ] Free tier: 1 Explore + 1 Evaluate session per user
+- [ ] $2 per additional session, doubling weekly, capped at $64
+- [ ] Paywall at session creation with Stripe Checkout
+- [ ] Global weekly price doubling with configurable launch date
 
 ### Out of Scope
 
-- Multi-tenant (multiple instructors) — single instructor for v1
-- Payment/billing — handled outside the app
+- Multi-tenant (multiple instructors) — single instructor for now
+- Instructor view / cohort features — deferred
 - Mobile app — web-first
 - Real-time collaboration — async only
 - Video/audio integration — separate from this tool
@@ -106,5 +107,15 @@ Evaluation path (phases 0-9): Adds Score → Sharpen → Validation Calls → De
 | useLayoutEffect + scrollHeight for textarea resize | CSS Grid mirror approach too fragile | ✓ Good — simple, reliable |
 | Separate localStorage keys per concern | react-use useLocalStorage has stale closure bug with shared keys | ✓ Good — fixed draft/scroll persistence |
 
+## Current Milestone: v1.1 Payments
+
+**Goal:** Monetize session creation with Stripe — urgency pricing that doubles weekly from $2 to $64 max.
+
+**Target features:**
+- Stripe Checkout integration for session payments
+- Free tier (1 Explore + 1 Evaluate)
+- Global weekly price doubling ($2 → $4 → $8 → ... → $64)
+- Paywall UX at session creation
+
 ---
-*Last updated: 2026-03-01 after v1.0 milestone*
+*Last updated: 2026-03-02 after v1.1 milestone start*
