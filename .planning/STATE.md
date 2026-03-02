@@ -2,15 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Payments
-status: defining_requirements
-last_updated: "2026-03-02"
-last_activity: 2026-03-02
+status: planning
+last_updated: "2026-03-02T09:02:56.662Z"
+last_activity: 2026-03-02 — Roadmap created for v1.1
 progress:
-  total_phases: 0
+  total_phases: 1
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
-  percent: 0
 ---
 
 # Project State: Gap Finder Web App
@@ -21,10 +20,10 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-01)
+See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** Persistent conversations that feel identical to chatting with Claude directly - the skill's magic preserved, with progress that never gets lost.
-**Current focus:** v1.1 Payments — defining requirements
+**Current focus:** v1.1 Payments — Phase 11: Pricing Engine
 
 **Tech Stack:** Next.js, Convex (database + auth), Clerk (auth), Claude API (conversations), Tailwind CSS, Motion (animations), d3-cloud (word layouts)
 
@@ -33,8 +32,15 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 ## Current Position
 
 **Milestone:** v1.1 Payments
-**Status:** Defining requirements
-**Last Activity:** 2026-03-02 — Milestone v1.1 started
+**Phase:** 11 — Pricing Engine
+**Status:** Roadmap created, ready to plan Phase 11
+**Last Activity:** 2026-03-02 — Roadmap created for v1.1
+
+**Progress:**
+```
+Phase 11 [          ] 0%   Pricing Engine
+Phase 12 [          ] 0%   Stripe Checkout
+```
 
 ---
 
@@ -50,6 +56,16 @@ Notable architectural decisions:
 - Implicit coverage tracking over explicit checklists (natural conversation preserved)
 - Research tools as Claude tool_use not MCP (Convex serverless compatible)
 - Phase 6 (Instructor View) deferred to v2
+- Stripe Checkout (not custom forms) for payments — Checkout handles all payment method complexity
+
+### v1.1 Payments Decisions
+
+| Decision | Rationale |
+|----------|-----------|
+| Stripe Checkout over custom payment forms | Checkout handles SCA, mobile, payment methods natively |
+| Free tier: 1 Explore + 1 Evaluate (not N sessions) | Type-aware free tier — both path types get a free try |
+| Price doubling weekly from configurable launch date | Urgency pricing; launch date must be changeable without code deploy |
+| PAY-07 (payment records) in Phase 11 | Schema must exist before Stripe flow writes to it |
 
 ### Technical Findings
 
@@ -62,7 +78,7 @@ Notable architectural decisions:
 
 ### Blockers
 
-None active. All API keys documented in PROJECT.md.
+None active.
 
 ### Quick Tasks Completed (v1.0)
 
@@ -77,11 +93,11 @@ None active. All API keys documented in PROJECT.md.
 
 ## Session Continuity
 
-**Last Session:** 2026-03-02
-**Last Action:** Started v1.1 Payments milestone
-**Next Action:** Define requirements → create roadmap → plan phases
+**Last Session:** 2026-03-02T09:02:56.659Z
+**Last Action:** Created v1.1 Payments roadmap (Phases 11-12)
+**Next Action:** `/gsd:plan-phase 11` — Pricing Engine
 
 ---
 
 *State initialized: 2025-01-22*
-*Last updated: 2026-03-02 — v1.1 Payments milestone started*
+*Last updated: 2026-03-02 — v1.1 roadmap created, Phase 11 next*
