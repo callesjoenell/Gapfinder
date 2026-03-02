@@ -2,14 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Payments
-status: planning
-last_updated: "2026-03-02T09:02:56.662Z"
-last_activity: 2026-03-02 — Roadmap created for v1.1
+status: completed
+last_updated: "2026-03-02T09:22:07.764Z"
+last_activity: "2026-03-02 — Executed plan 11-01: Pricing Engine foundation"
 progress:
   total_phases: 1
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 2
+  completed_plans: 1
+  percent: 50
 ---
 
 # Project State: Gap Finder Web App
@@ -33,14 +34,13 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Milestone:** v1.1 Payments
 **Phase:** 11 — Pricing Engine
-**Status:** Roadmap created, ready to plan Phase 11
-**Last Activity:** 2026-03-02 — Roadmap created for v1.1
+**Status:** Plan 11-01 complete, ready to execute plan 11-02 (if exists) or move to Phase 12
+**Last Activity:** 2026-03-02 — Executed plan 11-01: Pricing Engine foundation
 
 **Progress:**
-```
-Phase 11 [          ] 0%   Pricing Engine
-Phase 12 [          ] 0%   Stripe Checkout
-```
+[█████░░░░░] 50%
+Phase 11 [█████░░░░░] 50%   Pricing Engine (1/2 plans done)
+Phase 12 [          ]  0%   Stripe Checkout
 
 ---
 
@@ -66,6 +66,9 @@ Notable architectural decisions:
 | Free tier: 1 Explore + 1 Evaluate (not N sessions) | Type-aware free tier — both path types get a free try |
 | Price doubling weekly from configurable launch date | Urgency pricing; launch date must be changeable without code deploy |
 | PAY-07 (payment records) in Phase 11 | Schema must exist before Stripe flow writes to it |
+| computeCurrentPriceCents as plain TypeScript (not Convex query) | Enables unit testing without Convex runtime |
+| vitest added as first unit test framework | Isolated to pure functions; Convex functions tested via deploy |
+| setPricingConfig and createPayment are internalMutation | Not callable from client, only from trusted server actions |
 
 ### Technical Findings
 
@@ -93,9 +96,9 @@ None active.
 
 ## Session Continuity
 
-**Last Session:** 2026-03-02T09:02:56.659Z
-**Last Action:** Created v1.1 Payments roadmap (Phases 11-12)
-**Next Action:** `/gsd:plan-phase 11` — Pricing Engine
+**Last Session:** 2026-03-02T09:22:07.762Z
+**Last Action:** Completed plan 11-01 — Pricing Engine foundation (schema + pricing.ts + tests)
+**Next Action:** `/gsd:execute-phase 11` for plan 11-02 (if exists), or `/gsd:plan-phase 12` — Stripe Checkout
 
 ---
 
