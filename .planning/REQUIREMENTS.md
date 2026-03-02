@@ -20,8 +20,8 @@ Requirements for Stripe payments milestone.
 
 ### Pricing Display
 
-- [ ] **PRICE-01**: User sees current price and "doubles in X days" messaging at paywall
-- [ ] **PRICE-02**: Paywall shows how many free sessions remain (if any)
+- [x] **PRICE-01**: User sees current price and "doubles in X days" messaging at paywall
+- [x] **PRICE-02**: Paywall shows how many free sessions remain (if any)
 
 ## Out of Scope
 
@@ -45,8 +45,8 @@ Requirements for Stripe payments milestone.
 | PAY-02 | Phase 12 | Complete |
 | PAY-05 | Phase 12 | Complete |
 | PAY-06 | Phase 12 | Complete |
-| PRICE-01 | Phase 12 | Pending |
-| PRICE-02 | Phase 12 | Pending |
+| PRICE-01 | Phase 12 | Complete |
+| PRICE-02 | Phase 12 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 10 total

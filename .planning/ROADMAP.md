@@ -81,7 +81,7 @@ Plans:
 | 9. E2E Simulation | v1.0 | 3/3 | Complete | 2026-02 |
 | 10. Guardrails | v1.0 | 2/2 | Complete | 2026-02 |
 | 11. Pricing Engine | v1.1 | 2/2 | Complete | 2026-03-02 |
-| 12. Stripe Checkout | 2/2 | Complete   | 2026-03-02 | — |
+| 12. Stripe Checkout | 2/2 | Complete    | 2026-03-02 | — |
 
 ---
 
