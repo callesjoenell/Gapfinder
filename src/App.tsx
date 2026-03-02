@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, useSearchParams } from "react-router-dom";
 import { Toaster, toast } from "sonner";
-import { useAuth, SignIn } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
@@ -11,6 +11,10 @@ import { NewSessionModal } from "./components/NewSessionModal";
 import { OnboardingView } from "./components/OnboardingView";
 import { PathOverview } from "./components/PathOverview";
 import { useSessionState } from "./hooks/useSessionState";
+import { WelcomePage } from "./components/WelcomePage";
+import { AboutPage } from "./components/pages/AboutPage";
+import { ContactPage } from "./components/pages/ContactPage";
+import { FAQPage } from "./components/pages/FAQPage";
 
 function App() {
   return (
@@ -18,6 +22,9 @@ function App() {
       <Toaster position="top-right" richColors />
       <BrowserRouter>
         <Routes>
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/faq" element={<FAQPage />} />
           <Route path="/*" element={<AuthenticatedApp />} />
         </Routes>
       </BrowserRouter>
@@ -40,16 +47,7 @@ function AuthenticatedApp() {
   }
 
   if (!isSignedIn) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
-            Sign in to Start Building Now
-          </h2>
-          <SignIn routing="hash" />
-        </div>
-      </div>
-    );
+    return <WelcomePage />;
   }
 
   return <MainApp />;
