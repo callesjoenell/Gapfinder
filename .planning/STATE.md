@@ -105,14 +105,15 @@ None active.
 | 4 | Hardcode phase greetings to eliminate hallucination | 2026-02-21 |
 | 5 | Reinforce depth-first discovery in phases | 2026-02-22 |
 | 6 | Add About page legal subsections (Terms, Refund, company info) | 2026-03-02 |
+| 7 | Add Web Speech API speech-to-text mic button to MessageInput | 2026-03-03 |
 
 ---
 
 ## Session Continuity
 
-**Last Session:** 2026-03-02T14:00:00Z
-**Last Action:** Completed quick-6 — Terms, Refund pages and legal compliance content
-**Next Action:** Deploy and verify /terms and /refund in production.
+**Last Session:** 2026-03-03T12:35:03Z
+**Last Action:** Completed quick-7 — Web Speech API mic button in MessageInput
+**Next Action:** Deploy and verify speech-to-text in production (requires HTTPS).
 
 ---
 
