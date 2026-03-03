@@ -19,10 +19,10 @@ export function WelcomePage() {
       {/* Hero */}
       <header className="pt-16 pb-12 px-6 text-center">
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
-          Start Building Now
+          What To Build
         </h1>
         <p className="mt-4 text-lg text-gray-500 max-w-xl mx-auto">
-          Now that anyone can build, the first natural question is&nbsp;—
+          Now that anyone can build — what should you build?
         </p>
         <p className="mt-6 text-sm font-medium text-primary-600 bg-primary-50 inline-block px-4 py-2 rounded-full">
           First Explore session free · Evaluate from $2 · price doubles weekly

@@ -26,7 +26,7 @@ export function OnboardingView({
   return (
     <div className="flex flex-col items-center justify-center min-h-full p-8 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">
-        Start Building Now
+        What To Build
       </h1>
       <p className="text-gray-600 text-center mb-8">
         Discover ideas worth building by exploring your unfair advantages
