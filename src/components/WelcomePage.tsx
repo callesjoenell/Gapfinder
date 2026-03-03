@@ -6,9 +6,9 @@ export function WelcomePage() {
   const [mode, setMode] = useState<"sign-in" | "sign-up">("sign-up");
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('/post-its-bg.jpg')" }}>
       {/* Top nav */}
-      <nav className="flex items-center justify-end px-6 py-4 bg-white border-b border-gray-100">
+      <nav className="flex items-center justify-end px-6 py-4 bg-white/70 backdrop-blur-sm border-b border-gray-100">
         <div className="flex gap-6 text-sm text-gray-500">
           <Link to="/about" className="hover:text-gray-900">About</Link>
           <Link to="/faq" className="hover:text-gray-900">FAQ</Link>
@@ -17,7 +17,7 @@ export function WelcomePage() {
       </nav>
 
       {/* Hero */}
-      <header className="pt-16 pb-12 px-6 text-center">
+      <header className="pt-16 pb-12 px-6 text-center bg-white/70 backdrop-blur-sm">
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
           What To Build
         </h1>
@@ -32,7 +32,7 @@ export function WelcomePage() {
       {/* Two value props */}
       <section className="max-w-4xl mx-auto px-6 grid gap-8 sm:grid-cols-2 pb-16">
         {/* Explore */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-8">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary-50 text-primary-600 mb-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +60,7 @@ export function WelcomePage() {
         </div>
 
         {/* Evaluate */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-8">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-amber-50 text-amber-600 mb-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +94,7 @@ export function WelcomePage() {
           Frequently Asked Questions
         </h2>
         <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
               How is this different from just using an AI chat?
             </h3>
@@ -112,7 +112,7 @@ export function WelcomePage() {
               mechanism. The methodology and research are what make it work.
             </p>
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
               What should I build?
             </h3>
@@ -125,7 +125,7 @@ export function WelcomePage() {
               not generic startup ideas.
             </p>
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
               How do I know if my business idea is strong enough?
             </h3>
@@ -138,7 +138,7 @@ export function WelcomePage() {
               gated on evidence — you can't skip ahead on assumptions.
             </p>
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
               Who is What To Build for?
             </h3>
@@ -154,48 +154,66 @@ export function WelcomePage() {
       </section>
 
       {/* Auth section */}
-      <section className="bg-white border-t border-gray-100 py-12 px-6 flex-1 flex flex-col items-center">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-2 text-center">
-          {mode === "sign-up" ? "Get started" : "Welcome back"}
-        </h3>
-        <p className="text-gray-500 mb-8 text-center">
-          {mode === "sign-up"
-            ? "Create an account to start exploring"
-            : "Sign in to continue where you left off"}
-        </p>
+      <section className="bg-white/70 backdrop-blur-sm border-t border-gray-100 py-12 px-6 flex-1 flex flex-col items-center">
+        {/* Mobile: desktop-only message */}
+        <div className="md:hidden text-center max-w-sm">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gray-100 text-gray-400 mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            Desktop only for now
+          </h3>
+          <p className="text-gray-500 text-sm leading-relaxed">
+            What To Build is designed for focused, deep-work sessions that need a full screen. Open this page on your computer to get started.
+          </p>
+        </div>
 
-        {mode === "sign-up" ? (
-          <SignUp routing="hash" />
-        ) : (
-          <SignIn routing="hash" />
-        )}
+        {/* Desktop: Clerk auth */}
+        <div className="hidden md:flex flex-col items-center">
+          <h3 className="text-2xl font-semibold text-gray-900 mb-2 text-center">
+            {mode === "sign-up" ? "Get started" : "Welcome back"}
+          </h3>
+          <p className="text-gray-500 mb-8 text-center">
+            {mode === "sign-up"
+              ? "Create an account to start exploring"
+              : "Sign in to continue where you left off"}
+          </p>
 
-        <p className="mt-6 text-sm text-gray-500">
           {mode === "sign-up" ? (
-            <>
-              Already have an account?{" "}
-              <button
-                onClick={() => setMode("sign-in")}
-                className="text-primary-600 hover:text-primary-700 font-medium"
-              >
-                Sign in
-              </button>
-            </>
+            <SignUp routing="hash" />
           ) : (
-            <>
-              Don&apos;t have an account?{" "}
-              <button
-                onClick={() => setMode("sign-up")}
-                className="text-primary-600 hover:text-primary-700 font-medium"
-              >
-                Sign up
-              </button>
-            </>
+            <SignIn routing="hash" />
           )}
-        </p>
+
+          <p className="mt-6 text-sm text-gray-500">
+            {mode === "sign-up" ? (
+              <>
+                Already have an account?{" "}
+                <button
+                  onClick={() => setMode("sign-in")}
+                  className="text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  Sign in
+                </button>
+              </>
+            ) : (
+              <>
+                Don&apos;t have an account?{" "}
+                <button
+                  onClick={() => setMode("sign-up")}
+                  className="text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  Sign up
+                </button>
+              </>
+            )}
+          </p>
+        </div>
       </section>
 
-      <footer className="py-8 text-center text-sm text-gray-400 space-x-6">
+      <footer className="py-8 text-center text-sm text-gray-400 space-x-6 bg-white/70 backdrop-blur-sm">
         <Link to="/about" className="hover:text-gray-600">About</Link>
         <span>·</span>
         <Link to="/faq" className="hover:text-gray-600">FAQ</Link>
