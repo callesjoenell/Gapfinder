@@ -1,0 +1,23 @@
+# Start Building Now
+
+> AI-guided discovery and validation for aspiring builders. Find what to build based on your unique talents, experience, and networks — then sharpen your idea until it's unbeatable.
+
+## About
+Start Building Now helps people who want to build something but don't know where to start. Using AI-guided conversations, we help you discover and validate business ideas that are uniquely yours.
+
+## How It Works
+
+### Explore Phase — Find What to Build
+We dig into what makes you you — your talents, your life experience, your connections — to uncover a space that feels like it was made for you.
+
+### Evaluate Phase — Sharpen Your Idea
+Together we develop and score your idea, looking for deep-rooted human problems, challenges, and emotional opportunities to help you build the absolute best idea that only you can deliver.
+
+## Key Pages
+- [Home](https://www.whattobuild.app/)
+
+## Details
+- Built for first-time builders, career changers, and aspiring entrepreneurs
+- AI-powered conversational discovery process
+- Idea scoring and validation against real human needs
+- Research into market gaps, competition, and opportunity spaces

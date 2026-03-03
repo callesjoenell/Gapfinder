@@ -20,7 +20,7 @@ export function TermsPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Introduction</h2>
           <p className="text-gray-600 leading-relaxed">
-            These terms govern your use of Start Building Now (start-building.now), a SaaS product
+            These terms govern your use of Start Building Now (whattobuild.app), a SaaS product
             operated by Skip Intro AB, a company registered in Sweden. By using the service, you
             agree to these terms.
           </p>
