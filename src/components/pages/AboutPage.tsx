@@ -4,7 +4,7 @@ import { PublicPageLayout } from "../layout/PublicPageLayout";
 
 export function AboutPage() {
   useEffect(() => {
-    document.title = "About | Start Building Now";
+    document.title = "About | What To Build";
   }, []);
 
   return (
@@ -13,12 +13,12 @@ export function AboutPage() {
         {/* Hero */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            About Start Building Now
+            About What To Build
           </h1>
           <p className="text-lg text-gray-600 leading-relaxed">
             Now that anyone can build software, the question has shifted from
             &ldquo;can I build it?&rdquo; to &ldquo;what should I build?&rdquo;
-            Start Building Now is a structured methodology — delivered through
+            What To Build is a structured methodology — delivered through
             AI-guided conversation — that helps you answer that question based on
             who you actually are, not generic advice.
           </p>
@@ -31,7 +31,7 @@ export function AboutPage() {
           </h2>
           <p className="text-gray-600 leading-relaxed mb-4">
             Asking an AI &ldquo;what should I build?&rdquo; gets you a list of
-            generic ideas disconnected from your life. Start Building Now is
+            generic ideas disconnected from your life. What To Build is
             different because the AI is the delivery mechanism — the methodology
             is what makes it work.
           </p>
@@ -150,7 +150,7 @@ export function AboutPage() {
             do you know before you've wasted months?
           </p>
           <p className="text-gray-600 leading-relaxed">
-            We built Start Building Now to be the structured thinking partner that
+            We built What To Build to be the structured thinking partner that
             helps you cut through the noise. Not an idea generator — a process that
             helps you discover the thing only you can build, then validates it
             before you invest your time.
@@ -161,7 +161,7 @@ export function AboutPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">Company Information</h2>
           <p className="text-gray-600 leading-relaxed">
-            Start Building Now is operated by Skip Intro AB, a company registered in Sweden.
+            What To Build is operated by Skip Intro AB, a company registered in Sweden.
             For questions, visit our{" "}
             <Link to="/contact" className="text-primary-600 hover:text-primary-700 underline">
               Contact page

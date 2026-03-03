@@ -21,7 +21,7 @@ export const PHASES: PhaseConfig[] = [
     description:
       "Discover your unfair advantages through excavating 6 starting points",
     greeting:
-      "Welcome to Start Building Now! In this phase, we'll discover your unfair advantages by exploring six areas: your life situation, profession, hobbies, skills others pay you for, networks, and transformations you've made.\n\nLet's start simple -- **tell me about your current life situation.** What's your day-to-day like? What do you spend most of your time on?",
+      "Welcome to What To Build! In this phase, we'll discover your unfair advantages by exploring six areas: your life situation, profession, hobbies, skills others pay you for, networks, and transformations you've made.\n\nLet's start simple -- **tell me about your current life situation.** What's your day-to-day like? What do you spend most of your time on?",
     completionCriteria: [
       "User has answered excavation questions for all 6 starting points (Life Situation, Profession, Hobbies, Skills Others Pay For, Networks, Transformations Made)",
       "User has scored each area on Depth (1-5), Access (1-5), Energy (1-5)",
@@ -614,7 +614,7 @@ If community wasn't part of Phase 6, probe whether it should be:
       "Timeline established for MVP",
       "Pre-launch validation plan defined",
       "User knows their 'one metric that matters'",
-      "User has completed the Start Building Now journey with clarity",
+      "User has completed the What To Build journey with clarity",
     ],
     coverageTopics: [
       { key: "next_actions", label: "Next Actions", description: "Concrete next 3 steps" },

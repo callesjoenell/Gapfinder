@@ -1,9 +1,9 @@
-# Start Building Now
+# What To Build
 
 > AI-guided discovery and validation for aspiring builders. Find what to build based on your unique talents, experience, and networks — then sharpen your idea until it's unbeatable.
 
 ## About
-Start Building Now helps people who want to build something but don't know where to start. Using AI-guided conversations, we help you discover and validate business ideas that are uniquely yours.
+What To Build helps people who want to build something but don't know where to start. Using AI-guided conversations, we help you discover and validate business ideas that are uniquely yours.
 
 ## How It Works
 

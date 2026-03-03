@@ -3,7 +3,7 @@ import { PublicPageLayout } from "../layout/PublicPageLayout";
 
 export function ContactPage() {
   useEffect(() => {
-    document.title = "Contact | Start Building Now";
+    document.title = "Contact | What To Build";
   }, []);
 
   return (

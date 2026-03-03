@@ -35,7 +35,7 @@ export function buildJourneyFraming(context: ConversationContext): string {
       .map((p) => `  - **Phase ${p.number}: ${p.name}** (${p.timeEstimate}) - ${p.description}`)
       .join("\n");
 
-    return `Welcome to Start Building Now! You're on the ${sessionPath === "exploration" ? "Exploration" : "Evaluation"} path.
+    return `Welcome to What To Build! You're on the ${sessionPath === "exploration" ? "Exploration" : "Evaluation"} path.
 
 Here's what we'll work through together:
 

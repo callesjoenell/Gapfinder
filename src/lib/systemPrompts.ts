@@ -157,7 +157,7 @@ When a user surfaces multiple angles, segments, or motivations in one response, 
 Path: ${sessionPath === "exploration" ? "Exploration (discovering opportunities)" : "Evaluation (validating idea)"}
 Phase: ${currentPhase} - ${phaseConfig.name}
 You are in Phase ${currentPhase} of 9. ${9 - currentPhase} phases remain after this one.
-${isFirstSession && isNewSession ? "First time through Start Building Now" : ""}
+${isFirstSession && isNewSession ? "First time through What To Build" : ""}
 ${!isFirstSession && otherSessionNames.length > 0 ? `User has ${otherSessionNames.length} other active session${otherSessionNames.length === 1 ? "" : "s"}` : ""}
 
 ## Journey Map
@@ -203,7 +203,7 @@ In exploration phases (0-3): score emerging opportunities, highlight strongest, 
 
 ## Need Depth System
 
-This is the most important system in Start Building Now. Every idea exists somewhere on a Need Depth scale. Your job is to help the user climb it.
+This is the most important system in What To Build. Every idea exists somewhere on a Need Depth scale. Your job is to help the user climb it.
 
 ### The Need Depth Ladder
 

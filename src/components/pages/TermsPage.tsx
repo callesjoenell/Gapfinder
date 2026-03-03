@@ -4,7 +4,7 @@ import { PublicPageLayout } from "../layout/PublicPageLayout";
 
 export function TermsPage() {
   useEffect(() => {
-    document.title = "Terms and Conditions | Start Building Now";
+    document.title = "Terms and Conditions | What To Build";
   }, []);
 
   return (
@@ -20,7 +20,7 @@ export function TermsPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Introduction</h2>
           <p className="text-gray-600 leading-relaxed">
-            These terms govern your use of Start Building Now (whattobuild.app), a SaaS product
+            These terms govern your use of What To Build (whattobuild.app), a SaaS product
             operated by Skip Intro AB, a company registered in Sweden. By using the service, you
             agree to these terms.
           </p>
@@ -29,7 +29,7 @@ export function TermsPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. The Service</h2>
           <p className="text-gray-600 leading-relaxed">
-            Start Building Now provides AI-guided methodology for business idea validation. The
+            What To Build provides AI-guided methodology for business idea validation. The
             service includes conversational sessions, research tools, and scoring frameworks
             delivered through a web application.
           </p>

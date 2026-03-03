@@ -29,12 +29,12 @@ const FAQ_ITEMS: FAQItemProps[] = [
   {
     question: "How is this different from just chatting with an AI?",
     answer:
-      "An AI without the right context, framework, and questioning methodology just tells you what you want to hear. It validates instead of challenges, generates generic lists instead of digging deep, and has no way to score whether an idea is actually worth pursuing. Start Building Now is built on proven frameworks — MILES, Ikigai, the Mom Test, Jobs to Be Done — that ask the questions you wouldn't think to ask yourself. During exploration, it pulls live signals from Reddit, Hacker News, Product Hunt, Stack Overflow, and general web search, then scores what it finds against your personal unfair advantages using depth, access, and energy metrics. Progress is gated on real evidence, not optimistic assumptions. You discover insights yourself through guided questions — the AI never generates ideas for you. The AI is the delivery mechanism. The methodology and research are what make it work.",
+      "An AI without the right context, framework, and questioning methodology just tells you what you want to hear. It validates instead of challenges, generates generic lists instead of digging deep, and has no way to score whether an idea is actually worth pursuing. What To Build is built on proven frameworks — MILES, Ikigai, the Mom Test, Jobs to Be Done — that ask the questions you wouldn't think to ask yourself. During exploration, it pulls live signals from Reddit, Hacker News, Product Hunt, Stack Overflow, and general web search, then scores what it finds against your personal unfair advantages using depth, access, and energy metrics. Progress is gated on real evidence, not optimistic assumptions. You discover insights yourself through guided questions — the AI never generates ideas for you. The AI is the delivery mechanism. The methodology and research are what make it work.",
   },
   {
-    question: "What is Start Building Now?",
+    question: "What is What To Build?",
     answer:
-      "Start Building Now is an AI-guided platform that walks you through a proven, multi-phase process to either discover what to build (Explore path) or validate whether your existing idea is worth pursuing (Evaluate path). Each phase has specific frameworks, research tools, and completion criteria — it's closer to working with a structured coaching program than having a freeform conversation.",
+      "What To Build is an AI-guided platform that walks you through a proven, multi-phase process to either discover what to build (Explore path) or validate whether your existing idea is worth pursuing (Evaluate path). Each phase has specific frameworks, research tools, and completion criteria — it's closer to working with a structured coaching program than having a freeform conversation.",
   },
   {
     question: "How does the Explore path work?",
@@ -85,7 +85,7 @@ const FAQ_ITEMS: FAQItemProps[] = [
 
 export function FAQPage() {
   useEffect(() => {
-    document.title = "FAQ | Start Building Now";
+    document.title = "FAQ | What To Build";
   }, []);
 
   return (

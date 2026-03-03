@@ -103,7 +103,7 @@ export function WelcomePage() {
               methodology just tells you what you want to hear. It validates
               instead of challenges, generates lists instead of digging deep,
               and has no way to score whether an idea is actually worth
-              pursuing. Start Building Now uses proven frameworks — MILES,
+              pursuing. What To Build uses proven frameworks — MILES,
               Ikigai, the Mom Test, Jobs to Be Done — to ask the questions
               you wouldn&apos;t think to ask yourself. During exploration, it
               pulls live signals from Reddit, Hacker News, Product Hunt, and
@@ -117,7 +117,7 @@ export function WelcomePage() {
               What should I build?
             </h3>
             <p className="text-gray-600 leading-relaxed">
-              Start Building Now helps you answer this through the Explore path.
+              What To Build helps you answer this through the Explore path.
               Using the MILES framework, we map your unfair advantages — talents,
               experience, networks — then research real problems in your strongest
               domains with live data from Reddit, Hacker News, and Product Hunt.
@@ -140,7 +140,7 @@ export function WelcomePage() {
           </div>
           <div className="bg-white rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
-              Who is Start Building Now for?
+              Who is What To Build for?
             </h3>
             <p className="text-gray-600 leading-relaxed">
               Anyone who wants to build something meaningful — first-time

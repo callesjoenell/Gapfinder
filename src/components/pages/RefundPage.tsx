@@ -3,7 +3,7 @@ import { PublicPageLayout } from "../layout/PublicPageLayout";
 
 export function RefundPage() {
   useEffect(() => {
-    document.title = "Refund Policy | Start Building Now";
+    document.title = "Refund Policy | What To Build";
   }, []);
 
   return (
