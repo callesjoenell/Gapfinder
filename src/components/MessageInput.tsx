@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import type { Id } from "../../convex/_generated/dataModel";
+import { useSpeechToText } from "../hooks/useSpeechToText";
 
 interface MessageInputProps {
   onSend: (content: string) => void;
@@ -20,7 +21,7 @@ const MAX_HEIGHT_PX = 200;
 export function MessageInput({
   onSend,
   disabled,
-  placeholder = "Type a message...",
+  placeholder = "Type here or click the mic to talk",
   draftMessage,
   onDraftChange,
   onSendSuccess,
@@ -32,6 +33,14 @@ export function MessageInput({
   const prevSessionIdRef = useRef(sessionId);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  // Speech-to-text
+  const { isListening, isSupported, transcript, toggle, resetTranscript } =
+    useSpeechToText();
+
+  // Track the portion of content that came from the last speech transcript,
+  // so we can replace it (not append) when new interim/final results arrive.
+  const lastTranscriptRef = useRef("");
 
   // Expose form element to parent debug ref
   useEffect(() => {
@@ -66,12 +75,38 @@ export function MessageInput({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
 
+  // Sync speech transcript into content.
+  // Replace the previously injected speech portion at the end of content with the
+  // updated transcript, so typed text is preserved at the start.
+  useEffect(() => {
+    if (!transcript) return;
+
+    setContent((prev) => {
+      const typed = lastTranscriptRef.current
+        ? prev.endsWith(lastTranscriptRef.current)
+          ? prev.slice(0, prev.length - lastTranscriptRef.current.length)
+          : prev
+        : prev;
+
+      // Add a space separator when there is existing typed content
+      const separator = typed.length > 0 && !typed.endsWith(" ") ? " " : "";
+      const newContent = typed + separator + transcript;
+      lastTranscriptRef.current = transcript;
+      onDraftChange?.(newContent);
+      return newContent;
+    });
+  // Only run when transcript changes — we intentionally exclude other deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transcript]);
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!content.trim() || disabled) return;
 
     onSend(content.trim());
     setContent("");
+    resetTranscript();
+    lastTranscriptRef.current = "";
     onSendSuccess?.();
   }
 
@@ -95,15 +130,44 @@ export function MessageInput({
           onChange={(e) => {
             const newValue = e.target.value;
             setContent(newValue);
+            // Reset speech portion tracking when user edits manually
+            lastTranscriptRef.current = "";
             onDraftChange?.(newValue);
           }}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           placeholder={placeholder}
           rows={1}
-          className="flex-1 resize-none rounded-xl border border-gray-200 shadow-sm bg-white px-4 py-3 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
+          className="flex-1 resize-none rounded-xl border border-gray-200 shadow-sm bg-white px-4 py-3 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400 placeholder:text-gray-400"
           style={{ overflowY: "hidden" }}
         />
+        {isSupported && (
+          <button
+            type="button"
+            onClick={() => {
+              if (!isListening) resetTranscript();
+              toggle();
+            }}
+            disabled={disabled}
+            className={`rounded-xl p-3 transition-colors shrink-0 ${
+              isListening
+                ? "bg-red-500 text-white animate-pulse"
+                : "bg-primary-500 text-white hover:bg-primary-600"
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
+            aria-label={isListening ? "Stop recording" : "Start recording"}
+          >
+            {/* Heroicons microphone */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-5 h-5"
+            >
+              <path d="M8.25 4.5a3.75 3.75 0 117.5 0v8.25a3.75 3.75 0 11-7.5 0V4.5z" />
+              <path d="M6 10.5a.75.75 0 01.75.75v1.5a5.25 5.25 0 1010.5 0v-1.5a.75.75 0 011.5 0v1.5a6.751 6.751 0 01-6 6.709v2.291h3a.75.75 0 010 1.5h-7.5a.75.75 0 010-1.5h3v-2.291a6.751 6.751 0 01-6-6.709v-1.5A.75.75 0 016 10.5z" />
+            </svg>
+          </button>
+        )}
         <button
           type="submit"
           disabled={disabled || !content.trim()}
@@ -112,8 +176,10 @@ export function MessageInput({
           Send
         </button>
       </div>
-      <p className="text-xs text-gray-400 mt-2">
-        Press Enter to send, Shift+Enter for new line
+      <p className={`text-xs mt-2 ${isListening ? "text-red-400" : "text-gray-400"}`}>
+        {isListening
+          ? "Listening... Click mic to stop"
+          : "Press Enter to send, Shift+Enter for new line"}
       </p>
     </form>
   );
