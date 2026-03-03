@@ -123,7 +123,7 @@ export function MessageInput({
       onSubmit={handleSubmit}
       className="shrink-0 bg-transparent px-4 pb-4 pt-2"
     >
-      <div className="flex gap-3 items-end">
+      <div className="relative rounded-xl border border-gray-200 shadow-sm bg-white focus-within:ring-2 focus-within:ring-primary-500 focus-within:border-primary-500 disabled:bg-gray-50">
         <textarea
           ref={textareaRef}
           value={content}
@@ -138,49 +138,59 @@ export function MessageInput({
           disabled={disabled}
           placeholder={placeholder}
           rows={1}
-          className="flex-1 resize-none rounded-xl border border-gray-200 shadow-sm bg-white px-4 py-3 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-400 placeholder:text-gray-400"
+          className="w-full resize-none bg-transparent px-4 pt-3 pb-12 text-base focus:outline-none disabled:bg-gray-50 disabled:text-gray-400 placeholder:text-gray-400"
           style={{ overflowY: "hidden" }}
         />
-        {isSupported && (
+        {/* Bottom toolbar inside the input container — mic + send */}
+        <div className="absolute bottom-2 right-2 flex items-center gap-1">
+          {isSupported && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!isListening) resetTranscript();
+                toggle();
+              }}
+              disabled={disabled}
+              className={`rounded-lg p-2 transition-colors ${
+                isListening
+                  ? "text-red-500 bg-red-50 animate-pulse"
+                  : "text-gray-400 hover:text-primary-500 hover:bg-gray-100"
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
+              aria-label={isListening ? "Stop recording" : "Start recording"}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-5 h-5"
+              >
+                <path d="M8.25 4.5a3.75 3.75 0 117.5 0v8.25a3.75 3.75 0 11-7.5 0V4.5z" />
+                <path d="M6 10.5a.75.75 0 01.75.75v1.5a5.25 5.25 0 1010.5 0v-1.5a.75.75 0 011.5 0v1.5a6.751 6.751 0 01-6 6.709v2.291h3a.75.75 0 010 1.5h-7.5a.75.75 0 010-1.5h3v-2.291a6.751 6.751 0 01-6-6.709v-1.5A.75.75 0 016 10.5z" />
+              </svg>
+            </button>
+          )}
           <button
-            type="button"
-            onClick={() => {
-              if (!isListening) resetTranscript();
-              toggle();
-            }}
-            disabled={disabled}
-            className={`rounded-xl p-3 transition-colors shrink-0 ${
-              isListening
-                ? "bg-red-500 text-white animate-pulse"
-                : "bg-primary-500 text-white hover:bg-primary-600"
-            } disabled:opacity-50 disabled:cursor-not-allowed`}
-            aria-label={isListening ? "Stop recording" : "Start recording"}
+            type="submit"
+            disabled={disabled || !content.trim()}
+            className="bg-primary-500 text-white rounded-lg p-2 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            aria-label="Send message"
           >
-            {/* Heroicons microphone */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
               className="w-5 h-5"
             >
-              <path d="M8.25 4.5a3.75 3.75 0 117.5 0v8.25a3.75 3.75 0 11-7.5 0V4.5z" />
-              <path d="M6 10.5a.75.75 0 01.75.75v1.5a5.25 5.25 0 1010.5 0v-1.5a.75.75 0 011.5 0v1.5a6.751 6.751 0 01-6 6.709v2.291h3a.75.75 0 010 1.5h-7.5a.75.75 0 010-1.5h3v-2.291a6.751 6.751 0 01-6-6.709v-1.5A.75.75 0 016 10.5z" />
+              <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
             </svg>
           </button>
-        )}
-        <button
-          type="submit"
-          disabled={disabled || !content.trim()}
-          className="bg-primary-500 text-white rounded-xl px-6 py-3 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0"
-        >
-          Send
-        </button>
+        </div>
       </div>
-      <p className={`text-xs mt-2 ${isListening ? "text-red-400" : "text-gray-400"}`}>
-        {isListening
-          ? "Listening... Click mic to stop"
-          : "Press Enter to send, Shift+Enter for new line"}
-      </p>
+      {isListening && (
+        <p className="text-xs mt-2 text-red-400">
+          Listening... Click mic to stop
+        </p>
+      )}
     </form>
   );
 }
