@@ -8,7 +8,7 @@ export function WelcomePage() {
   return (
     <div className="min-h-screen flex flex-col bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('/post-its-bg.jpg')" }}>
       {/* Top nav */}
-      <nav className="flex items-center justify-end px-6 py-4 bg-white/70 backdrop-blur-sm border-b border-gray-100">
+      <nav className="flex items-center justify-end px-6 py-4 bg-white/80 backdrop-blur-sm border-b border-gray-100">
         <div className="flex gap-6 text-sm text-gray-500">
           <Link to="/about" className="hover:text-gray-900">About</Link>
           <Link to="/faq" className="hover:text-gray-900">FAQ</Link>
@@ -17,12 +17,12 @@ export function WelcomePage() {
       </nav>
 
       {/* Hero */}
-      <header className="pt-16 pb-12 px-6 text-center bg-white/70 backdrop-blur-sm">
+      <header className="pt-16 pb-12 px-6 text-center bg-white/80 backdrop-blur-sm">
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
           What To Build
         </h1>
         <p className="mt-4 text-lg text-gray-500 max-w-xl mx-auto">
-          Now that anyone can build — what should you build?
+          Now that anyone can build — what should YOU build?
         </p>
         <p className="mt-6 text-sm font-medium text-primary-600 bg-primary-50 inline-block px-4 py-2 rounded-full">
           First Explore session free · Evaluate from $2 · price doubles weekly
@@ -30,9 +30,9 @@ export function WelcomePage() {
       </header>
 
       {/* Two value props */}
-      <section className="max-w-4xl mx-auto px-6 grid gap-8 sm:grid-cols-2 pb-16">
+      <section className="max-w-4xl mx-auto px-6 grid gap-8 sm:grid-cols-2 py-16">
         {/* Explore */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-8">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary-50 text-primary-600 mb-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +60,7 @@ export function WelcomePage() {
         </div>
 
         {/* Evaluate */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-8">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-amber-50 text-amber-600 mb-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +94,7 @@ export function WelcomePage() {
           Frequently Asked Questions
         </h2>
         <div className="space-y-6">
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
               How is this different from just using an AI chat?
             </h3>
@@ -112,7 +112,7 @@ export function WelcomePage() {
               mechanism. The methodology and research are what make it work.
             </p>
           </div>
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
               What should I build?
             </h3>
@@ -125,7 +125,7 @@ export function WelcomePage() {
               not generic startup ideas.
             </p>
           </div>
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
               How do I know if my business idea is strong enough?
             </h3>
@@ -138,7 +138,7 @@ export function WelcomePage() {
               gated on evidence — you can't skip ahead on assumptions.
             </p>
           </div>
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-2">
               Who is What To Build for?
             </h3>
@@ -154,7 +154,7 @@ export function WelcomePage() {
       </section>
 
       {/* Auth section */}
-      <section className="bg-white/70 backdrop-blur-sm border-t border-gray-100 py-12 px-6 flex-1 flex flex-col items-center">
+      <section className="bg-white/80 backdrop-blur-sm border-t border-gray-100 py-12 px-6 flex-1 flex flex-col items-center">
         {/* Mobile: desktop-only message */}
         <div className="md:hidden text-center max-w-sm">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gray-100 text-gray-400 mb-5">
@@ -213,7 +213,7 @@ export function WelcomePage() {
         </div>
       </section>
 
-      <footer className="py-8 text-center text-sm text-gray-400 space-x-6 bg-white/70 backdrop-blur-sm">
+      <footer className="py-8 text-center text-sm text-gray-400 space-x-6 bg-white/80 backdrop-blur-sm">
         <Link to="/about" className="hover:text-gray-600">About</Link>
         <span>·</span>
         <Link to="/faq" className="hover:text-gray-600">FAQ</Link>
